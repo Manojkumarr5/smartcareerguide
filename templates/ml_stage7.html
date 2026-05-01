@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ML Step 7 – Clustering (K-Means, DBSCAN)</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: #f2f6ff; font-family: Arial, sans-serif; }
+    .content-box { max-width: 900px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); line-height: 1.7; position: relative; }
+    h2 { color: #0078d7; margin-bottom: 10px; font-size: 28px; }
+    h3 { color: #005fa3; margin-top: 20px; }
+    code { background: #eaf4ff; padding: 4px 6px; border-radius: 4px; font-size: 0.9rem; }
+    pre { background: #1e1e1e; color: #00ffea; padding: 12px; border-radius: 8px; overflow-x: auto; margin-top: 10px; }
+    .task-box { background: #f4f8ff; padding: 15px; border-left: 5px solid #0078d7; margin-top: 12px; border-radius: 6px; }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .back-btn:hover { background: #005fa3; }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .complete-btn:hover { background: #218838; }
+
+    .close-btn { position: absolute; top: 10px; right: 15px; font-size: 26px; font-weight: bold; color: #777; cursor: pointer; transition: 0.3s; }
+    .close-btn:hover { color: #000; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+    <div class="close-btn" onclick="goBackToML()">&times;</div>
+
+    <h2>Step 7: Clustering (K-Means, DBSCAN)</h2>
+    <p>Clustering is an unsupervised technique to group similar data points.</p>
+
+    <hr><br>
+
+    <h3>📌 K-Means Clustering</h3>
+    <pre>
+from sklearn.cluster import KMeans
+import numpy as np
+
+X = np.array([
+    [1, 2],
+    [1, 4],
+    [1, 0],
+    [10, 2],
+    [10, 4],
+    [10, 0]
+])
+
+kmeans = KMeans(n_clusters=2, random_state=0)
+kmeans.fit(X)
+
+print("Cluster labels:", kmeans.labels_)
+print("Cluster centers:", kmeans.cluster_centers_)
+    </pre>
+
+    <h3>📌 DBSCAN</h3>
+    <pre>
+from sklearn.cluster import DBSCAN
+
+db = DBSCAN(eps=3, min_samples=2).fit(X)
+print("DBSCAN labels:", db.labels_)
+    </pre>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks:</strong>
+      <ul>
+        <li>Try K-Means with different number of clusters.</li>
+        <li>Visualize clusters using a scatter plot.</li>
+        <li>Experiment with DBSCAN eps and min_samples values.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToML()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToML() {
+    // Use ML roadmap hash so popup auto-opens
+    window.location.href = "index.html#open-ml"; // [web:191][web:132]
+  }
+
+  function markCompleted() {
+    // Save completion for ML step 7
+    localStorage.setItem("ml_step7_completed", "true"); // [web:162][web:193][web:192]
+    window.location.href = "index.html#open-ml";
+  }
+</script>
+
+</body>
+</html>

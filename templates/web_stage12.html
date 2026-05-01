@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Step 12 – Databases (MongoDB / MySQL Basics)</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #005fa3;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #eaf4ff;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffea;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4f8ff;
+      padding: 15px;
+      border-left: 5px solid #0078d7;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .back-btn:hover {
+      background: #005fa3;
+    }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .complete-btn:hover {
+      background: #218838;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .compare-table th,
+    .compare-table td {
+      border: 1px solid #ddd;
+      padding: 6px 8px;
+      text-align: left;
+    }
+
+    .compare-table th {
+      background: #eaf4ff;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToWeb()">&times;</div>
+
+    <h2>Step 12: Work with Databases (MongoDB / MySQL Basics)</h2>
+    <p>In Stage 11 you built a simple backend with Node.js and Express. Now you will connect that backend to a database so that data is stored permanently instead of only in memory.</p>
+    <p>You will learn basic concepts of relational (MySQL) and document (MongoDB) databases and see starter code to connect them to Node.js.</p>
+
+    <hr><br>
+
+    <h3>1️⃣ Why use a database?</h3>
+    <p>Arrays in your server code disappear when the server restarts, but a database keeps data on disk so it persists over time.</p>
+    <p>Databases let you query, filter, sort, update, and secure large amounts of data efficiently.</p>
+
+    <h3>2️⃣ Relational vs document databases (MySQL vs MongoDB)</h3>
+    <p>MySQL is a relational database with tables, rows, and columns accessed with SQL.</p>
+    <p>MongoDB is a document database that stores JSON‑like documents in collections with a flexible schema.</p>
+
+    <table class="compare-table">
+      <tr>
+        <th>Feature</th>
+        <th>MySQL</th>
+        <th>MongoDB</th>
+      </tr>
+      <tr>
+        <td>Data model</td>
+        <td>Tables, rows, and columns (strict structure).</td>
+        <td>Collections and JSON‑like documents (flexible schema).</td>
+      </tr>
+      <tr>
+        <td>Query language</td>
+        <td>SQL (SELECT, INSERT, UPDATE, DELETE).</td>
+        <td>MongoDB query API (find, insertOne, updateOne, etc.).</td>
+      </tr>
+      <tr>
+        <td>Good for</td>
+        <td>Structured data, complex joins, strong relationships.</td>
+        <td>Flexible data, fast development, hierarchical documents.</td>
+      </tr>
+    </table>
+
+    <h3>3️⃣ Connecting Node.js to MySQL (basic example)</h3>
+    <p>This example shows how to connect Express to a MySQL database and query a table.</p>
+    <p>Ensure MySQL is installed and a database like <code>scg_db</code> with a <code>courses</code> table exists.</p>
+
+    <pre>
+// Install MySQL driver
+// npm install mysql2
+
+// db-mysql.js
+const mysql = require("mysql2");
+
+const connection = mysql.createConnection({
+  host: "localhost",
+  user: "root",          // your MySQL username
+  password: "password",  // your MySQL password
+  database: "scg_db"     // your database name
+});
+
+connection.connect((err) => {
+  if (err) {
+    console.error("MySQL connection error:", err);
+    return;
+  }
+  console.log("Connected to MySQL database");
+});
+
+module.exports = connection;
+    </pre>
+
+    <p>Then in your Express server:</p>
+
+    <pre>
+// server.js (MySQL route example)
+const express = require("express");
+const app = express();
+const mysqlConnection = require("./db-mysql");
+
+app.get("/api/mysql-courses", (req, res) => {
+  mysqlConnection.query("SELECT id, name, level FROM courses", (err, results) => {
+    if (err) {
+      console.error("Error fetching courses:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+    res.json(results);
+  });
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
+    </pre>
+
+    <p class="note">This endpoint returns courses from MySQL rather than from an in‑memory array.</p>
+
+    <h3>4️⃣ Connecting Node.js to MongoDB with Mongoose (basic example)</h3>
+    <p>MongoDB works naturally with Node.js because both use JSON‑style data, and Mongoose adds schemas and models on top.</p>
+    <p>Install Mongoose and ensure MongoDB (local or Atlas) is running.</p>
+
+    <div class="cmd-box">
+      <div># Install Mongoose</div>
+      <div><span>npm install mongoose</span></div>
+    </div>
+
+    <p>Create <code>db-mongo.js</code>:</p>
+
+    <pre>
+// db-mongo.js
+const mongoose = require("mongoose");
+
+const MONGO_URL = "mongodb://127.0.0.1:27017/scg_db"; // example local URL
+
+async function connectMongo() {
+  try {
+    await mongoose.connect(MONGO_URL);
+    console.log("Connected to MongoDB");
+  } catch (err) {
+    console.error("MongoDB connection error:", err);
+  }
+}
+
+module.exports = { mongoose, connectMongo };
+    </pre>
+
+    <p>Define a simple Course model in <code>models/Course.js</code>:</p>
+
+    <pre>
+// models/Course.js
+const { mongoose } = require("../db-mongo");
+
+const courseSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  level: { type: String, required: true }
+});
+
+const Course = mongoose.model("Course", courseSchema);
+
+module.exports = Course;
+    </pre>
+
+    <p>Use it in your Express server:</p>
+
+    <pre>
+// server-mongo.js
+const express = require("express");
+const app = express();
+const { connectMongo } = require("./db-mongo");
+const Course = require("./models/Course");
+
+app.use(express.json());
+
+// Connect to MongoDB once at startup
+connectMongo();
+
+// GET all courses
+app.get("/api/mongo-courses", async (req, res) => {
+  try {
+    const courses = await Course.find({});
+    res.json(courses);
+  } catch (err) {
+    console.error("Error fetching courses:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
+// POST create a new course
+app.post("/api/mongo-courses", async (req, res) => {
+  const { name, level } = req.body;
+  if (!name || !level) {
+    return res.status(400).json({ error: "Name and level are required" });
+  }
+
+  try {
+    const course = new Course({ name, level });
+    const saved = await course.save();
+    res.status(201).json(saved);
+  } catch (err) {
+    console.error("Error saving course:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
+
+const PORT = 3001;
+app.listen(PORT, () => {
+  console.log(`Mongo server running at http://localhost:${PORT}`);
+});
+    </pre>
+
+    <p class="note">Now your backend can store and retrieve courses from MongoDB instead of only using memory.</p>
+
+    <h3>5️⃣ Which database should you learn first?</h3>
+    <p>MongoDB is popular in full‑stack JavaScript stacks for rapid development and flexible schemas.</p>
+    <p>MySQL is strong for structured data and complex relationships; knowing basics of both makes you more adaptable.</p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Stage 12:</strong>
+      <ul>
+        <li>Install MySQL, create database <code>scg_db</code> and table <code>courses</code>, then build a <code>/api/mysql-courses</code> route in Express.</li>
+        <li>Install MongoDB (or use Atlas), create database <code>scg_db</code> and collection <code>courses</code>, then create a Mongoose <code>Course</code> model and test GET/POST routes.</li>
+        <li>From a simple HTML page or your Stage 7 test file, use <code>fetch</code> to display data from <code>/api/mysql-courses</code> or <code>/api/mongo-courses</code>.</li>
+        <li>Write down three differences between MySQL and MongoDB and when you might choose each.</li>
+        <li>Optional: Explore Sequelize (MySQL) or advanced Mongoose features like validation and default values.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToWeb()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function goBackToWeb() {
+    // Go back to index.html and open Web roadmap popup
+    window.location.href = "index.html#open-web"; // [web:241][web:250]
+  }
+
+  function markCompleted() {
+    // Mark Web step 12 as completed
+    localStorage.setItem("web_step12_completed", "true"); // [web:193][web:233][web:265]
+    window.location.href = "index.html#open-web";
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Step 5 – OOP: Classes and Inheritance</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Python Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToPython()">&times;</div>
+
+    <h2>Step 5: Learn OOP Concepts – Classes and Inheritance</h2>
+    <p>
+      In this stage you learn the basics of Object‑Oriented Programming (OOP) in Python:
+      how to define classes, create objects, and use inheritance to reuse and organize code.
+    </p>
+    <p>
+      OOP is used in most medium and large Python projects (Django apps, games, tools),
+      so getting comfortable with these ideas will help you understand real‑world code.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is a class? What is an object?</h3>
+    <p>
+      A <strong>class</strong> is like a blueprint or design that describes what data and
+      behavior something will have, and an <strong>object</strong> is a real thing created from
+      that blueprint.
+    </p>
+    <ul>
+      <li>Class = plan/template (for example, “Student” design).</li>
+      <li>Object = actual item based on that plan (for example, Asha, Ravi as Student objects).</li>
+      <li>Classes define attributes (data) and methods (functions).</li>
+    </ul>
+
+    <pre>
+# Simple Student class (blueprint)
+class Student:
+    def __init__(self, name, branch, year):
+        self.name = name
+        self.branch = branch
+        self.year = year
+
+    def introduce(self):
+        print("Hi, I am", self.name, "from", self.branch, "year", self.year)
+
+# creating objects (students) from the class
+s1 = Student("Asha", "CSE", 2)
+s2 = Student("Ravi", "ECE", 3)
+
+s1.introduce()
+s2.introduce()
+    </pre>
+
+    <p class="note">
+      <code>__init__</code> is a special method that runs when you create an object,
+      and the first parameter <code>self</code> refers to “this object itself”.
+    </p>
+
+    <h3>2️⃣ Understanding __init__ and self</h3>
+    <p>
+      <code>__init__()</code> is called the constructor and sets up the
+      object’s initial data (attributes).
+    </p>
+    <ul>
+      <li><code>self.name</code>, <code>self.branch</code> are attributes stored inside each object.</li>
+      <li>When you call <code>Student("Asha", "CSE", 2)</code>, Python automatically passes the new object as <code>self</code>.</li>
+      <li>Other parameters (like <code>name</code>, <code>branch</code>) come from what you pass when you create the object.</li>
+    </ul>
+
+    <pre>
+class Laptop:
+    def __init__(self, brand, ram_gb):
+        self.brand = brand
+        self.ram_gb = ram_gb
+
+    def show_config(self):
+        print("Brand:", self.brand, "| RAM:", self.ram_gb, "GB")
+
+l1 = Laptop("Dell", 8)
+l2 = Laptop("HP", 16)
+
+l1.show_config()
+l2.show_config()
+    </pre>
+
+    <p class="note">
+      Each object has its own values (for example, one laptop has 8 GB RAM, another has 16 GB),
+      but they share the same class definition.
+    </p>
+
+    <h3>3️⃣ Methods – functions inside a class</h3>
+    <p>
+      Methods are functions defined inside a class that operate on the object’s data
+      using <code>self</code>.
+    </p>
+
+    <pre>
+class BankAccount:
+    def __init__(self, owner, balance):
+        self.owner = owner
+        self.balance = balance
+
+    def deposit(self, amount):
+        self.balance += amount
+        print("Deposited", amount, "New balance:", self.balance)
+
+    def withdraw(self, amount):
+        if amount &lt;= self.balance:
+            self.balance -= amount
+            print("Withdrawn", amount, "New balance:", self.balance)
+        else:
+            print("Insufficient balance")
+
+acc = BankAccount("Kiran", 1000)
+acc.deposit(500)
+acc.withdraw(300)
+acc.withdraw(1500)
+    </pre>
+
+    <p class="note">
+      This pattern—class plus attributes plus methods—is how many apps model real things like
+      accounts, tickets, orders, and users.
+    </p>
+
+    <h3>4️⃣ What is inheritance?</h3>
+    <p>
+      <strong>Inheritance</strong> lets one class (child) reuse code from another class (parent)
+      so the child automatically gets the parent’s attributes and methods.
+    </p>
+    <ul>
+      <li>Parent / base class – general version (for example, <code>Person</code>).</li>
+      <li>Child / derived class – more specific version (for example, <code>Student</code>, <code>Teacher</code>).</li>
+      <li>Child can add new features or change (override) some behavior.</li>
+    </ul>
+
+    <pre>
+# Parent class
+class Person:
+    def __init__(self, name):
+        self.name = name
+
+    def introduce(self):
+        print("Hi, I am", self.name)
+
+# Child class inherits Person
+class Student(Person):
+    def __init__(self, name, branch):
+        super().__init__(name)   # call Person.__init__
+        self.branch = branch
+
+    def show_branch(self):
+        print(self.name, "studies", self.branch)
+
+p = Person("Asha")
+p.introduce()
+
+s = Student("Ravi", "CSE")
+s.introduce()       # from Person
+s.show_branch()     # from Student
+    </pre>
+
+    <p class="note">
+      The <code>super()</code> call lets the child reuse the parent’s initialization logic
+      instead of repeating the same code in multiple classes.
+    </p>
+
+    <h3>5️⃣ Real‑life example – College people</h3>
+    <p>
+      Here is a small example that models people in a college using inheritance.
+    </p>
+
+    <pre>
+class Person:
+    def __init__(self, name, role):
+        self.name = name
+        self.role = role
+
+    def info(self):
+        print(self.name, "-", self.role)
+
+class Student(Person):
+    def __init__(self, name, branch, year):
+        super().__init__(name, "Student")
+        self.branch = branch
+        self.year = year
+
+    def info(self):
+        # override parent method
+        print(self.name, "- Student -", self.branch, "Year", self.year)
+
+class Teacher(Person):
+    def __init__(self, name, subject):
+        super().__init__(name, "Teacher")
+        self.subject = subject
+
+    def info(self):
+        print(self.name, "- Teacher of", self.subject)
+
+people = [
+    Student("Asha", "CSE", 2),
+    Student("Ravi", "ECE", 3),
+    Teacher("Meera", "Python"),
+]
+
+for p in people:
+    p.info()
+    </pre>
+
+    <p class="note">
+      This is how you can build bigger systems: start with a base class and
+      extend it with more specific classes for each role.
+    </p>
+
+    <h3>6️⃣ When to use classes in your own projects</h3>
+    <p>
+      You do not need classes for every small script, but they are very helpful when:
+    </p>
+    <ul>
+      <li>You have many similar items (students, products, books, accounts) with the same kind of data.</li>
+      <li>You want to group related functions and data together, for example, all code about “Student” inside one class.</li>
+      <li>You are building a larger project (web app, game, tool) where organizing code matters.</li>
+    </ul>
+
+    <h3>7️⃣ Mini program – simple library system</h3>
+    <p>
+      This small example shows how you could start a library app using classes.
+    </p>
+
+    <pre>
+class Book:
+    def __init__(self, title, author, copies):
+        self.title = title
+        self.author = author
+        self.copies = copies
+
+    def available(self):
+        return self.copies &gt; 0
+
+    def issue(self):
+        if self.available():
+            self.copies -= 1
+            print("Issued:", self.title, "| Remaining:", self.copies)
+        else:
+            print("No copies left for:", self.title)
+
+class Library:
+    def __init__(self):
+        self.books = []
+
+    def add_book(self, book):
+        self.books.append(book)
+
+    def show_books(self):
+        for b in self.books:
+            print("-", b.title, "by", b.author, "| Copies:", b.copies)
+
+lib = Library()
+lib.add_book(Book("Python Basics", "Author A", 3))
+lib.add_book(Book("Data Science Intro", "Author B", 1))
+
+lib.show_books()
+
+# issue some books
+lib.books[0].issue()
+lib.books[0].issue()
+lib.books[1].issue()
+lib.books[1].issue()
+    </pre>
+
+    <p class="note">
+      This is not a full library system, but it shows how classes can represent real objects
+      and how methods implement actions on those objects.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Python Stage 5:</strong>
+      <ul>
+        <li>Create a <code>Student</code> class with attributes like <code>name</code>, <code>branch</code>, <code>year</code> and a method <code>summary()</code> that prints a one‑line introduction.</li>
+        <li>Make a <code>Car</code> class with attributes like <code>brand</code>, <code>model</code>, <code>year</code> and methods to show details and to “start” the car (just print a message).</li>
+        <li>Create a parent class <code>Employee</code> and a child class <code>Manager</code> that inherits from it and adds an extra attribute (like <code>team_size</code>).</li>
+        <li>Write a small script with a list of <code>Student</code> objects and loop over them to print their details.</li>
+        <li>Take any mini‑project idea (marks app, shop biller, attendance system) and write down which real‑world things can be turned into classes.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToPython()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToPython() {
+    // Go back to index.html and open Python roadmap popup
+    window.location.href = "index.html#open-python";
+  }
+
+  function markCompleted() {
+    // Mark Python Step 5 as completed in localStorage
+    localStorage.setItem("python_step5_completed", "true");
+    window.location.href = "index.html#open-python";
+  }
+</script>
+
+</body>
+</html>

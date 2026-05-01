@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 9 – Work with Views and Indexes</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 9: Work with Views and Indexes</h2>
+    <p>
+      In this stage you learn what a <strong>view</strong> is in SQL and how it can simplify
+      repeated queries, plus a basic idea of what an <strong>index</strong> does.
+    </p>
+    <p>
+      Views act like saved queries that you can treat as virtual tables, while indexes
+      help the database search faster on specific columns.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is a view?</h3>
+    <p>
+      A view is a virtual table based on the result of a SELECT query; it does not
+      store its own data, but reads from underlying tables whenever you query it.[web:236][web:239]
+    </p>
+    <ul>
+      <li>Views can hide complex joins and filters behind a simple name.</li>
+      <li>They are useful for reports, security (showing only some columns or rows), and reuse.</li>
+    </ul>
+
+    <h3>2️⃣ Creating a simple view</h3>
+    <p>
+      The basic pattern for making a view is:
+      <code>CREATE VIEW view_name AS SELECT ...</code>.
+    </p>
+
+    <pre>
+-- A view that shows basic student info
+CREATE VIEW student_basic AS
+SELECT id, name, branch
+FROM students;
+
+-- Use the view like a table
+SELECT * FROM student_basic;
+    </pre>
+
+    <p class="note">
+      Whenever you SELECT from <code>student_basic</code>, the database actually runs the
+      underlying SELECT query on <code>students</code>.
+    </p>
+
+    <h3>3️⃣ View with filter and join</h3>
+    <p>
+      Views can include WHERE, JOIN, GROUP BY, and other clauses so that reports are
+      always generated with the same logic.
+    </p>
+
+    <pre>
+-- CSE students only
+CREATE VIEW cse_students AS
+SELECT id, name, cgpa
+FROM students
+WHERE branch = 'CSE';
+
+-- Students with their marks (join view)
+CREATE VIEW student_marks AS
+SELECT s.id,
+       s.name,
+       s.branch,
+       m.subject,
+       m.score
+FROM students AS s
+INNER JOIN marks AS m
+    ON s.id = m.student_id;
+
+-- Use these views
+SELECT * FROM cse_students;
+SELECT * FROM student_marks;
+    </pre>
+
+    <p class="note">
+      If underlying data changes, such as new students or marks, the view results
+      update automatically because they are based on live tables.
+    </p>
+
+    <h3>4️⃣ Updating or dropping a view (concept)</h3>
+    <p>
+      You can change a view by dropping and recreating it, or by using ALTER VIEW
+      if your database supports that syntax.
+    </p>
+
+    <pre>
+-- remove a view when no longer needed
+DROP VIEW cse_students;
+
+-- pattern for ALTER VIEW (syntax may differ by database)
+-- ALTER VIEW student_basic AS
+-- SELECT id, name, branch, cgpa
+-- FROM students;
+    </pre>
+
+    <p class="note">
+      In many beginner projects, dropping and recreating a view is enough for simple
+      changes.
+
+    <h3>5️⃣ Indexes – very basic idea</h3>
+    <p>
+      A database index is a special data structure that improves the speed of reading
+      rows by allowing faster lookups on indexed columns.
+    </p>
+    <ul>
+      <li>Indexes are commonly created on columns used in WHERE or JOIN conditions, such as student_id or emails.</li>
+      <li>Indexes speed up reads but add write overhead because they must be updated on INSERT, UPDATE, and DELETE.</li>
+    </ul>
+
+    <pre>
+-- example pattern (exact syntax may differ)
+CREATE INDEX idx_students_branch
+ON students(branch);
+
+CREATE INDEX idx_marks_student_id
+ON marks(student_id);
+    </pre>
+
+    <p class="note">
+      Do not worry about advanced index tuning yet; just remember their purpose:
+      faster lookups on frequently searched columns at the cost of extra storage
+      and some write overhead.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for SQL Stage 9:</strong>
+      <ul>
+        <li>Create a simple view <code>student_basic</code> (id, name, branch) and run a SELECT on it to see the rows.</li>
+        <li>Create a view <code>high_cgpa_students</code> that shows only students with cgpa ≥ 8.0, then test it with <code>SELECT * FROM high_cgpa_students;</code>[web:238]</li>
+        <li>Create a view <code>student_marks</code> (join students and marks) and practice queries on that view instead of joining tables every time.</li>
+        <li>Drop one of your test views and recreate it with a slightly different column set or filter.</li>
+        <li>Optional: Create an index on a frequently filtered column (for example, branch in students) using syntax similar to the examples above.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 9 as completed in localStorage
+    localStorage.setItem("sql_step9_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

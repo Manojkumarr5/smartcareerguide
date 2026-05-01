@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 14 – Connect SQL with Python</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 14: Connect SQL with Python</h2>
+    <p>
+      In this stage you learn how to connect Python to a database, run SQL queries
+      from Python, and fetch results for apps or data analysis.
+    </p>
+    <p>
+      You start with SQLite, which needs no separate server, and then see how to
+      connect to MySQL or other databases using drivers.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Using SQLite with Python (beginner-friendly)</h3>
+    <p>
+      Python’s built‑in <code>sqlite3</code> module lets you work with a local <code>.db</code> file
+      without installing a separate database server.
+    </p>
+
+    <pre>
+# file: basic_sqlite_example.py
+import sqlite3
+
+# 1) connect to (or create) a SQLite database file
+conn = sqlite3.connect("college.db")  # will create if not existing
+cursor = conn.cursor()
+
+# 2) create a table (if it doesn't exist)
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS students (
+    id      INTEGER PRIMARY KEY,
+    name    TEXT,
+    branch  TEXT,
+    cgpa    REAL
+)
+""")
+
+# 3) insert some sample data
+cursor.execute(
+    "INSERT INTO students (name, branch, cgpa) VALUES (?, ?, ?)",
+    ("Asha", "CSE", 8.5)
+)
+cursor.execute(
+    "INSERT INTO students (name, branch, cgpa) VALUES (?, ?, ?)",
+    ("Ravi", "ECE", 7.8)
+)
+
+conn.commit()  # save changes
+
+# 4) run a SELECT query and fetch results
+cursor.execute("SELECT id, name, branch, cgpa FROM students")
+rows = cursor.fetchall()
+
+for row in rows:
+    print(row)
+
+# 5) close the connection
+cursor.close()
+conn.close()
+    </pre>
+
+    <p class="note">
+      The <code>?</code> placeholders are parameter markers that safely bind values and
+      help prevent SQL injection.
+    </p>
+
+    <h3>2️⃣ Querying with pandas for analysis</h3>
+    <p>
+      For analysis, you can load SQL query results into a pandas DataFrame and
+      then use Python for further processing.
+    </p>
+
+    <pre>
+import sqlite3
+import pandas as pd
+
+conn = sqlite3.connect("college.db")
+
+query = """
+SELECT branch,
+       AVG(cgpa) AS avg_cgpa,
+       COUNT(*)  AS students_count
+FROM students
+GROUP BY branch
+"""
+
+df = pd.read_sql_query(query, conn)
+print(df)
+
+conn.close()
+    </pre>
+
+    <p class="note">
+      This pattern of using SQL to select data and pandas to analyze it is very
+      common in data science workflows.
+    </p>
+
+    <h3>3️⃣ Connecting Python to MySQL (driver-based)</h3>
+    <p>
+      For MySQL you usually install a driver such as <code>mysql-connector-python</code>
+      and then connect with host, user, password, and database settings.
+    </p>
+
+    <pre>
+# install once:
+# pip install mysql-connector-python
+
+import mysql.connector
+
+connection = mysql.connector.connect(
+    host="localhost",
+    user="your_username",
+    password="your_password",
+    database="college_db"
+)
+
+cursor = connection.cursor()
+
+cursor.execute("SELECT id, name, branch, cgpa FROM students")
+rows = cursor.fetchall()
+
+for row in rows:
+    print(row)
+
+cursor.close()
+connection.close()
+    </pre>
+
+    <p class="note">
+      Other databases such as PostgreSQL and SQL Server use similar patterns with
+      their own drivers, for example <code>psycopg2</code> or <code>pyodbc</code>.
+    </p>
+
+    <h3>4️⃣ Best practices: parameters, errors, and context managers</h3>
+    <p>
+      Use parameterized queries for user input and handle errors cleanly so your
+      code is safe and robust.
+    </p>
+
+    <pre>
+import sqlite3
+
+try:
+    conn = sqlite3.connect("college.db")
+    cursor = conn.cursor()
+
+    name   = "Meena"
+    branch = "ME"
+    cgpa   = 9.1
+
+    cursor.execute(
+        "INSERT INTO students (name, branch, cgpa) VALUES (?, ?, ?)",
+        (name, branch, cgpa)
+    )
+
+    conn.commit()
+except Exception as e:
+    print("Error:", e)
+    conn.rollback()
+finally:
+    cursor.close()
+    conn.close()
+    </pre>
+
+    <p class="note">
+      Many programs also wrap connections in <code>with</code> blocks so resources are
+      closed automatically even if an error occurs.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for SQL Stage 14:</strong>
+      <ul>
+        <li>Create <code>basic_sqlite_example.py</code>, connect to <code>college.db</code>, create a <code>students</code> table if needed, insert a few rows, and print them.</li>
+        <li>Write a Python script that asks the user for name, branch, and cgpa via <code>input()</code> and inserts that data using a parameterized INSERT.</li>
+        <li>Use pandas plus SQLite to compute average CGPA per branch and show it as a DataFrame.</li>
+        <li>If you have MySQL installed, install <code>mysql-connector-python</code> and reproduce the MySQL connection example using your own credentials.</li>
+        <li>In your notebook, write the typical four‑step pattern for Python + SQL: connect → create cursor → execute queries and commit → close.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 14 as completed in localStorage
+    localStorage.setItem("sql_step14_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

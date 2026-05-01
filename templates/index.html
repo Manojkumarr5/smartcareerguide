@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Career Guide</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ===== SPLASH SCREEN ===== -->
+  <div id="splash">
+    <h1>Smart Career Guide</h1>
+  </div>
+
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div class="hamburger" id="hamburger">&#9776;</div>
+    <h1>Smart Career Guide</h1>
+
+    <div class="header-right">
+      <p id="welcomeUser"></p>
+      <div class="profile-section">
+        <div class="profile-icon" id="profileIcon">👤</div>
+        <div class="profile-dropdown" id="profileDropdown">
+          <a href="#" id="accountOption">Account</a>
+          <a href="#" id="editProfileOption">Edit Profile</a>
+          <a href="#" id="logoutOption">Logout</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== SIDE MENU ===== -->
+  <div id="sideMenu" class="side-menu">
+    <a href="index.html" class="active">Home</a>
+    <a href="resources.html">Resources</a>
+    <a href="jobs.html">Jobs</a>
+    <a href="internships.html">Internships</a> 
+    <a href="Aboutus.html">About Us</a>
+    <a href="Help.html">Help</a>
+  </div>
+
+  <!-- ===== OVERLAY ===== -->
+  <div id="overlay" class="overlay"></div>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero">
+      <h2>Empowering Engineering Students in Rural Areas</h2>
+      <p>Your one-stop guide for career growth, learning, and opportunities.</p>
+      <button id="exploreBtn">Explore Now</button>
+    </section>
+
+    <!-- ===== COURSES SECTION ===== -->
+    <section class="courses-section hidden" id="coursesSection">
+      <h2>📚 Popular Courses & Learning Paths</h2>
+      <p>Choose a course to see your step-by-step roadmap to success.</p>
+
+      <div class="course-cards">
+        <!-- ML card with id="openML" -->
+        <div class="card">
+          <h3>Machine Learning 🤖</h3>
+          <p>Learn to build intelligent systems and data-driven solutions.</p>
+          <a href="#" class="explore-course" data-course="ml" id="open-ml">Explore</a>
+        </div>
+
+        <div class="card">
+          <h3>Web Development 💻</h3>
+          <p>Master HTML, CSS, and JavaScript to create modern websites.</p>
+          <a href="#" class="explore-course" data-course="web" id="open-web">Explore</a>
+        </div>
+
+        <div class="card">
+          <h3>Python Programming 🐍</h3>
+          <p>Start your coding journey with one of the most versatile languages.</p>
+          <a href="#" class="explore-course" data-course="python" id="open-python">Explore</a>
+        </div>
+
+        <div class="card">
+          <h3>SQL & Databases 🗂️</h3>
+          <p>Learn to manage and analyze data with SQL databases.</p>
+          <a href="#" class="explore-course" data-course="sql" id="open-sql">Explore</a>
+        </div>
+
+        <div class="card">
+          <h3>Data Science 📊</h3>
+          <p>Combine statistics, programming, and visualization to extract insights.</p>
+          <a href="#" class="explore-course" data-course="ds" id="open-ds">Explore</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== MODAL (POPUP) ===== -->
+  <div id="courseModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeModal">&times;</span>
+      <h2 id="modalTitle"></h2>
+      <div id="roadmapContainer" class="roadmap"></div>
+      <div id="stepDetail" class="step-detail"></div>
+    </div>
+  </div>
+
+  <!-- ===== LINK TO MAIN JS FILE ===== -->
+  <script src="script.js"></script>
+</body>
+</html>

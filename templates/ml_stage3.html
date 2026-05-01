@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ML Step 3 – Statistics and Probability</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: #f2f6ff; font-family: Arial, sans-serif; }
+    .content-box { max-width: 900px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); line-height: 1.7; position: relative; }
+    h2 { color: #0078d7; margin-bottom: 10px; font-size: 28px; }
+    h3 { color: #005fa3; margin-top: 20px; }
+    code { background: #eaf4ff; padding: 4px 6px; border-radius: 4px; font-size: 0.9rem; }
+    pre { background: #1e1e1e; color: #00ffea; padding: 12px; border-radius: 8px; overflow-x: auto; margin-top: 10px; }
+    .task-box { background: #f4f8ff; padding: 15px; border-left: 5px solid #0078d7; margin-top: 12px; border-radius: 6px; }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .back-btn:hover { background: #005fa3; }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .complete-btn:hover { background: #218838; }
+
+    .close-btn { position: absolute; top: 10px; right: 15px; font-size: 26px; font-weight: bold; color: #777; cursor: pointer; transition: 0.3s; }
+    .close-btn:hover { color: #000; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+    <div class="close-btn" onclick="goBackToML()">&times;</div>
+
+    <h2>Step 3: Understand Statistics and Probability</h2>
+    <p>Statistics and probability help you understand data distributions, variation, and uncertainty in ML.</p>
+
+    <hr><br>
+
+    <h3>📌 Descriptive Statistics</h3>
+    <p>Mean, median, mode, variance, and standard deviation summarize data.</p>
+    <pre>
+import numpy as np
+
+data = np.array([10, 12, 15, 18, 20])
+
+print("Mean:", data.mean())
+print("Median:", np.median(data))
+print("Std Dev:", data.std())
+    </pre>
+
+    <h3>📌 Probability Basics</h3>
+    <p>Probability measures how likely an event is to happen.</p>
+    <pre>
+import random
+
+trials = 1000
+count_heads = 0
+
+for _ in range(trials):
+    flip = random.choice(["H", "T"])
+    if flip == "H":
+        count_heads += 1
+
+print("Estimated P(Head):", count_heads / trials)
+    </pre>
+
+    <h3>📌 Normal Distribution</h3>
+    <p>Many real-world features (like height, marks) are approximately normally distributed.</p>
+    <pre>
+import numpy as np
+
+samples = np.random.normal(loc=50, scale=10, size=1000)
+print("Sample mean:", samples.mean())
+print("Sample std:", samples.std())
+    </pre>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks:</strong>
+      <ul>
+        <li>Calculate mean, median, and standard deviation of your own marks data.</li>
+        <li>Simulate rolling a dice 1000 times and estimate probability of getting a 6.</li>
+        <li>Generate normally distributed samples and verify mean and std dev.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToML()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToML() {
+    // Use same hash pattern as other ML stages so roadmap auto-opens
+    window.location.href = "index.html#open-ml"; // [web:189][web:191]
+  }
+
+  function markCompleted() {
+    // Mark ML step 3 as completed
+    localStorage.setItem("ml_step3_completed", "true"); // [web:162][web:177]
+    window.location.href = "index.html#open-ml";
+  }
+</script>
+
+</body>
+</html>

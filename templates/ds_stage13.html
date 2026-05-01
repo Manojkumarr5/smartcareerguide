@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS Step 13 – Learn Model Tuning and Evaluation</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Data Science Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToDS()">&times;</div>
+
+    <h2>Step 13: Learn Model Tuning and Evaluation</h2>
+    <p>
+      In this stage you learn how to properly <strong>evaluate</strong> a model and
+      improve it using <strong>hyperparameter tuning</strong> (changing model settings
+      like depth or learning rate).
+    </p>
+    <p>
+      Instead of only checking accuracy once, you use better metrics and tools like
+      cross‑validation and GridSearchCV to find stronger models in a systematic way.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Evaluation metrics for classification and regression</h3>
+    <p>
+      Different problems need different metrics: classification uses accuracy, precision,
+      recall, F1; regression uses MAE, MSE, RMSE, and R².
+    </p>
+    <ul>
+      <li><strong>Accuracy</strong>: percent of correct predictions, but can be misleading on imbalanced data.[web:447][web:450]</li>
+      <li><strong>Precision</strong> and <strong>recall</strong>: focus on the quality of positive predictions, very important for minority classes.[web:445][web:450]</li>
+      <li><strong>MSE/RMSE</strong>: average squared error and its square root; <strong>R²</strong> shows how much variance is explained for regression.[web:447]</li>
+    </ul>
+
+    <pre>
+from sklearn.metrics import (
+    accuracy_score, precision_score, recall_score, f1_score,
+    mean_squared_error, r2_score
+)
+
+# Example for classification
+y_true = [0, 0, 1, 1, 1]
+y_pred = [0, 0, 0, 1, 1]
+
+print("Accuracy :", accuracy_score(y_true, y_pred))
+print("Precision:", precision_score(y_true, y_pred))
+print("Recall   :", recall_score(y_true, y_pred))
+print("F1-score :", f1_score(y_true, y_pred))
+    </pre>
+
+    <p class="note">
+      Beginner tutorials show how different metrics highlight different model
+      behaviors, especially when classes are imbalanced.
+    </p>
+
+    <h3>2️⃣ Cross‑validation – more reliable evaluation</h3>
+    <p>
+      Cross‑validation (such as k‑fold) splits the training data into several folds so
+      the model is trained and tested multiple times on different parts.
+    </p>
+    <ul>
+      <li>This gives a more stable performance estimate than a single train‑test split.</li>
+      <li>Common choice: 5‑fold or 10‑fold cross‑validation.</li>
+    </ul>
+
+    <pre>
+from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LogisticRegression
+
+model = LogisticRegression(max_iter=1000)
+
+scores = cross_val_score(
+    model, X, y,
+    cv=5,              # 5-fold cross-validation
+    scoring="accuracy"
+)
+print("CV scores:", scores)
+print("Mean accuracy:", scores.mean())
+    </pre>
+
+    <p class="note">
+      Model selection guides use cross‑validation to reduce variance in evaluation and
+      compare different models fairly.
+    </p>
+
+    <h3>3️⃣ What is hyperparameter tuning?</h3>
+    <p>
+      Hyperparameters are model settings chosen before training (like tree depth or
+      number of neighbors); tuning means searching for values that give better
+      performance.
+    </p>
+    <ul>
+      <li>Examples: <code>n_neighbors</code> in k‑NN, <code>max_depth</code> in decision trees, <code>C</code> in logistic regression.[web:449]</li>
+      <li>Automatic search: <strong>GridSearchCV</strong> and <strong>RandomizedSearchCV</strong> in scikit‑learn.</li>
+    </ul>
+
+    <p class="note">
+      Best practices suggest tuning on training data using cross‑validation, then
+      checking the final chosen model once on a held‑out test set.
+    </p>
+
+    <h3>4️⃣ Simple GridSearchCV example</h3>
+    <p>
+      GridSearchCV tries many combinations of hyperparameters and uses
+      cross‑validation to find the best one.
+    </p>
+
+    <pre>
+from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+
+rf = RandomForestClassifier(random_state=42)
+
+param_grid = {
+    "n_estimators": [50, 100],
+    "max_depth": [None, 5, 10]
+}
+
+grid_search = GridSearchCV(
+    estimator=rf,
+    param_grid=param_grid,
+    cv=3,
+    scoring="accuracy"
+)
+
+grid_search.fit(X_train, y_train)
+
+print("Best params :", grid_search.best_params_)
+print("Best score  :", grid_search.best_score_)
+
+best_model = grid_search.best_estimator_
+y_pred = best_model.predict(X_test)
+print("Test accuracy:", accuracy_score(y_test, y_pred))
+    </pre>
+
+    <p class="note">
+      GridSearchCV integrates cross‑validation directly into the hyperparameter search,
+      reducing the need for manual loops and helping avoid overfitting to one split.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for DS Stage 13:</strong>
+      <ul>
+        <li>Pick one classification dataset and
+            train a baseline model, then compute accuracy, precision, recall, and
+            F1‑score; note which metric changes the most if you adjust the decision
+            threshold.
+        </li>
+        <li>Use <code>cross_val_score</code> with 5‑fold cross‑validation for the same
+            model and compare the mean CV score with the simple train‑test score.
+        </li>
+        <li>Run a small GridSearchCV on 1–2 hyperparameters (for example depth and
+            number of trees) and record how much the best score improves over the
+            baseline.
+        </li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToDS()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToDS() {
+    // Go back to index.html and open Data Science roadmap popup
+    window.location.href = "index.html#open-ds";
+  }
+
+  function markCompleted() {
+    // Mark DS Step 13 as completed in localStorage
+    localStorage.setItem("ds_step13_completed", "true");
+    window.location.href = "index.html#open-ds";
+  }
+</script>
+
+</body>
+</html>

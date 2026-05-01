@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS Step 9 – Work with Clustering and PCA</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Data Science Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToDS()">&times;</div>
+
+    <h2>Step 9: Work with Clustering and PCA</h2>
+    <p>
+      In this stage you learn two important unsupervised learning tools:
+      <strong>clustering</strong>, which groups similar data points, and
+      <strong>PCA (Principal Component Analysis)</strong>, which reduces the number of
+      features while keeping main patterns.
+    </p>
+    <p>
+      These methods help you explore structure in data when there is no target label,
+      and also prepare cleaner inputs for later models.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is clustering?</h3>
+    <p>
+      Clustering algorithms automatically group observations into clusters so that
+      points in the same cluster are more similar to each other than to points in other
+      clusters.
+    </p>
+    <ul>
+      <li>Example: group students into “low/medium/high performance” without labels.</li>
+      <li>Example: group villages by literacy and income to see patterns for development.</li>
+    </ul>
+
+    <p class="note">
+      K‑means clustering is a common starting algorithm that tries to form <code>k</code>
+      groups by minimizing distance between points and their cluster centers.
+    </p>
+
+    <h3>2️⃣ Simple k-means clustering example</h3>
+    <p>
+      Here is a small example clustering students using maths and science marks as
+      features.[web:408]
+    </p>
+
+    <pre>
+import pandas as pd
+from sklearn.cluster import KMeans
+
+data = {
+    "maths":   [60, 75, 80, 90, 40, 45, 88, 70],
+    "science": [58, 72, 85, 92, 42, 50, 86, 68]
+}
+df = pd.DataFrame(data)
+
+# Choose number of clusters k = 2 (for example: lower and higher performers)
+kmeans = KMeans(n_clusters=2, random_state=42)
+df["cluster"] = kmeans.fit_predict(df[["maths", "science"]])
+
+print(df)
+    </pre>
+
+    <p class="note">
+      Introductory explanations describe k‑means as “pick k centers, assign each point
+      to the nearest center, update centers, and repeat until stable”.
+    </p>
+
+    <h3>3️⃣ Visualizing clusters (optional)</h3>
+    <p>
+      You can use a scatter plot colored by cluster to see how groups look in 2D
+      feature space.
+    </p>
+
+    <pre>
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(6, 4))
+plt.scatter(df["maths"], df["science"], c=df["cluster"], cmap="viridis")
+plt.xlabel("Maths Marks")
+plt.ylabel("Science Marks")
+plt.title("K-means Clusters of Students")
+plt.tight_layout()
+plt.show()
+    </pre>
+
+    <p class="note">
+      Visualization helps you “see” clusters as natural groups inside the data cloud.
+    </p>
+
+    <h3>4️⃣ What is PCA (Principal Component Analysis)?</h3>
+    <p>
+      PCA is a dimensionality reduction technique that creates new features
+      (“principal components”) that capture most of the variance (spread) in the
+      original data.
+    </p>
+    <ul>
+      <li>It is useful when you have many correlated features and want a smaller set
+          that still keeps the main patterns.</li>
+      <li>Often used for visualization (reducing many features to 2D) and as a
+          preprocessing step before clustering or modeling.</li>
+    </ul>
+
+    <p class="note">
+      Beginner explanations describe PCA as “rotating and compressing” data to keep the
+      most information with fewer dimensions.
+    </p>
+
+    <h3>5️⃣ Simple PCA example with scikit‑learn</h3>
+    <p>
+      This example reduces four subject marks to two principal components so you can
+      later cluster or plot in 2D.
+    </p>
+
+    <pre>
+from sklearn.decomposition import PCA
+
+# Example data: marks in four subjects
+data = {
+    "maths":   [60, 75, 80, 90, 40, 45, 88, 70],
+    "science": [58, 72, 85, 92, 42, 50, 86, 68],
+    "english": [65, 70, 78, 88, 55, 60, 82, 73],
+    "history": [62, 68, 75, 85, 50, 58, 80, 70]
+}
+df = pd.DataFrame(data)
+
+pca = PCA(n_components=2)
+components = pca.fit_transform(df)
+
+pca_df = pd.DataFrame(
+    components,
+    columns=["PC1", "PC2"]
+)
+print(pca_df.head())
+print("Explained variance ratio:", pca.explained_variance_ratio_)
+    </pre>
+
+    <p class="note">
+      The explained variance ratio shows how much of the original information each
+      principal component keeps.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for DS Stage 9:</strong>
+      <ul>
+        <li>Choose a small dataset with at least two numeric features and
+          run k‑means clustering with <code>k = 2</code> or <code>k = 3</code>, then add
+          the cluster labels as a new column.
+        </li>
+        <li>Use PCA to reduce a dataset with 3–5 numeric columns to 2 components and
+          print the explained variance ratios.
+        </li>
+        <li>(Optional) Create a scatter plot of PC1 vs PC2 colored by cluster to see how
+          PCA and clustering together show structure in the data.
+        </li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToDS()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToDS() {
+    // Go back to index.html and open Data Science roadmap popup
+    window.location.href = "index.html#open-ds";
+  }
+
+  function markCompleted() {
+    // Mark DS Step 9 as completed in localStorage
+    localStorage.setItem("ds_step9_completed", "true");
+    window.location.href = "index.html#open-ds";
+  }
+</script>
+
+</body>
+</html>

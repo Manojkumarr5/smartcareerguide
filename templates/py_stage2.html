@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Step 2 – Syntax, Loops, and Functions</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Python Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToPython()">&times;</div>
+
+    <h2>Step 2: Understand Syntax, Loops, and Functions</h2>
+    <p>
+      In this stage you move from just “running Python” to actually writing small programs.
+      You will understand basic Python syntax rules, learn how loops repeat work for you,
+      and how functions help you reuse code.
+    </p>
+    <p>
+      These skills are the foundation for projects, data work, and automation later in the Python track.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Python syntax – how code is written</h3>
+    <p>
+      Syntax is the set of rules for how Python code must be written so that the interpreter
+      understands it. If you break these rules, you get a <code>SyntaxError</code>.
+    </p>
+    <ul>
+      <li>Python uses indentation (spaces) to show blocks of code instead of curly braces.</li>
+      <li>Colons <code>:</code> are used after statements like <code>if</code>, <code>for</code>, <code>while</code>, and <code>def</code>.</li>
+      <li>One statement per line keeps code simple and readable.</li>
+      <li>Use <code>#</code> to write comments that explain your logic.</li>
+    </ul>
+
+    <pre>
+# Correct indentation example
+if 5 &gt; 3:
+    print("Yes, 5 is greater than 3")
+
+
+# Wrong (will cause indentation error)
+if 5 &gt; 3:
+print("This will break")
+    </pre>
+
+    <p class="note">
+      Always use the same number of spaces for each indentation level (commonly 4 spaces).
+      Mixing tabs and spaces can cause invisible errors.
+    </p>
+
+    <h3>2️⃣ for loop – repeat over a sequence</h3>
+    <p>
+      A <code>for</code> loop lets you repeat a block of code for each item in a sequence
+      like a list, string, or a range of numbers.
+    </p>
+    <p>Basic pattern:</p>
+
+    <pre>
+# Loop from 1 to 5
+for i in range(1, 6):
+    print("Number:", i)
+    </pre>
+
+    <p>Looping over a list:</p>
+
+    <pre>
+fruits = ["apple", "banana", "mango"]
+
+for fruit in fruits:
+    print("I like", fruit)
+    </pre>
+
+    <p class="note">
+      The variable after <code>for</code> (like <code>i</code> or <code>fruit</code>)
+      takes each value from the sequence one by one.
+    </p>
+
+    <h3>3️⃣ while loop – repeat while condition is true</h3>
+    <p>
+      A <code>while</code> loop repeats as long as a condition stays true.
+      It is useful when you do not know the exact number of repetitions in advance.
+    </p>
+
+    <pre>
+count = 1
+
+while count &lt;= 5:
+    print("Count:", count)
+    count = count + 1   # update the variable
+
+print("Loop finished")
+    </pre>
+
+    <p class="note">
+      Always make sure something inside the <code>while</code> loop changes the condition,
+      or the loop can run forever.
+    </p>
+
+    <h3>4️⃣ Loop control – break and continue</h3>
+    <p>
+      Two important keywords control loops:
+    </p>
+    <ul>
+      <li><code>break</code> – stop the loop completely.</li>
+      <li><code>continue</code> – skip the current step and go to the next one.</li>
+    </ul>
+
+    <pre>
+# Stop at 5
+for i in range(1, 11):
+    if i == 5:
+        break
+    print(i)
+    </pre>
+
+    <pre>
+# Skip 5
+for i in range(1, 11):
+    if i == 5:
+        continue
+    print(i)
+    </pre>
+
+    <h3>5️⃣ Functions – reuse your code</h3>
+    <p>
+      Functions let you group statements together and give that group a name,
+      so you can call it many times instead of repeating the same code.
+    </p>
+    <p>Basic structure:</p>
+
+    <pre>
+def greet(name):
+    print("Hello,", name)
+
+# calling the function
+greet("Rahul")
+greet("Aisha")
+    </pre>
+
+    <ul>
+      <li><code>def</code> starts a function definition.</li>
+      <li><code>name</code> is a parameter (input for the function).</li>
+      <li>You can <code>return</code> a value to the caller using the <code>return</code> keyword.</li>
+    </ul>
+
+    <pre>
+def add(a, b):
+    result = a + b
+    return result
+
+total = add(3, 4)
+print("Total is:", total)
+    </pre>
+
+    <h3>6️⃣ Putting it all together – small program</h3>
+    <p>
+      Here is a small example mixing functions, loops, and conditions to show a simple marks report.
+    </p>
+
+    <pre>
+def pass_or_fail(mark):
+    if mark &gt;= 35:
+        return "Pass"
+    else:
+        return "Fail"
+
+students = [("Asha", 40), ("Ravi", 30), ("Kiran", 90)]
+
+for name, mark in students:
+    status = pass_or_fail(mark)
+    print(name, ":", mark, "-", status)
+    </pre>
+
+    <p class="note">
+      This structure (data list + loop + function) is very common in projects
+      like result processing, bill calculation, and simple automation.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Python Stage 2:</strong>
+      <ul>
+        <li>Create a program that prints numbers from 1 to 20 using a <code>for</code> loop.</li>
+        <li>Modify it so it prints “Even” for even numbers and “Odd” for odd numbers.</li>
+        <li>Write a <code>while</code> loop that asks the user to type a secret word and stops when they type the correct word.</li>
+        <li>Create a function <code>square(n)</code> that returns the square of a number, and call it for numbers 1 to 10 inside a loop.</li>
+        <li>Make a function <code>greet_student(name, course)</code> that prints a friendly message for a student and their course.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToPython()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToPython() {
+    // Go back to index.html and open Python roadmap popup
+    window.location.href = "index.html#open-python";
+  }
+
+  function markCompleted() {
+    // Mark Python Step 2 as completed in localStorage
+    localStorage.setItem("python_step2_completed", "true");
+    window.location.href = "index.html#open-python";
+  }
+</script>
+
+</body>
+</html>

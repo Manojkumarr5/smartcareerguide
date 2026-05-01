@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 16 – Use Real Datasets for Analysis</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 16: Use Real Datasets for Analysis</h2>
+    <p>
+      In this stage you move from small toy tables to real datasets from the
+      internet (for example, Kaggle) and practice writing analysis queries on
+      them.
+    </p>
+    <p>
+      This builds the habit of understanding a schema, asking questions, and
+      writing SQL that discovers insights from real-world data.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Find and choose a real dataset</h3>
+    <p>
+      Many public datasets are available for free and can be used to practice SQL
+      without touching any production systems.
+    </p>
+    <ul>
+      <li>Kaggle: datasets on Olympics, e-commerce, movies, healthcare, and more.</li>
+      <li>Government and open data portals with demographics, transport, and finance data.</li>
+      <li>Prefer CSV files that are not too huge, roughly 10k–100k rows, to keep practice smooth.</li>
+    </ul>
+
+    <p class="note">
+      Pick a topic you like such as sports, movies, or sales so exploring the
+      data feels engaging instead of boring.
+    </p>
+
+    <h3>2️⃣ Load the dataset into your database</h3>
+    <p>
+      After downloading CSV files, create tables that match their columns and
+      import the data into your SQL database.
+    </p>
+
+    <pre>
+-- example: table for an orders dataset
+CREATE TABLE orders (
+    order_id      INT PRIMARY KEY,
+    order_date    DATE,
+    customer_id   INT,
+    country       VARCHAR(100),
+    sales_amount  DECIMAL(10,2),
+    category      VARCHAR(100)
+);
+
+-- then use your DB tool or a script to import the CSV:
+-- MySQL example:
+--   LOAD DATA INFILE 'orders.csv'
+--   INTO TABLE orders
+--   FIELDS TERMINATED BY ','
+--   ENCLOSED BY '"'
+--   LINES TERMINATED BY '\n'
+--   IGNORE 1 LINES;
+    </pre>
+
+    <p class="note">
+      Most database GUIs provide an “Import CSV” wizard so you can load files
+      without writing BULK INSERT or COPY commands initially.
+    </p>
+
+    <h3>3️⃣ Ask analysis-style questions</h3>
+    <p>
+      Once your data is in tables, think like an analyst and ask about patterns,
+      totals, and trends that matter for the dataset.
+    </p>
+
+    <pre>
+-- example questions on an orders dataset:
+
+-- total sales by country
+SELECT country,
+       SUM(sales_amount) AS total_sales
+FROM orders
+GROUP BY country
+ORDER BY total_sales DESC;
+
+-- monthly sales trend
+SELECT DATE_TRUNC('month', order_date) AS month,  -- function varies by DB
+       SUM(sales_amount) AS total_sales
+FROM orders
+GROUP BY DATE_TRUNC('month', order_date)
+ORDER BY month;
+
+-- top 5 customers by total sales
+SELECT customer_id,
+       SUM(sales_amount) AS total_sales
+FROM orders
+GROUP BY customer_id
+ORDER BY total_sales DESC
+LIMIT 5;
+    </pre>
+
+    <p class="note">
+      These types of queries resemble typical BI dashboards that aggregate sales
+      by geography, customer, and time.
+    </p>
+
+    <h3>4️⃣ Mix filters, joins, and derived columns</h3>
+    <p>
+      Real datasets often span multiple tables, so you will join them and apply
+      filters and computed columns to answer deeper questions.
+    </p>
+
+    <pre>
+-- suppose you also have a customers table
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY,
+    name        VARCHAR(200),
+    segment     VARCHAR(100),
+    region      VARCHAR(100)
+);
+
+-- average order size by customer segment
+SELECT c.segment,
+       AVG(o.sales_amount) AS avg_order_value
+FROM orders    AS o
+JOIN customers AS c
+  ON o.customer_id = c.customer_id
+GROUP BY c.segment
+ORDER BY avg_order_value DESC;
+
+-- orders only for a specific region and category
+SELECT o.order_id,
+       o.order_date,
+       c.region,
+       o.category,
+       o.sales_amount
+FROM orders    AS o
+JOIN customers AS c
+  ON o.customer_id = c.customer_id
+WHERE c.region  = 'Europe'
+  AND o.category = 'Electronics';
+    </pre>
+
+    <p class="note">
+      This mirrors daily analyst work: joining fact tables with dimension tables
+      and then aggregating and filtering the results.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for SQL Stage 16:</strong>
+      <ul>
+        <li>Visit a public dataset source such as Kaggle and download one dataset that interests you, like sales, sports, or movies.</li>
+        <li>Create one or more tables in your database to match the CSV columns and import the data using an import wizard or bulk command.</li>
+        <li>Write at least 10 analysis queries, including totals, averages, top N, monthly trends, and groupings by category or country.</li>
+        <li>Write your questions in natural language first, then translate them into SQL (for example, “Which category has the highest average sales?”).</li>
+        <li>Optional: Save your SQL and a short summary of 2–3 key insights in a README so you can reuse this as a mini portfolio project.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 16 as completed in localStorage
+    localStorage.setItem("sql_step16_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

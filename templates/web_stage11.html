@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Step 11 – Backend Basics (Node.js & Express)</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #005fa3;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #eaf4ff;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffea;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4f8ff;
+      padding: 15px;
+      border-left: 5px solid #0078d7;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .back-btn:hover {
+      background: #005fa3;
+    }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .complete-btn:hover {
+      background: #218838;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToWeb()">&times;</div>
+
+    <h2>Step 11: Learn Backend (Node.js & Express Basics)</h2>
+    <p>Until now, you worked mainly on the frontend: HTML, CSS, JavaScript in the browser, and calling public APIs. Backend development is about what happens on the server: handling requests, processing data, talking to databases, and sending responses back.</p>
+    <p>In this stage you will learn what backend is and build a simple Node.js + Express server with a few routes.</p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is backend development?</h3>
+    <p>Backend (server‑side) development includes the logic, APIs, and databases that power your application behind the scenes.</p>
+    <p>The frontend sends requests, and the backend responds with data or actions such as reading or updating records.</p>
+
+    <h3>2️⃣ What is Node.js and Express?</h3>
+    <p>Node.js lets you run JavaScript on the server instead of only in the browser.</p>
+    <p>Express is a lightweight Node.js framework that makes it easier to define routes like <code>app.get()</code> and <code>app.post()</code>.</p>
+
+    <h3>3️⃣ Setup: create a simple Express server</h3>
+    <p>Follow these steps to start a basic backend project.</p>
+
+    <div class="cmd-box">
+      <div># 1. Create a folder and go inside it</div>
+      <div><span>mkdir scg-backend</span></div>
+      <div><span>cd scg-backend</span></div>
+      <br>
+      <div># 2. Initialize Node.js project (creates package.json)</div>
+      <div><span>npm init -y</span></div>
+      <br>
+      <div># 3. Install Express</div>
+      <div><span>npm install express</span></div>
+    </div>
+
+    <p>Now create a file called <code>server.js</code> and put this basic code inside.</p>
+
+    <pre>
+// server.js
+const express = require("express");
+const app = express();
+
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+// Simple home route
+app.get("/", (req, res) => {
+  res.send("Smart Career Guide Backend is running!");
+});
+
+// Start the server
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});
+    </pre>
+
+    <p>Run your server with:</p>
+
+    <div class="cmd-box">
+      <div><span>node server.js</span></div>
+    </div>
+
+    <p class="note">Open <code>http://localhost:3000</code> in your browser to see the home route message.</p>
+
+    <h3>4️⃣ Creating simple API routes (GET)</h3>
+    <p>Express lets you define routes for different URLs, each with a handler that receives a request and sends a response.</p>
+    <p>Add these routes in <code>server.js</code> to serve sample course data.</p>
+
+    <pre>
+// Fake in-memory data
+const courses = [
+  { id: 1, name: "Web Development", level: "Beginner" },
+  { id: 2, name: "Machine Learning", level: "Intermediate" },
+  { id: 3, name: "Data Science", level: "Intermediate" }
+];
+
+// Get all courses
+app.get("/api/courses", (req, res) => {
+  res.json(courses);
+});
+
+// Get one course by id
+app.get("/api/courses/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const course = courses.find(c => c.id === id);
+
+  if (!course) {
+    return res.status(404).json({ error: "Course not found" });
+  }
+
+  res.json(course);
+});
+    </pre>
+
+    <p>Visit <code>http://localhost:3000/api/courses</code> for all courses and <code>/api/courses/1</code> for a single course.</p>
+
+    <h3>5️⃣ Handling POST requests (create new course)</h3>
+    <p>Use POST to create new data by reading JSON from the request body and pushing it into your in‑memory array.</p>
+
+    <pre>
+// Create a new course (POST)
+app.post("/api/courses", (req, res) => {
+  const { name, level } = req.body;
+
+  if (!name || !level) {
+    return res.status(400).json({ error: "Name and level are required" });
+  }
+
+  const newCourse = {
+    id: courses.length + 1,
+    name,
+    level
+  };
+
+  courses.push(newCourse);
+
+  res.status(201).json(newCourse);
+});
+    </pre>
+
+    <p class="note">Test POST routes using tools like Postman, Thunder Client, or a frontend fetch call.</p>
+
+    <h3>6️⃣ Connecting frontend and backend (concept)</h3>
+    <p>Your backend is just another API that your frontend can call using <code>fetch</code>, similar to public APIs from Stage 7.</p>
+    <p>Later you can load Smart Career Guide course data from <code>http://localhost:3000/api/courses</code> instead of hard‑coding arrays.</p>
+
+    <pre>
+// Example: Fetch courses from your backend
+fetch("http://localhost:3000/api/courses")
+  .then(res => res.json())
+  .then(data => {
+    console.log("Courses from backend:", data);
+  })
+  .catch(err => {
+    console.error("Error:", err);
+  });
+    </pre>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Stage 11:</strong>
+      <ul>
+        <li>Install Node.js, create <code>scg-backend</code>, run <code>npm init -y</code> and install Express.</li>
+        <li>Build the simple Express server with home route <code>/</code> and routes <code>/api/courses</code> and <code>/api/courses/:id</code> using an in‑memory array.</li>
+        <li>Add a POST route to create a new course and test it; verify the new course appears when you GET <code>/api/courses</code>.</li>
+        <li>Optionally add PUT and DELETE routes to update and remove courses.</li>
+        <li>Draw a diagram showing how browser → Express backend → JSON response works.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToWeb()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function goBackToWeb() {
+    // Go back to index.html and open Web roadmap popup
+    window.location.href = "index.html#open-web"; // [web:254][web:238]
+  }
+
+  function markCompleted() {
+    // Mark Web step 11 as completed
+    localStorage.setItem("web_step11_completed", "true"); // [web:192][web:193][web:264]
+    window.location.href = "index.html#open-web";
+  }
+</script>
+
+</body>
+</html>

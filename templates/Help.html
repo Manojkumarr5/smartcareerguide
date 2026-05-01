@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Help - Smart Career Guide</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER (same style as resources page) -->
+  <header>
+    <div class="hamburger" id="hamburger">&#9776;</div>
+    <h1>Smart Career Guide</h1>
+
+    <nav class="side-menu" id="sideMenu">
+      <a href="index.html">Home</a>
+      <a href="resources.html">Resources</a>
+      <a href="jobs.html">Jobs</a>
+      <a href="internships.html">Internships</a>
+      <a href="Aboutus.html">About us</a>
+      <a href="Help.html" class="active">Help</a>
+    </nav>
+  </header>
+
+  <div class="overlay" id="overlay"></div>
+
+  <main>
+    <section class="resources-section">
+      <h2>Help & How to Use Smart Career Guide</h2>
+      <p>This page explains how students can use the platform effectively:</p>
+
+      <ul>
+        
+      </ul>
+
+      <p>If you are a rural engineering student, start with Resources to build your skills, then regularly check Internships and Jobs.</p>
+    </section>
+  </main>
+
+  <script>
+    const hamburger = document.getElementById("hamburger");
+    const sideMenu = document.getElementById("sideMenu");
+    const overlay = document.getElementById("overlay");
+
+    hamburger.addEventListener("click", () => {
+      sideMenu.classList.toggle("open");
+      overlay.classList.toggle("show");
+    });
+
+    overlay.addEventListener("click", () => {
+      sideMenu.classList.remove("open");
+      overlay.classList.remove("show");
+    });
+  </script>
+
+</body>
+</html>

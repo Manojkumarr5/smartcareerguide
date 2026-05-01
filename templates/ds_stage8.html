@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS Step 8 – Understand ML Models (Regression, Classification)</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Data Science Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToDS()">&times;</div>
+
+    <h2>Step 8: Understand ML Models (Regression, Classification)</h2>
+    <p>
+      In this stage you meet the two main supervised learning families:
+      <strong>regression</strong> (predict numbers) and <strong>classification</strong>
+      (predict categories like pass/fail or yes/no).
+    </p>
+    <p>
+      You will see simple examples of linear regression and logistic regression using
+      scikit‑learn so students can connect math and code to real predictions.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Regression vs classification – simple idea</h3>
+    <p>
+      Regression problems predict a <strong>continuous number</strong>, such as marks,
+      salary, or house price.
+    </p>
+    <ul>
+      <li>Example: “Given study hours, predict the student’s marks out of 100.”</li>
+      <li>Example: “Given house size and location, predict price in rupees.”</li>
+    </ul>
+
+    <p>
+      Classification problems predict a <strong>category/label</strong>, such as pass vs
+      fail, spam vs not spam, or disease vs no disease.
+    </p>
+    <ul>
+      <li>Example: “Given marks, decide pass/fail.”</li>
+      <li>Example: “Given some features, decide whether a loan is approved or rejected.”</li>
+    </ul>
+
+    <p class="note">
+      A common explanation is: regression → continuous output; classification → discrete
+      class output.
+    </p>
+
+    <h3>2️⃣ Simple linear regression in code</h3>
+    <p>
+      Linear regression learns a straight‑line relationship between input features and a
+      numeric target such as scores.
+    </p>
+
+    <pre>
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+# Example: study_hours -> marks
+data = {
+    "study_hours": [1, 2, 3, 4, 5, 6],
+    "marks":       [35, 40, 50, 55, 65, 70]
+}
+df = pd.DataFrame(data)
+
+X = df[["study_hours"]]   # features (2D)
+y = df["marks"]           # target (1D)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+print("Slope (coefficient):", model.coef_)
+print("Intercept:", model.intercept_)
+
+predictions = model.predict(X_test)
+print("Predicted marks:", predictions)
+    </pre>
+
+    <p class="note">
+      The model learns a line with a slope and intercept that minimizes the squared error
+      between actual and predicted marks.
+    </p>
+
+    <h3>3️⃣ Simple logistic regression for binary classification</h3>
+    <p>
+      Logistic regression is a basic algorithm for binary classification when the target
+      is a yes/no or 0/1 outcome.
+    </p>
+
+    <pre>
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+
+# Example: marks -> pass (1) / fail (0)
+data = {
+    "marks": [30, 35, 40, 50, 60, 70, 80],
+    "pass":  [0, 0, 0, 1, 1, 1, 1]
+}
+df = pd.DataFrame(data)
+
+X = df[["marks"]]
+y = df["pass"]
+
+log_reg = LogisticRegression()
+log_reg.fit(X, y)
+
+# Predict class (0 or 1)
+print(log_reg.predict([[45], [65]]))
+
+# Predict probability of passing
+print(log_reg.predict_proba([[45], [65]]))
+    </pre>
+
+    <p class="note">
+      Logistic regression outputs probabilities between 0 and 1 and then assigns a class
+      label using a cutoff such as 0.5.
+    </p>
+
+    <h3>4️⃣ How to choose: regression or classification?</h3>
+    <p>
+      A simple rule is to look at your target column and choose the type of model based
+      on what you want to predict.
+    </p>
+    <ul>
+      <li>If the target is a number (marks, price, temperature) → use regression.</li>
+      <li>If the target is a label (pass/fail, yes/no, A/B/C) → use classification.</li>
+    </ul>
+
+    <p class="note">
+      Some problems can be framed both ways (predicting a probability vs predicting a
+      class), but this simple rule is enough at beginner level.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for DS Stage 8:</strong>
+      <ul>
+        <li>Take a small dataset of students and
+          build a linear regression model to predict marks from study hours, then print
+          predictions for a few new study hours.
+        </li>
+        <li>Create a pass/fail column (1 if marks ≥ some cutoff, else 0) and train a
+          logistic regression model; inspect <code>predict</code> and
+          <code>predict_proba</code> outputs.
+        </li>
+        <li>Write in simple language which problem is regression and which is
+          classification, and why.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToDS()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToDS() {
+    // Go back to index.html and open Data Science roadmap popup
+    window.location.href = "index.html#open-ds";
+  }
+
+  function markCompleted() {
+    // Mark DS Step 8 as completed in localStorage
+    localStorage.setItem("ds_step8_completed", "true");
+    window.location.href = "index.html#open-ds";
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS Step 14 – Explore Big Data Tools (Spark, Hadoop basics)</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Data Science Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToDS()">&times;</div>
+
+    <h2>Step 14: Explore Big Data Tools (Spark, Hadoop basics)</h2>
+    <p>
+      In this stage you get a simple, high‑level idea of <strong>Big Data</strong> tools,
+      especially <strong>Hadoop</strong> (for storage and batch processing) and
+      <strong>Apache Spark</strong> (for fast in‑memory processing).
+    </p>
+    <p>
+      The goal is not to become a Big Data engineer but to understand when traditional
+      tools are not enough and why frameworks like HDFS, MapReduce, and Spark are used
+      in large‑scale systems.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ When do we need Big Data tools?</h3>
+    <p>
+      Big Data appears when datasets are too large, too fast, or too varied for a
+      single machine to store or process comfortably.
+    </p>
+    <ul>
+      <li>Examples: logs from millions of users, sensor data from thousands of devices,
+          or years of detailed transaction records.</li>
+      <li>Traditional tools (single‑machine Python or SQL) can become slow or run out of
+          memory, so work is split across a cluster of machines.</li>
+    </ul>
+
+    <p class="note">
+      Introductory material highlights parallel processing, scalability, and
+      fault‑tolerance as core reasons for using Big Data frameworks.
+    </p>
+
+    <h3>2️⃣ Hadoop basics: HDFS and MapReduce</h3>
+    <p>
+      Hadoop provides a distributed file system called <strong>HDFS</strong> and a
+      processing model called <strong>MapReduce</strong>.
+    </p>
+    <ul>
+      <li><strong>HDFS</strong> stores data across many machines, with replicas to handle
+          hardware failures.</li>
+      <li><strong>MapReduce</strong> splits work into “map” tasks that process chunks in
+          parallel and “reduce” tasks that combine results.</li>
+    </ul>
+
+    <p class="note">
+      HDFS typically uses a NameNode to manage metadata and DataNodes to store actual
+      blocks, giving scalable, fault‑tolerant storage.
+    </p>
+
+    <h3>3️⃣ Spark basics: faster processing on clusters</h3>
+    <p>
+      Apache Spark is a cluster‑computing framework designed for fast, in‑memory
+      processing of large datasets, often running on top of HDFS or cloud storage.
+    </p>
+    <ul>
+      <li>Key ideas: RDDs and DataFrames provide abstractions for distributed data with
+          fault tolerance and parallel computation.</li>
+      <li>Spark supports SQL, machine learning, streaming, and graph processing in one
+          ecosystem.</li>
+    </ul>
+
+    <p class="note">
+      Spark often outperforms pure MapReduce by keeping intermediate results in memory
+      instead of writing them to disk after every step.
+    </p>
+
+    <h3>4️⃣ Simple Spark example (PySpark shell idea)</h3>
+    <p>
+      In practice, Spark runs in cluster or local mode through <strong>PySpark</strong>,
+      the Python interface for Spark.
+    </p>
+
+    <pre>
+# Example (concept): running inside a PySpark environment
+
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .appName("SimpleExample") \
+    .getOrCreate()
+
+# Create a simple DataFrame
+data = [("Asha", 8.5), ("Ravi", 7.8), ("Meena", 9.1)]
+df = spark.createDataFrame(data, ["name", "cgpa"])
+
+df.show()
+
+# Simple transformation
+df.filter(df.cgpa > 8.0).show()
+    </pre>
+
+    <p class="note">
+      Beginner courses show how such code can scale across cluster resources while
+      still looking similar to Pandas‑style operations.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for DS Stage 14 (concept‑level):</strong>
+      <ul>
+        <li>Write, in your own words, what problems Hadoop and Spark try to solve and
+            how they differ from single‑machine tool.
+        </li>
+        <li>Draw a simple diagram: HDFS with a NameNode and several DataNodes, and Spark
+            reading data from HDFS to run parallel jobs.
+        </li>
+        <li>(Optional, advanced) Install a local single‑node Hadoop or Spark setup using
+            a beginner tutorial and run a basic word‑count or simple DataFrame example.
+        </li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+   <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToDS()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToDS() {
+    // Go back to index.html and open Data Science roadmap popup
+    window.location.href = "index.html#open-ds";
+  }
+
+  function markCompleted() {
+    // Mark DS Step 14 as completed in localStorage
+    localStorage.setItem("ds_step14_completed", "true");
+    window.location.href = "index.html#open-ds";
+  }
+</script>
+
+</body>
+</html>

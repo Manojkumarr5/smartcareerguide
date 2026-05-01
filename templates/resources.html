@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resources - Smart Career Guide</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Smooth entry animation */
+    .resources-section {
+      text-align: center;
+      padding: 50px 20px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .resource-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      color: #004aad;
+    }
+
+    .card p {
+      color: #333;
+      font-size: 15px;
+    }
+
+    .card a {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #004aad;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .card a:hover {
+      background-color: #003380;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER WITH HAMBURGER ===== -->
+  <header>
+    <div class="hamburger" id="hamburger">&#9776;</div>
+    <h1>Smart Career Guide</h1>
+
+    <!-- SIDE MENU -->
+    <nav class="side-menu" id="sideMenu">
+      <a href="index.html">Home</a>
+      <a href="resources.html" class="active">Resources</a>
+      <a href="jobs.html">Jobs</a>
+      <a href="internships.html">Internships</a>
+      <a href="Aboutus.html">About us</a>
+      <a href="Help.html">Help</a>
+    </nav>
+  </header>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main>
+    <section class="resources-section">
+      <h2>Resources for Engineering Students</h2>
+      <p>Explore study materials, guides, and career resources to boost your skills.</p>
+
+      <div class="resource-cards">
+        <div class="card">
+          <h3>📘 Study Material</h3>
+          <p>Access textbooks, notes, and tutorials for your subjects.</p>
+          <a href="https://nptel.ac.in/" target="_blank">Explore</a>
+        </div>
+
+        <div class="card">
+          <h3>🎯 Career Guidance</h3>
+          <p>Get tips and strategies for internships and job placements.</p>
+          <a href="https://www.geeksforgeeks.org/career-guidance/" target="_blank">Explore</a>
+        </div>
+
+        <div class="card">
+          <h3>💻 Online Courses</h3>
+          <p>Enhance your knowledge with curated online courses and certifications.</p>
+          <a href="https://www.coursera.org/" target="_blank">Explore</a>
+        </div>
+
+        <div class="card">
+          <h3>📄 Resume Templates</h3>
+          <p>Download free, ready-to-use resume templates for engineers.</p>
+          <a href="https://www.canva.com/resumes/templates/engineering/" target="_blank">Explore</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== SCRIPT ===== -->
+  <script>
+    const hamburger = document.getElementById("hamburger");
+    const sideMenu = document.getElementById("sideMenu");
+    const overlay = document.getElementById("overlay");
+
+    hamburger.addEventListener("click", () => {
+      sideMenu.classList.toggle("open");
+      overlay.classList.toggle("show");
+    });
+
+    overlay.addEventListener("click", () => {
+      sideMenu.classList.remove("open");
+      overlay.classList.remove("show");
+    });
+  </script>
+
+</body>
+</html>

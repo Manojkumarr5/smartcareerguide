@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Step 7 – Work with APIs using Requests</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Python Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToPython()">&times;</div>
+
+    <h2>Step 7: Work with APIs using the Requests Library</h2>
+    <p>
+      In this stage you learn how to connect your Python programs to the internet using
+      the <code>requests</code> library. You will send HTTP requests to web APIs and read
+      the responses.
+    </p>
+    <p>
+      This is the foundation for building apps that use real‑time data such as weather,
+      news, currency rates, or any public API.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is an API? What is HTTP?</h3>
+    <p>
+      An <strong>API</strong> (Application Programming Interface) is a way for two programs
+      to talk to each other, and a <strong>web API</strong> uses HTTP (the same protocol your
+      browser uses) to send and receive data.
+    </p>
+    <ul>
+      <li>Your Python script = client.</li>
+      <li>API server on the internet = server.</li>
+      <li>You send a request (GET, POST, etc.), and the server sends back a response with data.</li>
+    </ul>
+
+    <h3>2️⃣ Installing and importing requests</h3>
+    <p>
+      <code>requests</code> is not part of the core Python installation, so you usually
+      install it once using <code>pip</code>.
+    </p>
+
+    <div class="cmd-box">
+      <div># install once</div>
+      <div><span>pip install requests</span></div>
+    </div>
+
+    <p>Then at the top of your Python file:</p>
+
+    <pre>
+import requests
+    </pre>
+
+    <p class="note">
+      After installation, you can import <code>requests</code> in any project on that system.
+    </p>
+
+    <h3>3️⃣ Your first GET request</h3>
+    <p>
+      A <strong>GET</strong> request asks the server for data. Here is a simple example
+      using a public test API.
+    </p>
+
+    <pre>
+import requests
+
+url = "https://jsonplaceholder.typicode.com/todos/1"  # sample test API
+response = requests.get(url)
+
+print("Status code:", response.status_code)
+print("Raw text:", response.text)
+    </pre>
+
+    <p class="note">
+      The <code>status_code</code> tells you if the request worked (200 = OK),
+      and <code>response.text</code> is the body of the response as a string.
+    </p>
+
+    <h3>4️⃣ Working with JSON data</h3>
+    <p>
+      Many APIs respond with JSON, which is like a Python dictionary in text form.
+      <code>requests</code> can convert it directly to Python objects.
+    </p>
+
+    <pre>
+import requests
+
+url = "https://jsonplaceholder.typicode.com/todos/1"
+response = requests.get(url)
+
+# convert JSON response to Python dict
+data = response.json()
+
+print("Title:", data["title"])
+print("Completed:", data["completed"])
+    </pre>
+
+    <p class="note">
+      Use <code>response.json()</code> when the server sends JSON, then access fields
+      as normal dictionary keys.[web:64]
+    </p>
+
+    <h3>5️⃣ Sending query parameters</h3>
+    <p>
+      Some APIs allow you to pass parameters in the URL (for example, page number, search term).
+      With <code>requests</code>, you can send them using the <code>params</code> argument.
+    </p>
+
+    <pre>
+import requests
+
+url = "https://jsonplaceholder.typicode.com/todos"
+params = {"userId": 1}    # filter todos for a specific user
+
+response = requests.get(url, params=params)
+data = response.json()
+
+print("Number of todos for user 1:", len(data))
+print("First todo title:", data[0]["title"])
+    </pre>
+
+    <p class="note">
+      <code>requests</code> automatically attaches <code>?userId=1</code> to the URL
+      when you pass <code>params</code>.
+    </p>
+
+    <h3>6️⃣ Basic POST request (sending data)</h3>
+    <p>
+      A <strong>POST</strong> request sends data to the server (for example, to create
+      a new record). Many APIs use POST for forms, comments, or new items.
+    </p>
+
+    <pre>
+import requests
+
+url = "https://jsonplaceholder.typicode.com/posts"
+payload = {
+    "title": "Smart Career Guide Test",
+    "body": "Hello from Python requests!",
+    "userId": 1
+}
+
+response = requests.post(url, json=payload)
+
+print("Status code:", response.status_code)
+print("Response JSON:", response.json())
+    </pre>
+
+    <p class="note">
+      In real APIs you may need authentication (API keys, tokens). For learning,
+      public test APIs are enough; never expose real keys in public code.
+    </p>
+
+    <h3>7️⃣ Handling errors and timeouts</h3>
+    <p>
+      Sometimes requests fail due to network issues or server problems, so you should handle
+      errors gracefully, especially for real users.
+    </p>
+
+    <pre>
+import requests
+
+url = "https://jsonplaceholder.typicode.com/todos/1"
+
+try:
+    response = requests.get(url, timeout=5)  # wait max 5 seconds
+    response.raise_for_status()  # raise error for bad status (4xx, 5xx)
+
+    data = response.json()
+    print("Todo title:", data["title"])
+
+except requests.exceptions.Timeout:
+    print("Request timed out. Please check your internet connection.")
+
+except requests.exceptions.HTTPError as e:
+    print("HTTP error:", e)
+
+except requests.exceptions.RequestException as e:
+    print("Request failed:", e)
+    </pre>
+
+    <p class="note">
+      <code>timeout</code> and <code>raise_for_status()</code> help you detect and handle
+      slow or failing API calls instead of letting the program hang.
+    </p>
+
+    <h3>8️⃣ Mini‑project idea – simple API viewer</h3>
+    <p>
+      Here is a small console tool that fetches posts for a selected user and prints them
+      in a clean way.
+    </p>
+
+    <pre>
+import requests
+
+base_url = "https://jsonplaceholder.typicode.com/posts"
+
+user_id = int(input("Enter user id (1-10): "))
+
+params = {"userId": user_id}
+response = requests.get(base_url, params=params)
+
+if response.status_code == 200:
+    posts = response.json()
+    print(f"\nFound {len(posts)} posts for user", user_id)
+    print("-" * 40)
+
+    for p in posts:
+        print("Post ID:", p["id"])
+        print("Title:", p["title"])
+        print("Body:", p["body"][:60], "...")
+        print("-" * 40)
+else:
+    print("Failed to fetch posts. Status code:", response.status_code)
+    </pre>
+
+    <p class="note">
+      You can later replace this test API with a real one (for example, news, weather,
+      or your own backend) and reuse the same structure.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Python Stage 7:</strong>
+      <ul>
+        <li>Install <code>requests</code> and write a script that fetches a single todo item and prints its title and completion status.</li>
+        <li>Modify the script to accept a <code>userId</code> from input and print how many todos that user has.</li>
+        <li>Use a public test API to send a POST request with a small JSON payload and print the response.</li>
+        <li>Add basic error handling with <code>try</code>/<code>except</code> and <code>timeout</code> so your script does not hang forever.</li>
+        <li>Think of one real API you would like to use in future (weather, movies, books) and check its documentation page.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToPython()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToPython() {
+    // Go back to index.html and open Python roadmap popup
+    window.location.href = "index.html#open-python";
+  }
+
+  function markCompleted() {
+    // Mark Python Step 7 as completed in localStorage
+    localStorage.setItem("python_step7_completed", "true");
+    window.location.href = "index.html#open-python";
+  }
+</script>
+
+</body>
+</html>

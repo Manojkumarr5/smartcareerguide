@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Step 13 – Full-Stack CRUD App</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #005fa3;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #eaf4ff;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffea;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4f8ff;
+      padding: 15px;
+      border-left: 5px solid #0078d7;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .back-btn:hover {
+      background: #005fa3;
+    }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .complete-btn:hover {
+      background: #218838;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .crud-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .crud-table th,
+    .crud-table td {
+      border: 1px solid #ddd;
+      padding: 6px 8px;
+      text-align: left;
+    }
+
+    .crud-table th {
+      background: #eaf4ff;
+    }
+
+    .app-layout {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #dde6ff;
+      background: #f9fbff;
+    }
+
+    .app-layout h4 {
+      margin-bottom: 8px;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .form-row input {
+      flex: 1;
+      min-width: 160px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 0.9rem;
+    }
+
+    .form-row button {
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: none;
+      background: #0078d7;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .form-row button:hover {
+      background: #005fa3;
+    }
+
+    .courses-list {
+      margin-top: 8px;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+      background: #ffffff;
+      padding: 8px;
+    }
+
+    .courses-list table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .courses-list th,
+    .courses-list td {
+      border: 1px solid #eee;
+      padding: 6px 8px;
+      text-align: left;
+    }
+
+    .courses-list th {
+      background: #f4f8ff;
+    }
+
+    .small-btn {
+      padding: 2px 6px;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .small-btn.edit {
+      background: #ffb300;
+      color: #fff;
+    }
+
+    .small-btn.delete {
+      background: #e53935;
+      color: #fff;
+    }
+
+    .status-box {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToWeb()">&times;</div>
+
+    <h2>Step 13: Build Full-Stack CRUD Apps</h2>
+    <p>By now you know frontend basics, backend basics, and databases. In this stage you will connect them to build a full‑stack CRUD app: create, read, update, and delete data from a real backend.</p>
+    <p>This is the foundation of many real web apps: todo lists, dashboards, admin panels, course managers, and more.</p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is a CRUD app?</h3>
+    <p>CRUD stands for Create, Read, Update, Delete, the four basic operations you perform on stored data.</p>
+    <p>In REST APIs, CRUD often maps to HTTP methods as shown below.</p>
+
+    <table class="crud-table">
+      <tr>
+        <th>CRUD operation</th>
+        <th>HTTP method</th>
+        <th>Example endpoint</th>
+      </tr>
+      <tr>
+        <td>Create</td>
+        <td>POST</td>
+        <td><code>POST /api/courses</code> – add a new course</td>
+      </tr>
+      <tr>
+        <td>Read</td>
+        <td>GET</td>
+        <td><code>GET /api/courses</code> – list all courses</td>
+      </tr>
+      <tr>
+        <td>Update</td>
+        <td>PUT / PATCH</td>
+        <td><code>PUT /api/courses/:id</code> – change name/level</td>
+      </tr>
+      <tr>
+        <td>Delete</td>
+        <td>DELETE</td>
+        <td><code>DELETE /api/courses/:id</code> – remove a course</td>
+      </tr>
+    </table>
+
+    <h3>2️⃣ Backend CRUD API (Node + Express example)</h3>
+    <p>This is a minimal CRUD API for a <code>courses</code> resource using Express and an in‑memory array.</p>
+
+    <pre>
+// server-crud.js
+const express = require("express");
+const app = express();
+app.use(express.json());
+
+let courses = [
+  { id: 1, name: "Web Development", level: "Beginner" },
+  { id: 2, name: "Machine Learning", level: "Intermediate" }
+];
+
+// READ all
+app.get("/api/courses", (req, res) => {
+  res.json(courses);
+});
+
+// CREATE
+app.post("/api/courses", (req, res) => {
+  const { name, level } = req.body;
+  if (!name || !level) {
+    return res.status(400).json({ error: "Name and level are required" });
+  }
+  const newCourse = {
+    id: courses.length ? courses[courses.length - 1].id + 1 : 1,
+    name,
+    level
+  };
+  courses.push(newCourse);
+  res.status(201).json(newCourse);
+});
+
+// UPDATE
+app.put("/api/courses/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const { name, level } = req.body;
+  const course = courses.find(c => c.id === id);
+  if (!course) {
+    return res.status(404).json({ error: "Course not found" });
+  }
+  if (name) course.name = name;
+  if (level) course.level = level;
+  res.json(course);
+});
+
+// DELETE
+app.delete("/api/courses/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const index = courses.findIndex(c => c.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: "Course not found" });
+  }
+  const deleted = courses.splice(index, 1)[0];
+  res.json(deleted);
+});
+
+const PORT = 3002;
+app.listen(PORT, () => {
+  console.log(`CRUD API running at http://localhost:${PORT}`);
+});
+    </pre>
+
+    <p class="note">Your frontend can now call this API with <code>fetch</code> or any HTTP client.</p>
+
+    <h3>3️⃣ Frontend: simple course manager UI</h3>
+    <p>This UI lets you create, list, update, and delete courses via the CRUD API.</p>
+
+    <div class="app-layout">
+      <h4>Mini Project: Course Manager (Frontend for CRUD API)</h4>
+      <div class="form-row">
+        <input type="hidden" id="courseId">
+        <input type="text" id="courseName" placeholder="Course name">
+        <input type="text" id="courseLevel" placeholder="Level (Beginner, Intermediate...)">
+        <button id="saveCourseBtn">Save</button>
+      </div>
+      <div class="status-box" id="statusBox">Status: Ready</div>
+      <div class="courses-list">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Level</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="coursesTableBody">
+            <!-- Rows will be inserted here by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3>4️⃣ Frontend JavaScript: calling the CRUD API</h3>
+    <p>This script uses <code>fetch</code> to call GET, POST, PUT, and DELETE on the backend.</p>
+
+    <pre>
+// Replace this base URL if needed
+const API_BASE = "http://localhost:3002/api/courses";
+
+const courseIdInput = document.getElementById("courseId");
+const courseNameInput = document.getElementById("courseName");
+const courseLevelInput = document.getElementById("courseLevel");
+const saveCourseBtn = document.getElementById("saveCourseBtn");
+const statusBox = document.getElementById("statusBox");
+const coursesTableBody = document.getElementById("coursesTableBody");
+
+// Load all courses
+async function loadCourses() {
+  try {
+    statusBox.textContent = "Status: Loading courses...";
+    const res = await fetch(API_BASE);
+    const data = await res.json();
+    renderCourses(data);
+    statusBox.textContent = "Status: Courses loaded";
+  } catch (err) {
+    console.error(err);
+    statusBox.textContent = "Status: Error loading courses";
+  }
+}
+
+function renderCourses(courses) {
+  coursesTableBody.innerHTML = "";
+  courses.forEach(course => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      &lt;td&gt;${course.id}&lt;/td&gt;
+      &lt;td&gt;${course.name}&lt;/td&gt;
+      &lt;td&gt;${course.level}&lt;/td&gt;
+      &lt;td&gt;
+        &lt;button class="small-btn edit" data-id="${course.id}"&gt;Edit&lt;/button&gt;
+        &lt;button class="small-btn delete" data-id="${course.id}"&gt;Delete&lt;/button&gt;
+      &lt;/td&gt;
+    `;
+
+    coursesTableBody.appendChild(tr);
+  });
+
+  document.querySelectorAll(".small-btn.edit").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-id");
+      startEditCourse(id);
+    });
+  });
+
+  document.querySelectorAll(".small-btn.delete").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-id");
+      deleteCourse(id);
+    });
+  });
+}
+
+// Start editing a course
+async function startEditCourse(id) {
+  try {
+    statusBox.textContent = "Status: Loading course " + id + "...";
+    const res = await fetch(API_BASE + "/" + id);
+    if (!res.ok) {
+      statusBox.textContent = "Status: Course not found";
+      return;
+    }
+    const course = await res.json();
+    courseIdInput.value = course.id;
+    courseNameInput.value = course.name;
+    courseLevelInput.value = course.level;
+    statusBox.textContent = "Status: Editing course " + id;
+  } catch (err) {
+    console.error(err);
+    statusBox.textContent = "Status: Error loading course";
+  }
+}
+
+// Save course (create or update)
+async function saveCourse() {
+  const id = courseIdInput.value;
+  const name = courseNameInput.value.trim();
+  const level = courseLevelInput.value.trim();
+
+  if (!name || !level) {
+    statusBox.textContent = "Status: Name and level are required";
+    return;
+  }
+
+  try {
+    let res;
+    if (id) {
+      statusBox.textContent = "Status: Updating course " + id + "...";
+      res = await fetch(API_BASE + "/" + id, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, level })
+      });
+    } else {
+      statusBox.textContent = "Status: Creating new course...";
+      res = await fetch(API_BASE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, level })
+      });
+    }
+
+    if (!res.ok) {
+      statusBox.textContent = "Status: Error saving course (code " + res.status + ")";
+      return;
+    }
+
+    courseIdInput.value = "";
+    courseNameInput.value = "";
+    courseLevelInput.value = "";
+
+    await loadCourses();
+  } catch (err) {
+    console.error(err);
+    statusBox.textContent = "Status: Error saving course";
+  }
+}
+
+// Delete a course
+async function deleteCourse(id) {
+  if (!confirm("Delete course " + id + "?")) return;
+  try {
+    statusBox.textContent = "Status: Deleting course " + id + "...";
+    const res = await fetch(API_BASE + "/" + id, {
+      method: "DELETE"
+    });
+    if (!res.ok) {
+      statusBox.textContent = "Status: Error deleting course (code " + res.status + ")";
+      return;
+    }
+    await loadCourses();
+  } catch (err) {
+    console.error(err);
+    statusBox.textContent = "Status: Error deleting course";
+  }
+}
+
+if (saveCourseBtn) {
+  saveCourseBtn.addEventListener("click", saveCourse);
+}
+
+// Initial load
+loadCourses();
+    </pre>
+
+    <h3>5️⃣ Big picture: how full‑stack CRUD fits together</h3>
+    <p>A full‑stack CRUD app connects frontend UI, backend API, and database so users can manage data end‑to‑end.</p>
+    <p>Once you understand this flow, you can build many app types like notes, student records, and admin dashboards.</p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Stage 13:</strong>
+      <ul>
+        <li>Create <code>server-crud.js</code> with these CRUD routes and test them in Postman or Thunder Client.</li>
+        <li>Create <code>web_stage13_test.html</code>, copy the Course Manager UI + JS, and connect it to your backend.</li>
+        <li>Replace the in‑memory array with a real MongoDB or MySQL database so data persists.</li>
+        <li>Add one extra field such as <code>category</code> and update backend and frontend.</li>
+        <li>Draw a flow diagram: User → Frontend → CRUD API → Database → Frontend.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToWeb()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function goBackToWeb() {
+    // Go back to index.html and open Web roadmap popup
+    window.location.href = "index.html#open-web"; // [web:254][web:238]
+  }
+
+  function markCompleted() {
+    // Mark Web step 13 as completed
+    localStorage.setItem("web_step13_completed", "true"); // [web:193][web:181]
+    window.location.href = "index.html#open-web";
+  }
+
+  // ===== Frontend CRUD demo script from section 4 =====
+  const API_BASE = "http://localhost:3002/api/courses";
+
+  const courseIdInput = document.getElementById("courseId");
+  const courseNameInput = document.getElementById("courseName");
+  const courseLevelInput = document.getElementById("courseLevel");
+  const saveCourseBtn = document.getElementById("saveCourseBtn");
+  const statusBox = document.getElementById("statusBox");
+  const coursesTableBody = document.getElementById("coursesTableBody");
+
+  async function loadCourses() {
+    try {
+      statusBox.textContent = "Status: Loading courses...";
+      const res = await fetch(API_BASE);
+      const data = await res.json();
+      renderCourses(data);
+      statusBox.textContent = "Status: Courses loaded";
+    } catch (err) {
+      console.error(err);
+      statusBox.textContent = "Status: Error loading courses";
+    }
+  }
+
+  function renderCourses(courses) {
+    coursesTableBody.innerHTML = "";
+    courses.forEach(course => {
+      const tr = document.createElement("tr");
+
+      tr.innerHTML = `
+        <td>${course.id}</td>
+        <td>${course.name}</td>
+        <td>${course.level}</td>
+        <td>
+          <button class="small-btn edit" data-id="${course.id}">Edit</button>
+          <button class="small-btn delete" data-id="${course.id}">Delete</button>
+        </td>
+      `;
+
+      coursesTableBody.appendChild(tr);
+    });
+
+    document.querySelectorAll(".small-btn.edit").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        startEditCourse(id);
+      });
+    });
+
+    document.querySelectorAll(".small-btn.delete").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        deleteCourse(id);
+      });
+    });
+  }
+
+  async function startEditCourse(id) {
+    try {
+      statusBox.textContent = "Status: Loading course " + id + "...";
+      const res = await fetch(API_BASE + "/" + id);
+      if (!res.ok) {
+        statusBox.textContent = "Status: Course not found";
+        return;
+      }
+      const course = await res.json();
+      courseIdInput.value = course.id;
+      courseNameInput.value = course.name;
+      courseLevelInput.value = course.level;
+      statusBox.textContent = "Status: Editing course " + id;
+    } catch (err) {
+      console.error(err);
+      statusBox.textContent = "Status: Error loading course";
+    }
+  }
+
+  async function saveCourse() {
+    const id = courseIdInput.value;
+    const name = courseNameInput.value.trim();
+    const level = courseLevelInput.value.trim();
+
+    if (!name || !level) {
+      statusBox.textContent = "Status: Name and level are required";
+      return;
+    }
+
+    try {
+      let res;
+      if (id) {
+        statusBox.textContent = "Status: Updating course " + id + "...";
+        res = await fetch(API_BASE + "/" + id, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, level })
+        });
+      } else {
+        statusBox.textContent = "Status: Creating new course...";
+        res = await fetch(API_BASE, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, level })
+        });
+      }
+
+      if (!res.ok) {
+        statusBox.textContent = "Status: Error saving course (code " + res.status + ")";
+        return;
+      }
+
+      courseIdInput.value = "";
+      courseNameInput.value = "";
+      courseLevelInput.value = "";
+
+      await loadCourses();
+    } catch (err) {
+      console.error(err);
+      statusBox.textContent = "Status: Error saving course";
+    }
+  }
+
+  async function deleteCourse(id) {
+    if (!confirm("Delete course " + id + "?")) return;
+    try {
+      statusBox.textContent = "Status: Deleting course " + id + "...";
+      const res = await fetch(API_BASE + "/" + id, {
+        method: "DELETE"
+      });
+      if (!res.ok) {
+        statusBox.textContent = "Status: Error deleting course (code " + res.status + ")";
+        return;
+      }
+      await loadCourses();
+    } catch (err) {
+      console.error(err);
+      statusBox.textContent = "Status: Error deleting course";
+    }
+  }
+
+  if (saveCourseBtn) {
+    saveCourseBtn.addEventListener("click", saveCourse);
+  }
+
+  loadCourses();
+</script>
+
+</body>
+</html>

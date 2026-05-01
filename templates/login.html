@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Smart Career Guide</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0078d7; /* Blue background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-container {
+      background-color: white;
+      padding: 40px;
+      border-radius: 15px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      text-align: center;
+      color: #0078d7;
+      margin-bottom: 30px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #f1f1f1;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #0078d7;
+      background-color: #fff;
+    }
+
+    .loginbtn {
+      width: 100%;
+      background-color: #0078d7;
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .loginbtn:hover {
+      background-color: #005fa3;
+    }
+
+    .signup-link {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .signup-link a {
+      color: #005fa3;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <h1>Login</h1>
+    <form id="loginForm">
+      <label for="email"><b>Email</b></label>
+      <input type="email" placeholder="Enter Email" id="email" required>
+
+      <label for="password"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" id="password" required>
+
+      <button type="submit" class="loginbtn">Login</button>
+
+      <div class="signup-link">
+        <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // ===== HANDLE LOGIN =====
+    const loginForm = document.getElementById("loginForm");
+
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      // Retrieve stored users from localStorage
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+
+      // Check if entered user exists
+      const user = users.find(u => u.email === email && u.password === password);
+
+      if (user) {
+        // Save user info to localStorage
+        localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+        // ✅ Show splash once per login only
+        localStorage.removeItem("splashShown"); 
+        // (removes old flag so script.js will show splash only this first time)
+
+        alert(`Welcome back, ${user.name || "User"}!`);
+        window.location.href = "index.html"; // redirect to homepage
+      } else {
+        alert("Invalid email or password. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>

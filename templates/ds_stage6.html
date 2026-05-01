@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS Step 6 – Understand Correlation and Covariance</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Data Science Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToDS()">&times;</div>
+
+    <h2>Step 6: Understand Correlation and Covariance</h2>
+    <p>
+      In this stage you learn two related ideas: <strong>covariance</strong> and
+      <strong>correlation</strong>, which both describe how two variables move together.
+    </p>
+    <p>
+      Covariance tells you the direction of the relationship, and correlation gives you
+      both the direction and strength on a simple scale from −1 to +1.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Intuition: move together or opposite?</h3>
+    <p>
+      Think of two variables like <strong>study hours</strong> and <strong>marks</strong>, or
+      <strong>rainfall</strong> and <strong>crop yield</strong>.
+    </p>
+    <ul>
+      <li>If both tend to increase together, the relationship is <strong>positive</strong>.</li>
+      <li>If one increases while the other tends to decrease, the relationship is <strong>negative</strong>.</li>
+    </ul>
+
+    <p class="note">
+      Covariance captures this “same direction or opposite” movement, but its raw value
+      is hard to interpret, so correlation is usually preferred.
+    </p>
+
+    <h3>2️⃣ What is covariance (simple idea)?</h3>
+    <p>
+      Covariance measures how two variables vary together around their means; a positive
+      value means they move in the same direction on average, a negative value means
+      opposite direction.
+    </p>
+    <ul>
+      <li>Positive covariance → when study hours are above average, marks are often above average too.</li>
+      <li>Negative covariance → when price is above average, demand tends to be below average.</li>
+    </ul>
+
+    <p class="note">
+      A drawback is that covariance is not standardized; its value depends on units and
+      can be any large positive or negative number.
+    </p>
+
+    <h3>3️⃣ What is correlation (simple idea)?</h3>
+    <p>
+      Correlation is a standardized form of covariance that always lies between −1
+      and +1, which makes relationships easy to compare.
+    </p>
+    <ul>
+      <li>+1 → perfect positive linear relationship.</li>
+      <li>0 → no linear relationship.</li>
+      <li>−1 → perfect negative linear relationship.</li>
+    </ul>
+
+    <p class="note">
+      Many guides treat values around 0.8 or −0.8 as strong, around 0.4–0.6 as moderate,
+      and near 0 as weak or no linear relationship.
+    </p>
+
+    <h3>4️⃣ Using Pandas: corr() and cov()</h3>
+    <p>
+      Pandas can compute covariance and correlation matrices for your numeric columns
+      with one line of code.
+    </p>
+
+    <pre>
+import pandas as pd
+
+df = pd.read_csv("students_clean.csv")
+
+print(df[["study_hours", "marks"]].head())
+
+# Correlation matrix
+print("Correlation:")
+print(df[["study_hours", "marks"]].corr())
+
+# Covariance matrix
+print("Covariance:")
+print(df[["study_hours", "marks"]].cov())
+    </pre>
+
+    <p class="note">
+      The diagonal values show each variable’s covariance or correlation with itself,
+      while the off‑diagonal entries show the relationship between pairs.
+    </p>
+
+    <h3>5️⃣ Visualizing correlation with a heatmap</h3>
+    <p>
+      A correlation matrix heatmap lets you see relationships between many variables
+      at once using colors.
+    </p>
+
+    <pre>
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+corr_matrix = df.corr(numeric_only=True)
+
+plt.figure(figsize=(6, 5))
+sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f")
+plt.title("Correlation Heatmap")
+plt.tight_layout()
+plt.show()
+    </pre>
+
+    <p class="note">
+      Strong positive correlations appear as warmer colors, strong negative as cooler
+      colors, and near‑zero correlations as neutral shades.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for DS Stage 6:</strong>
+      <ul>
+        <li>Take a dataset with at least three numeric columns (for example study hours,
+            attendance, marks) and compute the full correlation matrix using
+            <code>df.corr()</code>.</li>
+        <li>Draw a correlation heatmap and note at least two pairs of variables with
+            clear positive or negative correlation.</li>
+        <li>Write a few sentences in simple language explaining what positive, negative,
+            and near‑zero correlation mean for your dataset (for example “students who
+            attend more classes tend to score higher”).</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToDS()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToDS() {
+    // Go back to index.html and open Data Science roadmap popup
+    window.location.href = "index.html#open-ds";
+  }
+
+  function markCompleted() {
+    // Mark DS Step 6 as completed in localStorage
+    localStorage.setItem("ds_step6_completed", "true");
+    window.location.href = "index.html#open-ds";
+  }
+</script>
+
+</body>
+</html>

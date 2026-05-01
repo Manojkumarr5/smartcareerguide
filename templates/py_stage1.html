@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Step 1 – Install Python and IDE</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0; /* fixed +#0486f0 */
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Python Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToPython()">&times;</div>
+
+    <h2>Step 1: Install Python and IDE (VS Code, PyCharm)</h2>
+    <p>This stage starts from zero. You will install Python on your system, verify that it works, and set up an editor (VS Code or PyCharm) so you can comfortably write and run Python programs.</p>
+    <p>Once this is done, you will be ready for all future Python stages (syntax, data types, projects, automation, web apps, and more).</p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is Python?</h3>
+    <p>Python is a high-level, general-purpose programming language used in web development, data science, automation, AI, and many other areas.</p>
+    <p>Python code is usually saved in files ending with <code>.py</code> and then executed by the Python interpreter installed on your machine.</p>
+
+    <h3>2️⃣ Install Python (Windows)</h3>
+    <p>Follow these basic steps on Windows.</p>
+    <ul>
+      <li>Go to <code>https://www.python.org/downloads/</code> and download the latest stable Python 3 installer for Windows.</li>
+      <li>Run the <code>.exe</code> installer.</li>
+      <li>On the first screen, tick “Add Python to PATH”. This is important so you can run Python from any folder.</li>
+      <li>Click “Install Now” and wait until the installation finishes.</li>
+    </ul>
+
+    <p>Verify the installation using Command Prompt or PowerShell.</p>
+
+    <div class="cmd-box">
+      <div># Check Python version</div>
+      <div><span>python --version</span></div>
+      <div>or</div>
+      <div><span>py --version</span></div>
+    </div>
+
+    <p class="note">You should see something like <code>Python 3.x.x</code>. If not, restart the terminal or check that Python was added to PATH.</p>
+
+    <h3>3️⃣ Install Python (macOS)</h3>
+    <p>On macOS, the recommended ways are the official installer or tools like Homebrew.</p>
+    <ul>
+      <li>Option 1 – Official installer: Go to <code>https://www.python.org/downloads/macos/</code>, download the latest macOS installer, run the <code>.pkg</code> file, and follow the wizard.</li>
+      <li>Option 2 – Homebrew (for advanced users): install Homebrew, then run <code>brew install python</code> in the terminal.</li>
+    </ul>
+
+    <p>Verify in Terminal:</p>
+
+    <div class="cmd-box">
+      <div># Check Python 3 version</div>
+      <div><span>python3 --version</span></div>
+    </div>
+
+    <p class="note">On macOS, Python 3 is usually run with <code>python3</code> instead of <code>python</code>.</p>
+
+    <h3>4️⃣ Install Python (Linux – brief)</h3>
+    <p>On most Linux distributions, Python 3 is already installed or is available via the package manager.</p>
+    <p>For example, on Ubuntu‑based systems:</p>
+
+    <div class="cmd-box">
+      <div># Update package list</div>
+      <div><span>sudo apt update</span></div>
+      <br>
+      <div># Install Python 3 (if needed)</div>
+      <div><span>sudo apt install python3 python3-pip</span></div>
+      <br>
+      <div># Check version</div>
+      <div><span>python3 --version</span></div>
+    </div>
+
+    <h3>5️⃣ Install VS Code for Python</h3>
+    <p>VS Code (Visual Studio Code) is a lightweight, powerful editor that works well for Python.</p>
+    <ul>
+      <li>Go to <code>https://code.visualstudio.com/</code> and download the installer for your OS.</li>
+      <li>Install VS Code using the default options.</li>
+      <li>Open VS Code and install the “Python” extension by Microsoft from the Extensions panel.</li>
+    </ul>
+
+    <p>Create and run a simple Python file in VS Code:</p>
+
+    <pre>
+# hello.py
+print("Hello, Python from VS Code!")
+    </pre>
+
+    <p>Then in VS Code:</p>
+    <ul>
+      <li>Open the folder where <code>hello.py</code> is saved.[web:27]</li>
+      <li>Open <code>hello.py</code> and click the “Run” button, or open the built‑in terminal and run:</li>
+    </ul>
+
+    <div class="cmd-box">
+      <div><span>python hello.py</span>   # Windows</div>
+      <div><span>python3 hello.py</span>  # macOS/Linux</div>
+    </div>
+
+    <p class="note">You should see <code>Hello, Python from VS Code!</code> printed in the terminal.</p>
+
+    <h3>6️⃣ Install PyCharm (optional but recommended)</h3>
+    <p>PyCharm is a dedicated Python IDE with many helpful features for larger projects.</p>
+    <ul>
+      <li>Go to <code>https://www.jetbrains.com/pycharm/download/</code> and download the Community Edition (free).</li>
+      <li>Run the installer and follow the default steps for your OS.[web:28]</li>
+      <li>Open PyCharm and choose “New Project”. Select a location and make sure the correct Python interpreter is chosen.</li>
+    </ul>
+
+    <p>Create and run a simple script:</p>
+
+    <pre>
+# In main.py
+print("Hello from PyCharm!")
+    </pre>
+
+    <p class="note">Run the file using the green “Run” button. Output should appear in the run console inside PyCharm.</p>
+
+    <h3>7️⃣ Where to type commands (terminal / command prompt)</h3>
+    <p>Throughout the Python track, you will often use a terminal or command prompt to run scripts and install packages with tools like <code>pip</code>.</p>
+    <p>Common options:</p>
+    <ul>
+      <li>Windows: Command Prompt, PowerShell, or the VS Code integrated terminal.</li>
+      <li>macOS/Linux: Terminal app.</li>
+      <li>PyCharm: built‑in terminal at the bottom of the IDE.</li>
+    </ul>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Python Stage 1:</strong>
+      <ul>
+        <li>Install Python 3 on your system and verify using <code>python --version</code> or <code>python3 --version</code>.</li>
+        <li>Install VS Code, add the Python extension, create a file <code>hello.py</code>, and run it with a custom message.</li>
+        <li>Install PyCharm Community Edition (optional). Create a new project and run a simple <code>print()</code> program.</li>
+        <li>Create a dedicated folder for all your Python roadmap stages (for example, <code>smart-python-guide</code>) and keep your practice files there.</li>
+        <li>Explore the VS Code or PyCharm interface: find the terminal, run button, file explorer, and settings, and note what each part does.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToPython()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToPython() {
+    // Go back to index.html and open Python roadmap popup (use same hash pattern as ML/Web)
+    window.location.href = "index.html#open-python";
+  }
+
+  function markCompleted() {
+    // Mark Python Step 1 as completed in localStorage (same pattern as ml_step1_completed, web_step1_completed)
+    localStorage.setItem("python_step1_completed", "true");
+    window.location.href = "index.html#open-python";
+  }
+</script>
+
+</body>
+</html>

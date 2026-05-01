@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Step 16 – Deploy Small Web Apps</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Python Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToPython()">&times;</div>
+
+    <h2>Step 16: Deploy Small Web Apps</h2>
+    <p>
+      In this final Python stage you learn the basic idea of deploying your Flask web app
+      to the internet using modern platforms such as Render or Railway.
+    </p>
+    <p>
+      The goal is not to become a DevOps expert but to understand how to prepare your app,
+      create <code>requirements.txt</code>, and push code so others can open a URL and see it.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Local app ready for deployment</h3>
+    <p>
+      Start with a simple Flask app that you already tested locally, for example from
+      Stage 13 or 15.
+    </p>
+
+    <pre>
+# app.py
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello from Smart Career Guide deployment!"
+
+if __name__ == "__main__":
+    app.run()
+    </pre>
+
+    <p class="note">
+      Keep the app small at first; once deployment works you can plug in your bigger
+      project such as an API, dashboard, or student portal.
+    </p>
+
+    <h3>2️⃣ Create requirements.txt</h3>
+    <p>
+      Hosting platforms need to know which Python packages to install, defined in a
+      <code>requirements.txt</code> file.
+    </p>
+
+    <div class="cmd-box">
+      <div># from your virtual environment</div>
+      <div><span>pip freeze &gt; requirements.txt</span></div>
+    </div>
+
+    <p>
+      For a tiny app you can even create it manually with at least:
+    </p>
+
+    <pre>
+Flask
+gunicorn
+    </pre>
+
+    <p class="note">
+      <code>gunicorn</code> or another WSGI server is typically used in production
+      instead of Flask’s built‑in development server.
+    </p>
+
+    <h3>3️⃣ Add Procfile (or start command)</h3>
+    <p>
+      Many platforms look for a file that tells them how to start your app, often a
+      <code>Procfile</code> with a single line.
+    </p>
+
+    <pre>
+# Procfile (no extension)
+web: gunicorn app:app
+    </pre>
+
+    <p class="note">
+      This line says: run the “web” process using gunicorn, pointing to <code>app.py</code>
+      and the Flask object <code>app</code>.
+    </p>
+
+    <h3>4️⃣ Put project under Git and push to GitHub</h3>
+    <p>
+      Platforms like Render or Railway often connect directly to a GitHub repository.
+    </p>
+
+    <pre>
+# inside your project folder
+git init
+git add .
+git commit -m "Initial deployable version"
+
+# then create a GitHub repo and push (replace URL)
+git remote add origin https://github.com/yourusername/smart-career-flask.git
+git branch -M main
+git push -u origin main
+    </pre>
+
+    <p class="note">
+      Having your app on GitHub also helps build a portfolio and enables easy code reviews.
+    </p>
+
+    <h3>5️⃣ Deploy to a platform (example: Railway / Render)</h3>
+    <p>
+      Deployment screens differ slightly between platforms, but the overall flow is similar.
+    </p>
+    <ul>
+      <li>Create an account on a host such as Railway or Render.</li>
+      <li>Click “New Project” or “New Web Service” and choose “Deploy from GitHub”.</li>
+      <li>Select your Flask repository and confirm defaults for a Python app and main branch.</li>
+      <li>The platform installs dependencies from <code>requirements.txt</code> and runs your start command.</li>
+    </ul>
+    <p class="note">
+      After a successful build, the platform gives you a public URL where your app is live.
+    </p>
+
+    <h3>6️⃣ Basic environment variables idea</h3>
+    <p>
+      In real apps you should not hardcode secrets such as API keys or database passwords
+      and instead keep them as environment variables configured on the hosting platform.
+    </p>
+    <ul>
+      <li>In Flask, read values using <code>os.environ.get("SECRET_KEY")</code> after importing <code>os</code>.</li>
+      <li>On Railway or Render, open project settings, find “Environment Variables”, and add key–value pairs.</li>
+    </ul>
+    <p class="note">
+      This pattern is used in almost all serious web apps for security and flexibility.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Python Stage 16:</strong>
+      <ul>
+        <li>Prepare a tiny Flask app (just one or two routes) and add <code>requirements.txt</code> and <code>Procfile</code>.</li>
+        <li>Initialize a Git repository, commit your code, and push it to a new GitHub repo.</li>
+        <li>Create a free account on a platform like Render or Railway and deploy the repo.</li>
+        <li>Open the public URL on your phone or another device and show it to a friend or mentor.</li>
+        <li>Write down which steps were confusing so you can revisit them when deploying bigger apps later.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToPython()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToPython() {
+    // Go back to index.html and open Python roadmap popup
+    window.location.href = "index.html#open-python";
+  }
+
+  function markCompleted() {
+    // Mark Python Step 16 as completed in localStorage
+    localStorage.setItem("python_step16_completed", "true");
+    window.location.href = "index.html#open-python";
+  }
+</script>
+
+</body>
+</html>

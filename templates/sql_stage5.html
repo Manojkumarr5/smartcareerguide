@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 5 – Understand INSERT, UPDATE, DELETE</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 5: Understand INSERT, UPDATE, DELETE</h2>
+    <p>
+      In this stage you learn the main DML (Data Manipulation Language) commands:
+      <code>INSERT</code>, <code>UPDATE</code>, and <code>DELETE</code>, which let you add, change,
+      and remove rows in your tables.
+    </p>
+    <p>
+      You will practice them on your <code>students</code> table so that CRUD (Create, Read,
+      Update, Delete) becomes natural.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ INSERT – add new rows</h3>
+    <p>
+      The INSERT statement adds new records to a table by specifying the table name,
+      the target columns, and matching values.
+    </p>
+
+    <pre>
+-- Insert a single student
+INSERT INTO students (id, name, branch, cgpa)
+VALUES (4, 'Kiran', 'ME', 8.9);
+
+-- Insert multiple students (if your DB supports this syntax)
+INSERT INTO students (id, name, branch, cgpa)
+VALUES
+  (5, 'Salma', 'CSE', 9.2),
+  (6, 'Arjun', 'EEE', 7.5);
+    </pre>
+
+    <p class="note">
+      After inserting, run <code>SELECT * FROM students;</code> to confirm that the new rows
+      appear as expected.
+    </p>
+
+    <h3>2️⃣ INSERT without listing columns (and why to avoid it)</h3>
+    <p>
+      You can also insert by providing values in the table’s column order without
+      listing column names, but this is risky if the table structure changes.
+    </p>
+
+    <pre>
+-- Only works if you follow the exact column order in the table
+INSERT INTO students
+VALUES (7, 'Deepa', 'CSE', 8.0);
+    </pre>
+
+    <p class="note">
+      Best practice is to always list columns in INSERT, especially in real projects,
+      so your SQL is less fragile.
+    </p>
+
+    <h3>3️⃣ UPDATE – modify existing rows</h3>
+    <p>
+      UPDATE changes values of existing rows; a WHERE clause usually targets specific
+      rows, and if omitted it updates all rows.
+    </p>
+
+    <pre>
+-- Increase Kiran's cgpa
+UPDATE students
+SET cgpa = 9.1
+WHERE id = 4;
+
+-- Change branch for a specific student
+UPDATE students
+SET branch = 'CSE'
+WHERE name = 'Arjun';
+    </pre>
+
+    <p class="note">
+      Always double‑check the WHERE condition before running UPDATE; a missing WHERE
+      will modify every row in the table.
+    </p>
+
+    <h3>4️⃣ DELETE – remove rows</h3>
+    <p>
+      DELETE removes rows from a table; with WHERE you delete chosen records, and
+      without WHERE you delete all rows.
+    </p>
+
+    <pre>
+-- Delete a single student by id
+DELETE FROM students
+WHERE id = 6;
+
+-- Delete all students in a particular branch
+DELETE FROM students
+WHERE branch = 'EEE';
+    </pre>
+
+    <p class="note">
+      Avoid running <code>DELETE FROM table_name;</code> on important data, because it clears
+      the entire table; use it only with care in test databases.
+    </p>
+
+    <h3>5️⃣ CRUD flow: INSERT → SELECT → UPDATE → SELECT → DELETE → SELECT</h3>
+    <p>
+      A good way to build confidence is to perform a full CRUD cycle on a practice
+      row and watch how the table changes after each step.
+    </p>
+
+    <pre>
+-- 1) CREATE (insert a new row)
+INSERT INTO students (id, name, branch, cgpa)
+VALUES (10, 'TestUser', 'TEST', 5.0);
+
+-- 2) READ (check it)
+SELECT * FROM students WHERE id = 10;
+
+-- 3) UPDATE (fix data)
+UPDATE students
+SET cgpa = 7.0, branch = 'CSE'
+WHERE id = 10;
+
+-- 4) READ (check again)
+SELECT * FROM students WHERE id = 10;
+
+-- 5) DELETE (remove practice row)
+DELETE FROM students
+WHERE id = 10;
+    </pre>
+
+    <p class="note">
+      In many systems, DML changes are finalized with COMMIT and can be undone with
+      ROLLBACK before committing, which you will see in the transactions stage.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for SQL Stage 5:</strong>
+      <ul>
+        <li>Insert at least 3 new students into your <code>students</code> table using INSERT with explicit column names.</li>
+        <li>Write an UPDATE query to change the branch or cgpa for one of the new students, then verify it with a SELECT.</li>
+        <li>Write a DELETE query to remove one practice row by id, and confirm with SELECT that it is gone.</li>
+        <li>Perform the full CRUD flow for a “dummy” student (insert, read, update, read, delete, read).</li>
+        <li>In your notebook, write one example each for INSERT, UPDATE, and DELETE that you could apply to a marks or courses table.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 5 as completed in localStorage
+    localStorage.setItem("sql_step5_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

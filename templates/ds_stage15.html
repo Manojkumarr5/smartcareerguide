@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS Step 15 – Deploy Models using Streamlit or Flask</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Data Science Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToDS()">&times;</div>
+
+    <h2>Step 15: Deploy Models using Streamlit or Flask</h2>
+    <p>
+      In this stage you learn how to take a trained ML model and make it available to
+      others through a simple web interface using <strong>Streamlit</strong> or a small
+      <strong>Flask</strong> API.
+    </p>
+    <p>
+      The goal is to build a basic app where a user enters inputs (like study hours or
+      house size) and sees predictions, which is very useful for portfolios and demos.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Save a trained model to a file</h3>
+    <p>
+      First train a simple model (for example predicting marks from study hours) and
+      save it using <code>joblib</code> or <code>pickle</code> so the web app can load it.
+    </p>
+
+    <pre>
+# train_and_save_model.py
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+import joblib
+
+df = pd.read_csv("students.csv")
+df = df.dropna(subset=["marks"])
+
+X = df[["study_hours", "attendance"]]
+y = df["marks"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+joblib.dump(model, "marks_model.joblib")
+print("Model saved as marks_model.joblib")
+    </pre>
+
+    <p class="note">
+      Deployment tutorials usually train offline, save the model to a file, and then
+      load it inside the app for fast predictions.
+    </p>
+
+    <h3>2️⃣ Simple Streamlit app for predictions</h3>
+    <p>
+      Streamlit gives a web UI from a small Python script, with sliders, inputs, and
+      buttons created directly in code.
+    </p>
+
+    <pre>
+# app_marks_streamlit.py
+import streamlit as st
+import joblib
+import numpy as np
+
+# Load trained model
+model = joblib.load("marks_model.joblib")
+
+st.title("Student Marks Predictor")
+st.write("Enter study details and get a predicted marks value.")
+
+study_hours = st.slider("Study hours per day", 0.0, 12.0, 2.0, 0.5)
+attendance = st.slider("Attendance (%)", 0.0, 100.0, 75.0, 1.0)
+
+if st.button("Predict"):
+    X_new = np.array([[study_hours, attendance]])
+    pred = model.predict(X_new)[0]
+    st.success(f"Predicted marks: {pred:.1f}")
+    </pre>
+
+    <p class="note">
+      Apps like this are typically run locally with
+      <code>streamlit run app_marks_streamlit.py</code>, which opens in the browser and
+      can later be deployed on Streamlit Cloud.
+    </p>
+
+    <h3>3️⃣ Simple Flask API example (concept level)</h3>
+    <p>
+      Flask can expose the model as an HTTP endpoint that receives JSON and returns
+      predictions to any client that calls it.
+    </p>
+
+    <pre>
+# app_marks_flask.py
+from flask import Flask, request, jsonify
+import joblib
+import numpy as np
+
+app = Flask(__name__)
+model = joblib.load("marks_model.joblib")
+
+@app.route("/predict", methods=["POST"])
+def predict():
+    data = request.get_json()
+    study_hours = data.get("study_hours", 0)
+    attendance = data.get("attendance", 0)
+
+    X_new = np.array([[study_hours, attendance]])
+    pred = model.predict(X_new)[0]
+
+    return jsonify({"predicted_marks": float(pred)})
+
+if __name__ == "__main__":
+    app.run(debug=True)
+    </pre>
+
+    <p class="note">
+      A common beginner pattern is a single <code>/predict</code> route that loads the
+      model once at startup and serves JSON prediction requests.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for DS Stage 15:</strong>
+      <ul>
+        <li>Train a small regression or classification model, save it with joblib, and
+            confirm it can be loaded in a separate script for predictions.
+        </li>
+        <li>Build a Streamlit app with 2–3 input widgets and a “Predict” button that
+            calls the model and displays a friendly result message.
+        </li>
+        <li>(Optional) Build a simple Flask API with one <code>/predict</code>
+            endpoint, send a test JSON request using Postman or <code>curl</code>, and
+            inspect the returned prediction.
+        </li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToDS()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToDS() {
+    // Go back to index.html and open Data Science roadmap popup
+    window.location.href = "index.html#open-ds";
+  }
+
+  function markCompleted() {
+    // Mark DS Step 15 as completed in localStorage
+    localStorage.setItem("ds_step15_completed", "true");
+    window.location.href = "index.html#open-ds";
+  }
+</script>
+
+</body>
+</html>

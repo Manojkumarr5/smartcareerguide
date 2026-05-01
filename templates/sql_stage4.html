@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 4 – Work with SELECT, WHERE, and ORDER BY</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 4: Work with SELECT, WHERE, and ORDER BY</h2>
+    <p>
+      In this stage you learn how to select data from tables, filter rows using
+      <code>WHERE</code>, and sort results using <code>ORDER BY</code>; these clauses form the backbone
+      of most queries.
+    </p>
+    <p>
+      All examples use the <code>students</code> table you created earlier, with columns such as
+      id, name, branch, and cgpa.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ SELECT – choose which columns to see</h3>
+    <p>
+      SELECT defines which columns you want in the result, and FROM tells SQL which table
+      to read.
+    </p>
+
+    <pre>
+-- all columns, all rows
+SELECT *
+FROM students;
+
+-- only specific columns
+SELECT name, branch, cgpa
+FROM students;
+    </pre>
+
+    <p class="note">
+      Start every query by asking: “Which table am I reading from, and which columns
+      do I need?”.
+    </p>
+
+    <h3>2️⃣ WHERE – filter rows by condition</h3>
+    <p>
+      WHERE restricts the rows returned based on a condition such as a specific branch
+      or a minimum CGPA.
+    </p>
+
+    <pre>
+-- students from CSE only
+SELECT name, branch, cgpa
+FROM students
+WHERE branch = 'CSE';
+
+-- students with cgpa greater than or equal to 8.0
+SELECT name, cgpa
+FROM students
+WHERE cgpa >= 8.0;
+    </pre>
+
+    <p class="note">
+      Comparison operators like =, &lt;, &gt;, &lt;=, &gt;=, and &lt;&gt; (or != in some systems) are
+      used inside WHERE to express conditions.
+    </p>
+
+    <h3>3️⃣ WHERE with AND / OR</h3>
+    <p>
+      You can combine multiple conditions using logical operators AND and OR.
+    </p>
+
+    <pre>
+-- CSE students with cgpa above 8.0
+SELECT name, branch, cgpa
+FROM students
+WHERE branch = 'CSE' AND cgpa > 8.0;
+
+-- students from CSE or ECE
+SELECT name, branch
+FROM students
+WHERE branch = 'CSE' OR branch = 'ECE';
+    </pre>
+
+    <p class="note">
+      Use parentheses when mixing AND and OR to control the order of evaluation and
+      make the logic clear.
+    </p>
+
+    <h3>4️⃣ ORDER BY – sort results</h3>
+    <p>
+      ORDER BY sorts the result set by one or more columns; sorting is ascending (ASC)
+      by default, or descending (DESC) if specified.
+    </p>
+
+    <pre>
+-- sort students by name (A to Z)
+SELECT name, branch, cgpa
+FROM students
+ORDER BY name ASC;
+
+-- sort students by cgpa (highest first)
+SELECT name, branch, cgpa
+FROM students
+ORDER BY cgpa DESC;
+    </pre>
+
+    <p class="note">
+      ORDER BY is applied after filtering, so SQL first selects rows with WHERE and then
+      sorts those rows.
+    </p>
+
+    <h3>5️⃣ Combine WHERE and ORDER BY</h3>
+    <p>
+      In real queries you almost always combine SELECT, FROM, WHERE, and ORDER BY
+      into a single statement.
+    </p>
+
+    <pre>
+-- CSE students only, sorted by cgpa descending
+SELECT name, branch, cgpa
+FROM students
+WHERE branch = 'CSE'
+ORDER BY cgpa DESC;
+
+-- students with cgpa >= 8, sorted by name
+SELECT name, branch, cgpa
+FROM students
+WHERE cgpa >= 8.0
+ORDER BY name ASC;
+    </pre>
+
+    <p class="note">
+      A helpful mental template is:
+      <code>SELECT ... FROM ... WHERE ... ORDER BY ...;</code> and you fill in each part.
+    </p>
+
+    <div class="task-box>
+      <strong>🎯 Mini Tasks for SQL Stage 4:</strong>
+      <ul>
+        <li>Write a query to show all columns from <code>students</code> where branch is 'CSE'.</li>
+        <li>Write a query to list <code>name</code> and <code>cgpa</code> for students with cgpa &gt;= 8.0, sorted by cgpa descending.</li>
+        <li>Write a query to show only students from 'ECE' or 'ME', sorted alphabetically by name.</li>
+        <li>Add 2–3 more student rows with different branches and cgpa, then rerun your queries and check the results.</li>
+        <li>Optional: Try a query with a more complex WHERE such as <code>(branch = 'CSE' OR branch = 'ECE') AND cgpa &gt;= 8.0</code> and see which rows appear.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 4 as completed in localStorage
+    localStorage.setItem("sql_step4_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

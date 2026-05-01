@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 15 – Work on DB Projects (Library, HR System)</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 15: Work on DB Projects (Library, HR System)</h2>
+    <p>
+      In this stage you use everything you learned to design and build small real
+      databases, such as a Library Management System or an HR (employee) system.
+    </p>
+    <p>
+      You will define tables, constraints, and relationships, then write practical
+      queries that feel like real work, not just classroom exercises.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Project option 1: Library Management System</h3>
+    <p>
+      A library system tracks books, members, and borrowings, which is ideal to
+      practice tables, joins, and date handling.
+    </p>
+
+    <pre>
+-- members (students) table
+CREATE TABLE members (
+    member_id   INT PRIMARY KEY,
+    full_name   VARCHAR(100) NOT NULL,
+    branch      VARCHAR(50),
+    year        INT,
+    email       VARCHAR(100) UNIQUE
+);
+
+-- books table
+CREATE TABLE books (
+    book_id     INT PRIMARY KEY,
+    title       VARCHAR(200) NOT NULL,
+    author      VARCHAR(100),
+    category    VARCHAR(50),
+    pub_year    INT
+);
+
+-- borrowings table
+CREATE TABLE borrowings (
+    borrow_id   INT PRIMARY KEY,
+    member_id   INT,
+    book_id     INT,
+    borrow_date DATE,
+    return_date DATE,
+    FOREIGN KEY (member_id) REFERENCES members(member_id),
+    FOREIGN KEY (book_id)   REFERENCES books(book_id)
+);
+    </pre>
+
+    <p class="note">
+      This schema lets you practice joins, GROUP BY, and date filters to understand
+      borrowing patterns and member behavior.
+    </p>
+
+    <h3>2️⃣ Library project – example queries</h3>
+    <p>
+      Once the tables are ready, you can write queries that might appear in a real
+      library dashboard or report.
+    </p>
+
+    <pre>
+-- list all currently borrowed books (not yet returned)
+SELECT b.title,
+       m.full_name,
+       br.borrow_date
+FROM borrowings AS br
+JOIN books   AS b ON br.book_id   = b.book_id
+JOIN members AS m ON br.member_id = m.member_id
+WHERE br.return_date IS NULL;
+
+-- count books borrowed by each member
+SELECT m.full_name,
+       COUNT(*) AS total_borrowed
+FROM members AS m
+JOIN borrowings AS br ON m.member_id = br.member_id
+GROUP BY m.full_name
+ORDER BY total_borrowed DESC;
+
+-- most popular books (by times borrowed)
+SELECT b.title,
+       COUNT(*) AS times_borrowed
+FROM books AS b
+JOIN borrowings AS br ON b.book_id = br.book_id
+GROUP BY b.title
+ORDER BY times_borrowed DESC;
+    </pre>
+
+    <p class="note">
+      These queries can later be used in reports, dashboards, or portfolio
+      documentation for your library project.
+    </p>
+
+    <h3>3️⃣ Project option 2: HR / Employee System</h3>
+    <p>
+      An HR system tracks employees, departments, and salaries and is one of the
+      most common beginner SQL project ideas.
+    </p>
+
+    <pre>
+-- departments table
+CREATE TABLE departments (
+    dept_id     INT PRIMARY KEY,
+    dept_name   VARCHAR(100) NOT NULL,
+    location    VARCHAR(100)
+);
+
+-- employees table
+CREATE TABLE employees (
+    emp_id      INT PRIMARY KEY,
+    first_name  VARCHAR(50),
+    last_name   VARCHAR(50),
+    email       VARCHAR(100) UNIQUE,
+    hire_date   DATE,
+    salary      DECIMAL(10,2),
+    dept_id     INT,
+    FOREIGN KEY (dept_id) REFERENCES departments(dept_id)
+);
+    </pre>
+
+    <p class="note">
+      You can extend this schema with job titles, managers, attendance, or salary
+      history to make it closer to real enterprise systems.
+    </p>
+
+    <h3>4️⃣ HR project – example queries</h3>
+    <p>
+      With these tables you can answer typical HR questions using SELECT, JOIN,
+      GROUP BY, and date filters.
+    </p>
+
+    <pre>
+-- list employees with their department name
+SELECT e.emp_id,
+       e.first_name,
+       e.last_name,
+       d.dept_name,
+       e.salary
+FROM employees AS e
+JOIN departments AS d ON e.dept_id = d.dept_id;
+
+-- total salary cost by department
+SELECT d.dept_name,
+       SUM(e.salary) AS total_salary
+FROM departments AS d
+JOIN employees  AS e ON d.dept_id = e.dept_id
+GROUP BY d.dept_name
+ORDER BY total_salary DESC;
+
+-- employees who joined after a specific date
+SELECT emp_id,
+       first_name,
+       last_name,
+       hire_date
+FROM employees
+WHERE hire_date > '2022-01-01'
+ORDER BY hire_date;
+    </pre>
+
+    <p class="note">
+      These kinds of queries mirror real interview and on-the-job reporting needs
+      such as staff distribution, salary budgets, and recent hires.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for SQL Stage 15:</strong>
+      <ul>
+        <li>Choose either the Library or HR project and create all tables with appropriate primary and foreign keys in your database.</li>
+        <li>Insert at least 20–50 rows across the tables with realistic sample data so that reports look meaningful.</li>
+        <li>Write at least 10 queries that answer real questions such as top borrowers, popular categories, highest‑paying departments, or newest employees.</li>
+        <li>Save your CREATE TABLE and INSERT statements in one <code>.sql</code> file and your analytical queries in another inside a project folder.</li>
+        <li>In your notebook or README, describe the project goal, tables, relationships, and list the key business questions your SQL solves.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 15 as completed in localStorage
+    localStorage.setItem("sql_step15_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

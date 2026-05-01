@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS Step 3 – Learn Data Cleaning with Pandas</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Data Science Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToDS()">&times;</div>
+
+    <h2>Step 3: Learn Data Cleaning Using Pandas</h2>
+    <p>
+      In this stage you learn how to clean messy data using <strong>Pandas</strong> in Python:
+      loading a CSV, checking for missing values, fixing them, and removing obvious
+      mistakes or duplicates.
+    </p>
+    <p>
+      Most real‑life datasets have missing entries, extra spaces, wrong types, or repeated
+      rows, so data cleaning is one of the most important daily skills in data science.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Setup – create a small sample dataset</h3>
+    <p>
+      First create a simple CSV file so that students in any college or village can
+      practice without internet.
+    </p>
+    <ul>
+      <li>Open a text editor or Excel and create a file called <code>students_raw.csv</code>.</li>
+      <li>Add a few rows with some missing values and small mistakes (for example empty CGPA, extra spaces in names).</li>
+    </ul>
+
+    <pre>
+name,branch,cgpa
+Asha ,CSE,8.5
+Ravi,ECE,
+Meena , CSE ,9.1
+Ravi,ECE,
+Sita,MECH,7.2
+    </pre>
+
+    <p class="note">
+      Notice there are missing CGPA values and name/branch have extra spaces; there is
+      also a duplicate row for Ravi.
+    </p>
+
+    <h3>2️⃣ Load data in Pandas and inspect</h3>
+    <p>
+      Now use Pandas to load this CSV and quickly check its structure.
+    </p>
+
+    <pre>
+import pandas as pd
+
+df = pd.read_csv("students_raw.csv")
+
+print(df.head())        # first few rows
+print(df.info())        # column types and non-null counts
+print(df.isna().sum())  # how many missing values in each column
+    </pre>
+
+    <p class="note">
+      Functions like <code>head()</code>, <code>info()</code>, and <code>isna().sum()</code>
+      help you see problems such as missing values or wrong data types in seconds.
+    </p>
+
+    <h3>3️⃣ Handle missing values</h3>
+    <p>
+      There are many ways to handle missing values: drop rows, fill with a fixed value,
+      or fill using statistics like mean or median.
+    </p>
+
+    <pre>
+# Option 1: drop rows where cgpa is missing
+df_drop = df.dropna(subset=["cgpa"])
+
+# Option 2: fill missing cgpa with average cgpa
+avg_cgpa = df["cgpa"].mean()
+df_fill = df.copy()
+df_fill["cgpa"] = df_fill["cgpa"].fillna(avg_cgpa)
+    </pre>
+
+    <p class="note">
+      For beginner projects, clearly explain in comments why you choose to drop or fill
+      missing values so that students understand the trade‑off.
+    </p>
+
+    <h3>4️⃣ Fix spaces, text, and duplicates</h3>
+    <p>
+      Raw data often has extra spaces and repeated rows; Pandas gives simple functions
+      to standardize and remove duplicates.
+    </p>
+
+    <pre>
+clean = df.copy()
+
+# Remove extra spaces from text columns
+clean["name"] = clean["name"].str.strip()
+clean["branch"] = clean["branch"].str.strip()
+
+# Drop exact duplicate rows
+clean = clean.drop_duplicates()
+    </pre>
+
+    <p class="note">
+      Cleaning text (using <code>str.strip()</code>, <code>str.lower()</code>, etc.) and
+      removing duplicates with <code>drop_duplicates()</code> are standard data‑wrangling
+      steps in many projects.
+    </p>
+
+    <h3>5️⃣ Convert data types if needed</h3>
+    <p>
+      Sometimes numeric columns are accidentally read as text because of symbols or
+      missing values; converting dtypes makes calculations possible.
+    </p>
+
+    <pre>
+# Ensure cgpa is numeric, convert errors to NaN
+clean["cgpa"] = pd.to_numeric(clean["cgpa"], errors="coerce")
+
+print(clean.dtypes)
+    </pre>
+
+    <p class="note">
+      After converting, you can again use <code>isna().sum()</code> to see if any new
+      missing values appeared and decide how to handle them.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for DS Stage 3:</strong>
+      <ul>
+        <li>Create a CSV (like <code>students_raw.csv</code> or local shop sales) with at least 10 rows, including some missing values and duplicates.</li>
+        <li>Write a Pandas script that loads the CSV, prints <code>head()</code>, <code>info()</code>, and <code>isna().sum()</code>.</li>
+        <li>Clean the data by:
+          <ul>
+            <li>Removing extra spaces in text columns.</li>
+            <li>Dropping or filling missing values (and writing in comments which choice you made).</li>
+            <li>Removing duplicate rows using <code>drop_duplicates()</code>.</li>
+          </ul>
+        </li>
+        <li>Save the cleaned dataset as <code>students_clean.csv</code> and open it to confirm that it looks tidy.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+   <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToDS()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToDS() {
+    // Go back to index.html and open Data Science roadmap popup
+    window.location.href = "index.html#open-ds";
+  }
+
+  function markCompleted() {
+    // Mark DS Step 3 as completed in localStorage
+    localStorage.setItem("ds_step3_completed", "true");
+    window.location.href = "index.html#open-ds";
+  }
+</script>
+
+</body>
+</html>

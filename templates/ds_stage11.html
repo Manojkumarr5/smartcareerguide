@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS Step 11 – Build Predictive ML Projects</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Data Science Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToDS()">&times;</div>
+
+    <h2>Step 11: Build Predictive ML Projects</h2>
+    <p>
+      In this stage you connect everything so far into a small <strong>end‑to‑end
+      predictive project</strong>: define a problem, prepare data, train a model,
+      evaluate it, and save basic results.
+    </p>
+    <p>
+      The goal is not a “perfect” model but a clear, repeatable pipeline that students
+      can adapt for many datasets like marks, house prices, or simple business data.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Define a simple prediction problem</h3>
+    <p>
+      Start by writing the problem in one sentence, including what you want to predict
+      (target) and what information you will use (features).
+    </p>
+    <ul>
+      <li>Example regression project: “Predict student marks from study hours and attendance.”</li>
+      <li>Example classification project: “Predict whether a student will pass (1) or fail (0).”[web:426]</li>
+    </ul>
+
+    <p class="note">
+      Project guides usually say: define the question clearly before touching code or
+      data; this keeps the work focused.
+    </p>
+
+    <h3>2️⃣ Load, clean, and split the data</h3>
+    <p>
+      Use earlier cleaning skills, then split data into train and test so you can check
+      performance on unseen examples.
+    </p>
+
+    <pre>
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+# Example dataset: students.csv (one row per student)
+# columns: study_hours, attendance, marks
+
+df = pd.read_csv("students.csv")
+
+# Basic cleaning: drop rows with missing target
+df = df.dropna(subset=["marks"])
+
+# Optionally fill or drop other missing values
+df["study_hours"] = df["study_hours"].fillna(df["study_hours"].median())
+df["attendance"] = df["attendance"].fillna(df["attendance"].median())
+
+X = df[["study_hours", "attendance"]]  # features
+y = df["marks"]                        # target
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+    </pre>
+
+    <p class="note">
+      A train‑test split is standard so the model is evaluated on data it did not see
+      during training.
+    </p>
+
+    <h3>3️⃣ Train a simple regression model</h3>
+    <p>
+      Start with a basic model such as linear regression; the main aim is to understand
+      each step in the workflow.
+    </p>
+
+    <pre>
+from sklearn.linear_model import LinearRegression
+
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+print("Coefficients:", model.coef_)
+print("Intercept:", model.intercept_)
+    </pre>
+
+    <p class="note">
+      Coefficients can be read as “how much marks change if study hours or attendance
+      increase by 1, keeping the other feature fixed”.
+    </p>
+
+    <h3>4️⃣ Evaluate the model with simple metrics</h3>
+    <p>
+      Use mean squared error or R² for regression, and accuracy or F1 for classification
+      to compare predictions with actual values.
+    </p>
+
+    <pre>
+from sklearn.metrics import mean_squared_error, r2_score
+
+y_pred = model.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print("Mean Squared Error:", mse)
+print("R^2 Score:", r2)
+    </pre>
+
+    <p class="note">
+      Beginner projects often discuss whether the error is reasonable and suggest
+      adding features or trying other models if performance is weak.
+    </p>
+
+    <h3>5️⃣ Save basic outputs and think about next steps</h3>
+    <p>
+      Even for a small project, it is useful to save predictions and the trained model,
+      and write a short summary of what you learned.
+    </p>
+
+    <pre>
+# Save predictions for inspection
+results = X_test.copy()
+results["actual_marks"] = y_test.values
+results["predicted_marks"] = y_pred
+results.to_csv("students_predictions.csv", index=False)
+
+# (Optional) Save model using joblib
+import joblib
+joblib.dump(model, "marks_model.joblib")
+    </pre>
+
+    <p class="note">
+      End‑to‑end project tutorials recommend keeping code, small sample data, and a
+      README so this work can go into a GitHub portfolio later.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for DS Stage 11:</strong>
+      <ul>
+        <li>Choose one small problem (marks, house rent, or shop sales) and write a
+            one‑sentence problem statement and list of input features.
+        </li>
+        <li>Build a full pipeline in one script: load → clean → split → train →
+            evaluate → save predictions, and run it end‑to‑end without errors.[web:424][web:429]
+        </li>
+        <li>Write a simple “project summary” in 8–10 sentences describing data,
+            model, metrics, and what you would try next.
+        </li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToDS()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToDS() {
+    // Go back to index.html and open Data Science roadmap popup
+    window.location.href = "index.html#open-ds";
+  }
+
+  function markCompleted() {
+    // Mark DS Step 11 as completed in localStorage
+    localStorage.setItem("ds_step11_completed", "true");
+    window.location.href = "index.html#open-ds";
+  }
+</script>
+
+</body>
+</html>

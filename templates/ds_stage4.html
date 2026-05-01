@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS Step 4 – Visualize Data with Matplotlib and Seaborn</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Data Science Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToDS()">&times;</div>
+
+    <h2>Step 4: Visualize Data with Matplotlib and Seaborn</h2>
+    <p>
+      In this stage you learn how to turn numbers into simple, clear charts using
+      <strong>Matplotlib</strong> and <strong>Seaborn</strong> in Python.
+    </p>
+    <p>
+      Good visualizations help you quickly see trends, compare groups, and explain
+      results to others, which is a core part of any data science job.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Setup – import libraries and simple data</h3>
+    <p>
+      First, make sure you have Matplotlib and Seaborn installed, then create a small
+      dataset (for example student marks) directly in code.
+    </p>
+
+    <pre>
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# optional: nicer default style
+sns.set_style("whitegrid")
+
+data = {
+    "name": ["Asha", "Ravi", "Meena", "Sita", "Kiran"],
+    "maths": [60, 75, 80, 90, 70],
+    "science": [65, 70, 85, 88, 72]
+}
+df = pd.DataFrame(data)
+print(df.head())
+    </pre>
+
+    <p class="note">
+      Using a small DataFrame keeps things simple for beginners while still looking like
+      real data from a class or college.
+    </p>
+
+    <h3>2️⃣ Line plot and bar chart with Matplotlib</h3>
+    <p>
+      Matplotlib gives low‑level control to build basic charts like line plots and bar
+      charts.
+    </p>
+
+    <pre>
+# Line plot of maths marks
+plt.figure(figsize=(6, 4))
+plt.plot(df["name"], df["maths"], marker="o", color="blue")
+plt.xlabel("Student")
+plt.ylabel("Maths Marks")
+plt.title("Maths Marks of Students")
+plt.tight_layout()
+plt.show()
+
+# Bar chart of science marks
+plt.figure(figsize=(6, 4))
+plt.bar(df["name"], df["science"], color="green")
+plt.xlabel("Student")
+plt.ylabel("Science Marks")
+plt.title("Science Marks of Students")
+plt.tight_layout()
+plt.show()
+    </pre>
+
+    <p class="note">
+      Labels, titles, and <code>tight_layout()</code> make charts easier to read and
+      ready to show to teachers, friends, or in mini‑projects.
+    </p>
+
+    <h3>3️⃣ Scatter plot and distribution plot with Seaborn</h3>
+    <p>
+      Seaborn sits on top of Matplotlib and makes it easier to create attractive
+      statistical plots with less code.
+    </p>
+
+    <pre>
+# Scatter plot: maths vs science
+plt.figure(figsize=(6, 4))
+sns.scatterplot(data=df, x="maths", y="science")
+plt.xlabel("Maths Marks")
+plt.ylabel("Science Marks")
+plt.title("Maths vs Science Marks")
+plt.tight_layout()
+plt.show()
+
+# Distribution of maths marks
+plt.figure(figsize=(6, 4))
+sns.histplot(data=df, x="maths", kde=True)
+plt.xlabel("Maths Marks")
+plt.title("Distribution of Maths Marks")
+plt.tight_layout()
+plt.show()
+    </pre>
+
+    <p class="note">
+      Scatter plots show relationships between two numeric variables, while histogram or
+      distribution plots show how values are spread out.
+    </p>
+
+    <h3>4️⃣ Simple grouped bar chart with Seaborn</h3>
+    <p>
+      You can also compare categories using bar plots, for example average marks by
+      subject or branch.
+    </p>
+
+    <pre>
+# Convert to long format for easier plotting
+df_long = df.melt(id_vars="name",
+                  value_vars=["maths", "science"],
+                  var_name="subject",
+                  value_name="marks")
+
+plt.figure(figsize=(7, 4))
+sns.barplot(data=df_long, x="name", y="marks", hue="subject")
+plt.xlabel("Student")
+plt.ylabel("Marks")
+plt.title("Maths vs Science Marks by Student")
+plt.tight_layout()
+plt.show()
+    </pre>
+
+    <p class="note">
+      Many tutorials use this “long” format plus <code>hue</code> to compare multiple
+      groups in one clean chart.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for DS Stage 4:</strong>
+      <ul>
+        <li>Take a small dataset (students, shop sales, or rainfall) and build at least
+          a line plot, a bar chart, and a scatter plot using Matplotlib and Seaborn.</li>
+        <li>Add clear titles, axis labels, and, where needed, a legend so that a person
+          from a rural college can understand the story by just looking at the chart.</li>
+        <li>Write 3–5 short sentences describing what each chart shows (for example
+          “Sita scores the highest in maths, and maths and science marks are positively
+          related”).</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+   <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToDS()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToDS() {
+    // Go back to index.html and open Data Science roadmap popup
+    window.location.href = "index.html#open-ds";
+  }
+
+  function markCompleted() {
+    // Mark DS Step 4 as completed in localStorage
+    localStorage.setItem("ds_step4_completed", "true");
+    window.location.href = "index.html#open-ds";
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Step 8 – Learn Pandas for Data Analysis</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Python Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToPython()">&times;</div>
+
+    <h2>Step 8: Learn Pandas for Data Analysis</h2>
+    <p>
+      In this stage you start using <strong>pandas</strong>, a powerful library for working
+      with tabular data (rows and columns) similar to Excel or SQL tables. Pandas makes it
+      easy to load, clean, filter, and analyze data.
+    </p>
+    <p>
+      Even with basic commands, you can already do useful data work for marks, attendance,
+      simple reports, and small projects.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Installing and importing pandas</h3>
+    <p>
+      Pandas is not in the core Python installation, so install it once using <code>pip</code>.
+    </p>
+
+    <div class="cmd-box">
+      <div># install once</div>
+      <div><span>pip install pandas</span></div>
+    </div>
+
+    <p>Then in your Python file or notebook:</p>
+
+    <pre>
+import pandas as pd
+    </pre>
+
+    <p class="note">
+      The alias <code>pd</code> is a common short name used in almost all tutorials and
+      real projects.
+    </p>
+
+    <h3>2️⃣ Key ideas: Series and DataFrame</h3>
+    <p>
+      Pandas has two main building blocks: <strong>Series</strong> and <strong>DataFrame</strong>.
+    </p>
+    <ul>
+      <li><strong>Series</strong> – like one column (1‑D).</li>
+      <li><strong>DataFrame</strong> – table with rows and columns (2‑D), made of many Series.</li>
+    </ul>
+
+    <pre>
+import pandas as pd
+
+# Series example
+s = pd.Series([10, 20, 30, 40])
+print("Series:")
+print(s)
+
+# DataFrame example from a dict
+data = {
+    "name": ["Asha", "Ravi", "Kiran"],
+    "marks": [85, 72, 91],
+    "branch": ["CSE", "ECE", "ME"]
+}
+df = pd.DataFrame(data)
+
+print("\nDataFrame:")
+print(df)
+    </pre>
+
+    <p class="note">
+      In the DataFrame, each key in the dictionary becomes a column.
+    </p>
+
+    <h3>3️⃣ Loading data from CSV</h3>
+    <p>
+      In real use, you will often read data from a CSV file (comma‑separated values),
+      and pandas makes this a one‑line operation.
+    </p>
+
+    <pre>
+import pandas as pd
+
+# marks.csv should be in the same folder
+df = pd.read_csv("marks.csv")
+
+print("First 5 rows:")
+print(df.head())
+    </pre>
+
+    <p class="note">
+      <code>head()</code> shows the first few rows; use <code>df.tail()</code> for the last rows.
+    </p>
+
+    <h3>4️⃣ Exploring your DataFrame</h3>
+    <p>
+      Pandas provides quick methods to understand the data shape and basic statistics.
+    </p>
+
+    <pre>
+print("Shape (rows, columns):", df.shape)
+print("\nColumn names:", df.columns)
+
+print("\nSummary statistics:")
+print(df.describe())    # for numeric columns
+
+print("\nInfo:")
+print(df.info())
+    </pre>
+
+    <p class="note">
+      These commands help you quickly check if the dataset looks correct before analysis.
+    </p>
+
+    <h3>5️⃣ Selecting columns and rows</h3>
+    <p>
+      You can select specific columns like this:
+    </p>
+
+    <pre>
+# one column (Series)
+names = df["name"]
+
+# multiple columns (DataFrame)
+marks_and_branch = df[["name", "marks", "branch"]]
+    </pre>
+
+    <p>Filtering rows based on conditions:</p>
+
+    <pre>
+# students with marks >= 80
+top_students = df[df["marks"] &gt;= 80]
+
+# CSE students with marks >= 75
+cse_good = df[(df["branch"] == "CSE") &amp; (df["marks"] &gt;= 75)]
+    </pre>
+
+    <p class="note">
+      This pattern <code>df[condition]</code> is extremely powerful for real data cleaning and filtering.
+    </p>
+
+    <h3>6️⃣ Adding new columns</h3>
+    <p>
+      You can create new columns based on calculations or conditions.
+    </p>
+
+    <pre>
+# suppose marks are out of 100
+df["result"] = df["marks"].apply(lambda m: "Pass" if m &gt;= 35 else "Fail")
+
+# add grade
+def grade(m):
+    if m &gt;= 80:
+        return "A"
+    elif m &gt;= 60:
+        return "B"
+    elif m &gt;= 35:
+        return "C"
+    else:
+        return "F"
+
+df["grade"] = df["marks"].apply(grade)
+
+print(df.head())
+    </pre>
+
+    <p class="note">
+      Functions with <code>apply()</code> let you convert business rules (like grading) into code.
+    </p>
+
+    <h3>7️⃣ Grouping and summarizing data</h3>
+    <p>
+      Grouping allows you to calculate statistics for each category, for example branch‑wise average marks.
+    </p>
+
+    <pre>
+# average marks by branch
+branch_avg = df.groupby("branch")["marks"].mean()
+print(branch_avg)
+
+# count of pass/fail
+result_counts = df["result"].value_counts()
+print(result_counts)
+    </pre>
+
+    <p class="note">
+      <code>groupby()</code> is a key feature for reports and dashboards.
+    </p>
+
+    <h3>8️⃣ Saving your cleaned data</h3>
+    <p>
+      After cleaning or adding new columns, you can save the updated DataFrame back to a CSV.
+    </p>
+
+    <pre>
+df.to_csv("marks_cleaned.csv", index=False)
+    </pre>
+
+    <p class="note">
+      Setting <code>index=False</code> avoids saving the DataFrame index as an extra column.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Python Stage 8:</strong>
+      <ul>
+        <li>Create a small CSV file (for example, 10 rows of students with name, branch, and marks) and load it with <code>pd.read_csv()</code>.</li>
+        <li>Print basic info: shape, columns, <code>head()</code>, <code>describe()</code>.</li>
+        <li>Filter students with marks ≥ 80 and save them to a new CSV file.</li>
+        <li>Add a grade column using your own grading rules with <code>apply()</code>.</li>
+        <li>Use <code>groupby()</code> to show average marks for each branch, and note which branch is performing best.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToPython()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToPython() {
+    // Go back to index.html and open Python roadmap popup
+    window.location.href = "index.html#open-python";
+  }
+
+  function markCompleted() {
+    // Mark Python Step 8 as completed in localStorage
+    localStorage.setItem("python_step8_completed", "true");
+    window.location.href = "index.html#open-python";
+  }
+</script>
+
+</body>
+</html>

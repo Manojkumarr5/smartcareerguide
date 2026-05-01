@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Step 5 – DOM Manipulation & Events</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #005fa3;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #eaf4ff;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffea;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4f8ff;
+      padding: 15px;
+      border-left: 5px solid #0078d7;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .back-btn:hover {
+      background: #005fa3;
+    }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .complete-btn:hover {
+      background: #218838;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .demo-btn {
+      margin-top: 8px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: none;
+      background: #0078d7;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .demo-btn:hover {
+      background: #005fa3;
+    }
+
+    .output-box {
+      margin-top: 10px;
+      padding: 10px;
+      background: #f2f6ff;
+      border-radius: 6px;
+      font-family: Consolas, monospace;
+      font-size: 0.9rem;
+      min-height: 24px;
+    }
+
+    .color-box {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      margin-top: 10px;
+      background: #0078d7;
+    }
+
+    .todo-list {
+      margin-top: 8px;
+      padding-left: 18px;
+    }
+
+    .todo-list li {
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToWeb()">&times;</div>
+
+    <h2>Step 5: DOM Manipulation and Events</h2>
+    <p>In Stage 4, you learned about JavaScript variables, loops, and functions. Now you will learn how to use JavaScript to actually change the page that the user sees: text, colors, elements, etc.</p>
+    <p>This is done through the DOM (Document Object Model) and events like clicks, input typing, and more.</p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is the DOM?</h3>
+    <p>DOM stands for Document Object Model. When the browser loads your HTML, it builds a tree-like structure in memory. Each HTML element becomes a JavaScript object that you can access and change.</p>
+    <p>You can select elements (like <code>&lt;p&gt;</code>, <code>&lt;div&gt;</code>, <code>&lt;button&gt;</code>) and change their text, HTML, styles, or even remove or add new elements.</p>
+
+    <h3>2️⃣ Selecting elements: getElementById and querySelector</h3>
+    <p>To change something, first you need to select it. Two very common methods are:</p>
+    <ul>
+      <li><code>document.getElementById("someId")</code> – selects one element by its id.</li>
+      <li><code>document.querySelector("css-selector")</code> – selects the first element that matches a CSS selector.</li>
+    </ul>
+
+    <pre>
+// HTML
+<p id="welcomeText">Welcome text goes here.</p>
+
+
+// JavaScript
+const p = document.getElementById("welcomeText");
+p.textContent = "Hello from JavaScript!";
+    </pre>
+
+    <button class="demo-btn" onclick="changeWelcomeText()">Change welcome text</button>
+    <p id="welcomeText">Welcome text goes here.</p>
+
+    <h3>3️⃣ Changing text and HTML content</h3>
+    <p>You can change the inside of an element in two main ways:</p>
+    <ul>
+      <li><code>textContent</code> – sets plain text (good when you just want text).</li>
+      <li><code>innerHTML</code> – sets HTML (text + tags).</li>
+    </ul>
+
+    <pre>
+// Using textContent
+const msg = document.getElementById("msgText");
+msg.textContent = "This is plain text.";
+
+
+// Using innerHTML
+const msg2 = document.getElementById("msgHtml");
+msg2.innerHTML = "<strong>This has bold text using &lt;strong&gt;.</strong>";
+    </pre>
+
+    <button class="demo-btn" onclick="showTextExamples()">Show text examples</button>
+    <p id="msgText">Original text (textContent example).</p>
+    <p id="msgHtml">Original text (innerHTML example).</p>
+
+    <h3>4️⃣ Handling events with addEventListener</h3>
+    <p>An event is something that happens in the browser: click, key press, mouse move, input change, etc. You can “listen” for an event and then run a function when it happens.</p>
+    <p>The <code>addEventListener</code> method connects an element to an event and a handler function.</p>
+
+    <pre>
+// HTML
+<button id="colorBtn">Change color</button>
+<div id="colorBox" class="color-box"></div>
+
+
+// JavaScript
+const colorBtn = document.getElementById("colorBtn");
+const colorBox = document.getElementById("colorBox");
+
+
+colorBtn.addEventListener("click", () => {
+  colorBox.style.backgroundColor = "tomato";
+});
+    </pre>
+
+    <button id="colorBtn" class="demo-btn">Change color</button>
+    <div id="colorBox" class="color-box"></div>
+
+    <h3>5️⃣ Reading user input and updating the page</h3>
+    <p>You can get the value from an input field using the <code>value</code> property, and then show it somewhere else on the page.</p>
+    <p>This is how search bars, forms, and dynamic text work.</p>
+
+    <pre>
+// HTML
+<input type="text" id="nameInput" placeholder="Enter your name">
+<button id="greetBtn">Greet Me</button>
+<p id="greetOutput"></p>
+
+
+// JavaScript
+const nameInput = document.getElementById("nameInput");
+const greetBtn = document.getElementById("greetBtn");
+const greetOutput = document.getElementById("greetOutput");
+
+
+greetBtn.addEventListener("click", () => {
+  const name = nameInput.value;
+  greetOutput.textContent = "Hello, " + name + "!";
+});
+    </pre>
+
+    <input type="text" id="nameInput" placeholder="Enter your name">
+    <button id="greetBtn" class="demo-btn">Greet Me</button>
+    <p id="greetOutput"></p>
+
+    <h3>6️⃣ Creating a simple todo list (add &lt;li&gt; items)</h3>
+    <p>You can also create new elements with JavaScript and add them to the page. This is useful for lists, dynamic content, search results, etc.</p>
+    <p>Below is a simple todo list where each click on “Add Task” adds a new list item.</p>
+
+    <pre>
+// HTML
+<input type="text" id="taskInput" placeholder="New task">
+<button id="addTaskBtn">Add Task</button>
+<ul id="taskList"></ul>
+
+
+// JavaScript
+const taskInput = document.getElementById("taskInput");
+const addTaskBtn = document.getElementById("addTaskBtn");
+const taskList = document.getElementById("taskList");
+
+
+addTaskBtn.addEventListener("click", () => {
+  const text = taskInput.value.trim();
+  if (text === "") return;
+
+
+  const li = document.createElement("li");
+  li.textContent = text;
+  taskList.appendChild(li);
+
+
+  taskInput.value = "";
+});
+    </pre>
+
+    <input type="text" id="taskInput" placeholder="New task">
+    <button id="addTaskBtn" class="demo-btn">Add Task</button>
+    <ul id="taskList" class="todo-list"></ul>
+
+    <h3>7️⃣ Changing CSS styles with JavaScript</h3>
+    <p>You can change the style of an element directly from JavaScript using the <code>style</code> property. You write CSS property names in camelCase (for example, <code>backgroundColor</code> instead of <code>background-color</code>).</p>
+    <p>Below is a button that toggles between light and dark mode for a small box.</p>
+
+    <pre>
+// HTML
+<div id="modeBox">Light mode</div>
+<button id="toggleModeBtn">Toggle Mode</button>
+
+
+// JavaScript
+const modeBox = document.getElementById("modeBox");
+const toggleBtn = document.getElementById("toggleModeBtn");
+let isDark = false;
+
+
+toggleBtn.addEventListener("click", () => {
+  if (!isDark) {
+    modeBox.style.backgroundColor = "#333";
+    modeBox.style.color = "#fff";
+    modeBox.textContent = "Dark mode";
+    isDark = true;
+  } else {
+    modeBox.style.backgroundColor = "#f2f6ff";
+    modeBox.style.color = "#000";
+    modeBox.textContent = "Light mode";
+    isDark = false;
+  }
+});
+    </pre>
+
+    <div id="modeBox" class="output-box" style="background:#f2f6ff; color:#000;">Light mode</div>
+    <button id="toggleModeBtn" class="demo-btn">Toggle Mode</button>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Stage 5:</strong>
+      <ul>
+        <li>Create a file called <code>web_stage5_test.html</code>. Add a paragraph and a button. When the button is clicked, change the paragraph text to something new.</li>
+        <li>Add an input where the user types their favorite programming language. On button click, show a message like “Nice, you like JavaScript!” using <code>textContent</code>.</li>
+        <li>Build a simple todo list: an input, an “Add” button, and a list. Each time you click Add, append a new <code>&lt;li&gt;</code> with the task text.</li>
+        <li>Create a box and two buttons: “Make Red” and “Make Blue”. Use <code>addEventListener</code> and <code>style.backgroundColor</code> to change the color.</li>
+        <li>Experiment: Log messages to the console when different events happen (click, input, mouseover) using <code>console.log</code>.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToWeb()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function goBackToWeb() {
+    // Go back to index.html and open Web roadmap popup
+    window.location.href = "index.html#open-web"; // [web:241][web:238]
+  }
+
+  function markCompleted() {
+    // Mark Web step 5 as completed
+    localStorage.setItem("web_step5_completed", "true"); // [web:192][web:193][web:177]
+    window.location.href = "index.html#open-web";
+  }
+
+  function changeWelcomeText() {
+    const p = document.getElementById("welcomeText");
+    p.textContent = "Hello from JavaScript! (changed using DOM)";
+  }
+
+  function showTextExamples() {
+    const msg = document.getElementById("msgText");
+    const msg2 = document.getElementById("msgHtml");
+
+    msg.textContent = "This is plain text set using textContent.";
+    msg2.innerHTML = "<strong>This is bold text set using innerHTML.</strong>";
+  }
+
+  // Color change demo
+  const colorBtn = document.getElementById("colorBtn");
+  const colorBox = document.getElementById("colorBox");
+  if (colorBtn && colorBox) {
+    colorBtn.addEventListener("click", () => {
+      colorBox.style.backgroundColor = "tomato";
+    });
+  }
+
+  // Greet input demo
+  const nameInput = document.getElementById("nameInput");
+  const greetBtn = document.getElementById("greetBtn");
+  const greetOutput = document.getElementById("greetOutput");
+  if (greetBtn && nameInput && greetOutput) {
+    greetBtn.addEventListener("click", () => {
+      const name = nameInput.value.trim();
+      if (name === "") {
+        greetOutput.textContent = "Please enter your name.";
+      } else {
+        greetOutput.textContent = "Hello, " + name + "!";
+      }
+    });
+  }
+
+  // Todo list demo
+  const taskInput = document.getElementById("taskInput");
+  const addTaskBtn = document.getElementById("addTaskBtn");
+  const taskList = document.getElementById("taskList");
+  if (addTaskBtn && taskInput && taskList) {
+    addTaskBtn.addEventListener("click", () => {
+      const text = taskInput.value.trim();
+      if (text === "") return;
+
+      const li = document.createElement("li");
+      li.textContent = text;
+      taskList.appendChild(li);
+
+      taskInput.value = "";
+    });
+  }
+
+  // Mode toggle demo
+  const modeBox = document.getElementById("modeBox");
+  const toggleModeBtn = document.getElementById("toggleModeBtn");
+  let isDark = false;
+  if (modeBox && toggleModeBtn) {
+    toggleModeBtn.addEventListener("click", () => {
+      if (!isDark) {
+        modeBox.style.backgroundColor = "#333";
+        modeBox.style.color = "#fff";
+        modeBox.textContent = "Dark mode";
+        isDark = true;
+      } else {
+        modeBox.style.backgroundColor = "#f2f6ff";
+        modeBox.style.color = "#000";
+        modeBox.textContent = "Light mode";
+        isDark = false;
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

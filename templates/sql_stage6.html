@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 6 – Master JOINs (INNER, LEFT, RIGHT, FULL)</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 6: Master JOINs (INNER, LEFT, RIGHT, FULL)</h2>
+    <p>
+      In this stage you learn how to combine data from multiple tables using SQL
+      JOINs: INNER JOIN, LEFT JOIN, RIGHT JOIN, and FULL JOIN.
+    </p>
+    <p>
+      These joins let you answer questions that need information spread across
+      tables, such as students and their marks or customers and their orders.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Setup: students and marks tables</h3>
+    <p>
+      Use two related tables for practice: one for students and one for their marks,
+      connected by a foreign key such as student_id.
+    </p>
+
+    <pre>
+-- students table
+CREATE TABLE students (
+    id      INT PRIMARY KEY,
+    name    VARCHAR(100),
+    branch  VARCHAR(50)
+);
+
+-- marks table
+CREATE TABLE marks (
+    id         INT PRIMARY KEY,
+    student_id INT,
+    subject    VARCHAR(50),
+    score      INT
+);
+    </pre>
+
+    <p class="note">
+      Insert rows so that some students have marks in multiple subjects and
+      at least one student has no marks; this makes join differences clear.
+    </p>
+
+    <h3>2️⃣ INNER JOIN – only matching rows</h3>
+    <p>
+      INNER JOIN returns only rows where the join condition matches in both tables,
+      usually linking a primary key to a foreign key.
+    </p>
+
+    <pre>
+-- list students with their subjects and scores
+SELECT s.id,
+       s.name,
+       s.branch,
+       m.subject,
+       m.score
+FROM students AS s
+INNER JOIN marks AS m
+    ON s.id = m.student_id;
+    </pre>
+
+    <p class="note">
+      Any student without a matching row in <code>marks</code> will not appear because
+      INNER JOIN keeps only matching pairs.
+    </p>
+
+    <h3>3️⃣ LEFT JOIN – keep all left table rows</h3>
+    <p>
+      LEFT JOIN returns all rows from the left table and matching rows from the
+      right table, filling non‑matches with NULL values.
+    </p>
+
+    <pre>
+-- list all students and show marks if they exist
+SELECT s.id,
+       s.name,
+       s.branch,
+       m.subject,
+       m.score
+FROM students AS s
+LEFT JOIN marks AS m
+    ON s.id = m.student_id;
+    </pre>
+
+    <p class="note">
+      Students with no marks still appear, with NULL for subject and score,
+      which helps identify missing data.
+    </p>
+
+    <h3>4️⃣ RIGHT JOIN and FULL JOIN – idea and syntax</h3>
+    <p>
+      RIGHT JOIN keeps all rows from the right table and matching rows from the
+      left, while FULL JOIN keeps all rows from both tables and uses NULLs where
+      no match exists; some databases do not support FULL JOIN directly.
+    </p>
+
+    <pre>
+-- RIGHT JOIN pattern (supported in many but not all SQL systems)
+SELECT s.id,
+       s.name,
+       s.branch,
+       m.subject,
+       m.score
+FROM students AS s
+RIGHT JOIN marks AS m
+    ON s.id = m.student_id;
+
+-- FULL JOIN pattern (for systems that support FULL OUTER JOIN)
+SELECT s.id,
+       s.name,
+       s.branch,
+       m.subject,
+       m.score
+FROM students AS s
+FULL JOIN marks AS m
+    ON s.id = m.student_id;
+    </pre>
+
+    <p class="note">
+      INNER JOIN and LEFT JOIN cover most everyday needs; RIGHT and FULL joins
+      are used more selectively and may require workarounds in some databases.
+    </p>
+
+    <h3>5️⃣ JOINs with filtering and sorting</h3>
+    <p>
+      You can combine joins with WHERE and ORDER BY to answer focused questions,
+      such as filtering by branch and ordering by score.
+    </p>
+
+    <pre>
+-- CSE students only, sorted by score descending
+SELECT s.name,
+       s.branch,
+       m.subject,
+       m.score
+FROM students AS s
+INNER JOIN marks AS m
+    ON s.id = m.student_id
+WHERE s.branch = 'CSE'
+ORDER BY m.score DESC;
+    </pre>
+
+    <p class="note">
+      A helpful mental template is:
+      <code>FROM table1 JOIN table2 ON join_condition WHERE ... ORDER BY ...</code> and then fill each part.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for SQL Stage 6:</strong>
+      <ul>
+        <li>Create and fill <code>students</code> and <code>marks</code> tables with at least 6–8 students and 10–15 marks records, ensuring some students have no marks.</li>
+        <li>Write an INNER JOIN query to list only students who have marks, showing name, subject, and score.</li>
+        <li>Write a LEFT JOIN query to list all students, showing NULL marks for those without entries in the <code>marks</code> table.</li>
+        <li>Add a WHERE condition to your join such as one branch filter and sort by score using ORDER BY.</li>
+        <li>In your notebook, draw a small Venn‑diagram style sketch and explain the differences between INNER, LEFT, RIGHT, and FULL JOIN using your data.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 6 as completed in localStorage
+    localStorage.setItem("sql_step6_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

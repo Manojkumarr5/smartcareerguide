@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Step 3 – Data Types, Lists, and Dicts</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Python Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToPython()">&times;</div>
+
+    <h2>Step 3: Work with Data Types, Lists, and Dictionaries</h2>
+    <p>
+      In this stage you learn how Python stores information using different data types,
+      and how to organize many values using lists and dictionaries. These are the basic
+      containers you will use again and again in data science, web apps, and automation.
+    </p>
+    <p>
+      By the end of this step, you should feel comfortable creating lists and dictionaries,
+      reading values from them, and updating them in simple programs.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Core Python data types</h3>
+    <p>
+      Python has several built‑in data types. For now, focus on the most common ones.
+    </p>
+    <ul>
+      <li><strong>int</strong> – whole numbers like <code>5</code>, <code>-3</code>, <code>2025</code>.</li>
+      <li><strong>float</strong> – decimal numbers like <code>3.14</code>, <code>0.5</code>.</li>
+      <li><strong>str</strong> – text (strings) like <code>"hello"</code>, <code>"Smart Career Guide"</code>.</li>
+      <li><strong>bool</strong> – logical values: <code>True</code> or <code>False</code>.</li>
+      <li><strong>list</strong> – ordered, changeable collection of items.</li>
+      <li><strong>dict</strong> – collection of key–value pairs (like a small database row).</li>
+    </ul>
+
+    <pre>
+age = 19              # int
+price = 199.99        # float
+name = "Ananya"       # str
+is_student = True     # bool
+    </pre>
+
+    <p class="note">
+      You can check a value’s type using the <code>type()</code> function, for example:
+      <code>type(age)</code>, <code>type(name)</code>.
+    </p>
+
+    <h3>2️⃣ Lists – ordered collections</h3>
+    <p>
+      A list is like a container that can hold many values in order. You create lists with
+      square brackets <code>[]</code>. Lists can store numbers, strings, or even a mix.
+    </p>
+
+    <pre>
+marks = [78, 85, 90, 66]
+friends = ["Asha", "Ravi", "Kiran"]
+mixed = ["Ravi", 19, True]
+    </pre>
+
+    <p>Accessing items (indexing starts from 0):</p>
+
+    <pre>
+print(friends[0])   # "Asha"
+print(marks[2])     # 90
+
+# negative index from the end
+print(friends[-1])  # "Kiran"
+    </pre>
+
+    <p>Changing and adding items:</p>
+
+    <pre>
+marks[1] = 88               # change second mark
+marks.append(95)            # add at the end
+friends.insert(1, "Meera")  # insert at position 1
+
+print(marks)
+print(friends)
+    </pre>
+
+    <p class="note">
+      Lists are <strong>mutable</strong> (changeable): you can update, add, and remove items after creating them.
+    </p>
+
+    <h3>3️⃣ Looping over lists</h3>
+    <p>
+      Lists become powerful when you combine them with loops. You can easily process all items.
+    </p>
+
+    <pre>
+marks = [78, 85, 90, 66]
+
+total = 0
+for m in marks:
+    total = total + m
+
+average = total / len(marks)
+print("Average mark:", average)
+    </pre>
+
+    <p class="note">
+      This simple pattern (list + loop + calculation) is used in many real tasks:
+      attendance, marks, sales, sensor readings, and more.
+    </p>
+
+    <h3>4️⃣ Dictionaries – key–value pairs</h3>
+    <p>
+      A dictionary stores data as <strong>key → value</strong> pairs. You create dictionaries
+      with curly braces <code>{}</code>. It is like a small database row where you can quickly
+      look up a value using its key.
+    </p>
+
+    <pre>
+student = {
+    "name": "Asha",
+    "age": 19,
+    "branch": "CSE",
+    "is_hostel": True
+}
+
+print(student["name"])    # "Asha"
+print(student["branch"])  # "CSE"
+    </pre>
+
+    <p>Adding and updating values:</p>
+
+    <pre>
+student["cgpa"] = 8.5          # add new key
+student["age"] = 20            # update age
+
+print(student)
+    </pre>
+
+    <p class="note">
+      Keys are usually strings (like <code>"name"</code> or <code>"cgpa"</code>). Dictionaries
+      are very common in APIs, JSON, and config files.[web:40][web:43]
+    </p>
+
+    <h3>5️⃣ List of dictionaries – real student data</h3>
+    <p>
+      You can combine lists and dictionaries to store many records, for example a list
+      of students where each student is a dictionary.[web:42][web:47]
+    </p>
+
+    <pre>
+students = [
+    {"name": "Asha", "branch": "CSE", "cgpa": 8.5},
+    {"name": "Ravi", "branch": "ECE", "cgpa": 7.8},
+    {"name": "Kiran", "branch": "ME", "cgpa": 9.1},
+]
+
+for s in students:
+    print(s["name"], "-", s["branch"], "-", s["cgpa"])
+    </pre>
+
+    <p class="note">
+      This pattern is very close to real applications, where data is stored as a list of
+      records (students, products, employees, etc.).
+    </p>
+
+    <h3>6️⃣ Small comparison – list vs dictionary</h3>
+    <p>
+      Both lists and dictionaries can hold many values, but they are used differently.
+    </p>
+
+    <ul>
+      <li>
+        Use a <strong>list</strong> when order matters and you access items by position
+        (0, 1, 2, …), for example marks, daily temperatures, or a list of names.
+      </li>
+      <li>
+        Use a <strong>dictionary</strong> when you want to label each value with a key
+        and access by name, for example one student’s profile or one product’s details.
+      </li>
+    </ul>
+
+    <h3>7️⃣ Simple mini program – marks report</h3>
+    <p>
+      Here is a small example using everything from this stage: data types, list, dict, and loops.
+    </p>
+
+    <pre>
+students = [
+    {"name": "Asha", "marks": [78, 85, 90]},
+    {"name": "Ravi", "marks": [60, 55, 70]},
+    {"name": "Kiran", "marks": [95, 92, 88]},
+]
+
+for s in students:
+    total = sum(s["marks"])
+    avg = total / len(s["marks"])
+
+    if avg &gt;= 75:
+        status = "Distinction"
+    elif avg &gt;= 35:
+        status = "Pass"
+    else:
+        status = "Fail"
+
+    print(s["name"], ":", avg, "-", status)
+    </pre>
+
+    <p class="note">
+      This is already close to a real college mini‑project: basic result processing using
+      Python data types instead of Excel.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Python Stage 3:</strong>
+      <ul>
+        <li>Create a list of 5 friend names and print each name with a greeting.</li>
+        <li>Make a list of 5 item prices, calculate the total and average price.</li>
+        <li>Create a dictionary for yourself with keys like <code>"name"</code>, <code>"college"</code>, <code>"year"</code>, <code>"goal"</code>.</li>
+        <li>Make a list of 3 such dictionaries (3 different students) and print only their names and goals.</li>
+        <li>Modify the marks‑report program to also show which student has the highest average.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToPython()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToPython() {
+    // Go back to index.html and open Python roadmap popup
+    window.location.href = "index.html#open-python";
+  }
+
+  function markCompleted() {
+    // Mark Python Step 3 as completed in localStorage
+    localStorage.setItem("python_step3_completed", "true");
+    window.location.href = "index.html#open-python";
+  }
+</script>
+
+</body>
+</html>

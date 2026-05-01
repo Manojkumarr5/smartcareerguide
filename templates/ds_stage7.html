@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS Step 7 – Learn Feature Engineering</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Data Science Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToDS()">&times;</div>
+
+    <h2>Step 7: Learn Feature Engineering</h2>
+    <p>
+      In this stage you learn <strong>feature engineering</strong>: creating, cleaning,
+      and transforming input columns (“features”) so that machine learning models can
+      learn patterns more easily.
+    </p>
+    <p>
+      Good feature engineering includes handling missing values, encoding categories,
+      scaling numeric values, and sometimes creating new features from existing ones.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is a feature?</h3>
+    <p>
+      A <strong>feature</strong> is a column used by a model to make predictions, such as
+      study hours, attendance percentage, or branch of a student.
+    </p>
+    <ul>
+      <li>Numeric features: numbers like age, salary, marks.</li>
+      <li>Categorical features: labels like branch, city, product category.</li>
+    </ul>
+
+    <p class="note">
+      Feature engineering means choosing which columns to use and how to represent them
+      so that algorithms can understand them better.
+    </p>
+
+    <h3>2️⃣ Handle missing values (quick recap)</h3>
+    <p>
+      Before any further transformations, make sure missing values are handled in a
+      consistent, documented way.
+    </p>
+
+    <pre>
+import pandas as pd
+
+df = pd.read_csv("students_raw.csv")
+
+# Example: fill missing study_hours with median
+df["study_hours"] = df["study_hours"].fillna(df["study_hours"].median())
+
+# Example: drop rows where target (marks) is missing
+df = df.dropna(subset=["marks"])
+    </pre>
+
+    <p class="note">
+      Many tutorials treat handling missing values as the first feature‑engineering step,
+      because unreliable data leads to weak features.
+    </p>
+
+    <h3>3️⃣ Encode categorical variables</h3>
+    <p>
+      Models cannot directly use text labels like branch names; these must be
+      converted into numbers using encoding techniques.
+    </p>
+
+    <pre>
+# Example dataset
+# columns: name, branch (CSE/ECE/MECH), marks
+
+# One‑hot encode 'branch'
+df_encoded = pd.get_dummies(df, columns=["branch"], drop_first=True)
+
+print(df_encoded.head())
+    </pre>
+
+    <p class="note">
+      One‑hot encoding (such as <code>get_dummies()</code>) is a common beginner‑friendly
+      method for turning small categorical features into numeric columns.
+    </p>
+
+    <h3>4️⃣ Scale numeric features</h3>
+    <p>
+      Many algorithms work better when numeric features are on a similar scale (for
+      example 0–1 or with mean 0 and standard deviation 1).
+    </p>
+
+    <pre>
+from sklearn.preprocessing import StandardScaler
+
+numeric_cols = ["study_hours", "attendance", "marks"]
+scaler = StandardScaler()
+
+df_scaled = df.copy()
+df_scaled[numeric_cols] = scaler.fit_transform(df_scaled[numeric_cols])
+
+print(df_scaled.head())
+    </pre>
+
+    <p class="note">
+      Distance‑based models like k‑nearest neighbors and clustering, as well as many
+      linear models, benefit strongly from proper scaling.
+    </p>
+
+    <h3>5️⃣ Create simple new features</h3>
+    <p>
+      Sometimes combining existing columns into a new one can give the model a clearer
+      signal, such as ratios or total scores.
+    </p>
+
+    <pre>
+# Example: efficiency score = marks per study hour
+df["efficiency"] = df["marks"] / (df["study_hours"] + 1e-3)
+
+# Example: attendance category
+df["attendance_level"] = pd.cut(
+    df["attendance"],
+    bins=[0, 60, 80, 100],
+    labels=["low", "medium", "high"]
+)
+    </pre>
+
+    <p class="note">
+      Simple, domain‑based features such as ratios or bucketed levels often improve
+      model performance more than very complex transformations.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for DS Stage 7:</strong>
+      <ul>
+        <li>Pick a small dataset (students, sales, or local data) and:
+          handle missing values, one‑hot encode at least one categorical column, and
+          scale key numeric columns.
+        </li>
+        <li>Create at least two new features (for example a ratio, total, or simple
+          category bucket) and use simple plots to see how these features relate to
+          the target.
+        </li>
+        <li>Write a short explanation in simple English of why each engineered feature
+          might help a future model.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToDS()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToDS() {
+    // Go back to index.html and open Data Science roadmap popup
+    window.location.href = "index.html#open-ds";
+  }
+
+  function markCompleted() {
+    // Mark DS Step 7 as completed in localStorage
+    localStorage.setItem("ds_step7_completed", "true");
+    window.location.href = "index.html#open-ds";
+  }
+</script>
+
+</body>
+</html>
