@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Step 14 – Authentication (Sessions & JWT)</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #005fa3;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #eaf4ff;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffea;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4f8ff;
+      padding: 15px;
+      border-left: 5px solid #0078d7;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .back-btn:hover {
+      background: #005fa3;
+    }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .complete-btn:hover {
+      background: #218838;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .compare-table th,
+    .compare-table td {
+      border: 1px solid #ddd;
+      padding: 6px 8px;
+      text-align: left;
+    }
+
+    .compare-table th {
+      background: #eaf4ff;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToWeb()">&times;</div>
+
+    <h2>Step 14: Add Authentication (Sessions & JWT)</h2>
+    <p>In Stage 13 you built a full‑stack CRUD app. Now you will add authentication so only logged‑in users can access certain routes or actions (for example, editing courses).</p>
+    <p>You will learn the basic ideas of session‑based auth and token‑based auth (JWT), and see a simple example using JSON Web Tokens.</p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is authentication and authorization?</h3>
+    <p>Authentication answers “Who are you?” by verifying the user’s identity, for example with email and password or Google login.</p>
+    <p>Authorization answers “What are you allowed to do?” by deciding which APIs or pages the authenticated user can access.</p>
+
+    <h3>2️⃣ Sessions vs JWT (high level)</h3>
+    <p>Two common ways to keep users logged in are session‑based auth and token‑based auth (JWT).</p>
+    <p>Here is a simple comparison:</p>
+
+    <table class="compare-table">
+      <tr>
+        <th>Feature</th>
+        <th>Sessions</th>
+        <th>JWT (Tokens)</th>
+      </tr>
+      <tr>
+        <td>Where data is stored</td>
+        <td>Session data stored on server; client keeps only a session ID cookie.</td>
+        <td>Token stored on client (localStorage or cookie); server usually stores no session state.</td>
+      </tr>
+      <tr>
+        <td>Server state</td>
+        <td>Stateful (server tracks sessions).</td>
+        <td>Stateless (server verifies token on each request).</td>
+      </tr>
+      <tr>
+        <td>Invalidate session</td>
+        <td>Easy: delete session on server.</td>
+        <td>Harder: tokens remain valid until expiry unless extra logic is used.</td>
+      </tr>
+    </table>
+
+    <h3>3️⃣ JWT basics (structure and flow)</h3>
+    <p>JWT (JSON Web Token) is a compact string with three parts: header, payload, and signature, separated by dots like <code>xxxxx.yyyyy.zzzzz</code>.</p>
+    <p>Typical flow: user logs in, server verifies credentials, generates a signed JWT, client stores it and sends it in the Authorization header with future requests.</p>
+
+    <pre>
+// Example Authorization header
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+    </pre>
+
+    <h3>4️⃣ Simple Node.js + Express + JWT example (concept)</h3>
+    <p>This minimal example shows JWT‑based auth with a hard‑coded user and secret key for learning purposes.</p>
+
+    <div class="cmd-box">
+      <div># Install dependencies</div>
+      <div><span>npm install express jsonwebtoken bcryptjs</span></div>
+    </div>
+
+    <pre>
+// auth-server.js
+const express = require("express");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+
+const app = express();
+app.use(express.json());
+
+// In a real app, store users in a database with hashed passwords
+const users = [
+  {
+    id: 1,
+    username: "student",
+    // password: "password123" hashed (example only)
+    passwordHash: bcrypt.hashSync("password123", 10)
+  }
+];
+
+const JWT_SECRET = "super-secret-key-change-this";
+
+// Login route: check credentials, issue token
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+
+  const user = users.find(u => u.username === username);
+  if (!user) {
+    return res.status(401).json({ error: "Invalid credentials" });
+  }
+
+  const passwordValid = bcrypt.compareSync(password, user.passwordHash);
+  if (!passwordValid) {
+    return res.status(401).json({ error: "Invalid credentials" });
+  }
+
+  // Create JWT payload and sign token
+  const payload = { userId: user.id, username: user.username };
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+
+  res.json({ token });
+});
+
+// Middleware to protect routes
+function authMiddleware(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  if (!authHeader) {
+    return res.status(401).json({ error: "Missing Authorization header" });
+  }
+
+  const [type, token] = authHeader.split(" ");
+  if (type !== "Bearer" || !token) {
+    return res.status(401).json({ error: "Invalid Authorization header format" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded; // attach user info to request
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: "Invalid or expired token" });
+  }
+}
+
+// Protected route example
+app.get("/profile", authMiddleware, (req, res) => {
+  res.json({
+    message: "Welcome to your profile!",
+    user: req.user
+  });
+});
+
+const PORT = 3003;
+app.listen(PORT, () => {
+  console.log(`Auth server running at http://localhost:${PORT}`);
+});
+    </pre>
+
+    <p class="note">Here, <code>/login</code> is public, but <code>/profile</code> is protected and needs a valid JWT in the Authorization header.</p>
+
+    <h3>5️⃣ Frontend: simple login form using JWT</h3>
+    <p>This frontend example calls <code>/login</code>, stores the token, and uses it to load a protected profile route.</p>
+
+    <pre>
+<!-- HTML -->
+<form id="loginForm">
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+  <button type="submit">Login</button>
+</form>
+
+<button id="loadProfileBtn">Load Profile</button>
+<pre id="profileOutput"></pre>
+
+<!-- JavaScript -->
+const API_BASE = "http://localhost:3003";
+let authToken = null;
+
+const loginForm = document.getElementById("loginForm");
+const loadProfileBtn = document.getElementById("loadProfileBtn");
+const profileOutput = document.getElementById("profileOutput");
+
+loginForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  const res = await fetch(API_BASE + "/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password })
+  });
+
+  if (!res.ok) {
+    profileOutput.textContent = "Login failed.";
+    return;
+  }
+
+  const data = await res.json();
+  authToken = data.token; // store token in memory for now
+  profileOutput.textContent = "Logged in! Token stored.";
+});
+
+loadProfileBtn.addEventListener("click", async () => {
+  if (!authToken) {
+    profileOutput.textContent = "Please login first.";
+    return;
+  }
+
+  const res = await fetch(API_BASE + "/profile", {
+    headers: {
+      Authorization: "Bearer " + authToken
+    }
+  });
+
+  if (!res.ok) {
+    profileOutput.textContent = "Failed to load profile.";
+    return;
+  }
+
+  const data = await res.json();
+  profileOutput.textContent = JSON.stringify(data, null, 2);
+});
+    </pre>
+
+    <p class="note">In real apps, tokens are often stored in HTTP‑only cookies or secure storage and used with proper logout and refresh flows.</p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Stage 14:</strong>
+      <ul>
+        <li>Create <code>auth-server.js</code> and implement JWT login plus a protected route, then test using Postman or Thunder Client.</li>
+        <li>Build a simple frontend login page that calls <code>/login</code>, stores the JWT, and uses it for a protected route like <code>/profile</code>.</li>
+        <li>Integrate authentication into your CRUD app so only authenticated users can create/update/delete courses.</li>
+        <li>Read about pros and cons of session‑based vs token‑based auth and note when you would choose each.</li>
+        <li>Optional: Try an Express session library such as <code>express-session</code> and compare with the JWT approach.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToWeb()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function goBackToWeb() {
+    // Go back to index.html and open Web roadmap popup
+    window.location.href = "index.html#open-web"; // [web:254][web:238]
+  }
+
+  function markCompleted() {
+    // Mark Web step 14 as completed
+    localStorage.setItem("web_step14_completed", "true"); // [web:193][web:192]
+    window.location.href = "index.html#open-web";
+  }
+</script>
+
+</body>
+</html>

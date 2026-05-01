@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 10 – Understand Keys and Constraints</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 10: Understand Keys and Constraints</h2>
+    <p>
+      In this stage you learn how constraints like PRIMARY KEY, FOREIGN KEY, NOT NULL,
+      UNIQUE, CHECK, and DEFAULT help keep your data clean and consistent.
+    </p>
+    <p>
+      You also connect these ideas to basic normalization, where a good table design
+      avoids unnecessary repetition and strange update problems.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Keys and constraints – quick idea</h3>
+    <p>
+      A constraint is a rule the database enforces on a column or table, such as
+      “this column cannot be empty” or “these values must be unique”.
+    </p>
+    <ul>
+      <li>Keys like PRIMARY KEY and FOREIGN KEY are special constraints that manage identity and relationships between tables.</li>
+      <li>Other constraints such as NOT NULL, UNIQUE, CHECK, and DEFAULT control allowed values and reduce bad data.</li>
+    </ul>
+
+    <h3>2️⃣ PRIMARY KEY and FOREIGN KEY</h3>
+    <p>
+      PRIMARY KEY uniquely identifies each row in a table and cannot be NULL; a table
+      has exactly one primary key, which may be single‑column or composite.
+    </p>
+
+    <pre>
+-- students with primary key
+CREATE TABLE students (
+    id      INT PRIMARY KEY,
+    name    VARCHAR(100) NOT NULL,
+    branch  VARCHAR(50),
+    cgpa    DECIMAL(3,1)
+);
+
+-- marks table with foreign key that references students.id
+CREATE TABLE marks (
+    id         INT PRIMARY KEY,
+    student_id INT,
+    subject    VARCHAR(50),
+    score      INT,
+    FOREIGN KEY (student_id) REFERENCES students(id)
+);
+    </pre>
+
+    <p class="note">
+      FOREIGN KEY ensures that every student_id in marks must exist in students.id,
+      which protects the relationship between the tables.
+    </p>
+
+    <h3>3️⃣ NOT NULL, UNIQUE, CHECK, DEFAULT</h3>
+    <p>
+      These constraints control what values can be stored in a column and help avoid
+      common data entry mistakes.
+    </p>
+
+    <pre>
+CREATE TABLE users (
+    user_id    INT PRIMARY KEY,
+    email      VARCHAR(100) UNIQUE NOT NULL,
+    full_name  VARCHAR(100) NOT NULL,
+    age        INT CHECK (age >= 18),
+    country    VARCHAR(50) DEFAULT 'India'
+);
+    </pre>
+
+    <ul>
+      <li><strong>NOT NULL</strong>: value cannot be empty, so a row must supply something for that column.</li>
+      <li><strong>UNIQUE</strong>: all values in the column must be different, often used for emails or usernames.</li>
+      <li><strong>CHECK</strong>: value must satisfy a condition, such as age greater than or equal to 18.</li>
+      <li><strong>DEFAULT</strong>: auto‑fills a value if none is provided, such as default country.</li>
+    </ul>
+
+    <p class="note">
+      These rules are enforced by the database itself so even if application code
+      has bugs, invalid data is blocked.
+    </p>
+
+    <h3>4️⃣ Inline vs table-level constraint syntax</h3>
+    <p>
+      Constraints can be written inline with column definitions or at the end of
+      the CREATE TABLE statement as separate table‑level clauses.
+    </p>
+
+    <pre>
+-- inline style
+CREATE TABLE example1 (
+    id    INT PRIMARY KEY,
+    email VARCHAR(100) UNIQUE
+);
+
+-- table-level style
+CREATE TABLE example2 (
+    id    INT,
+    email VARCHAR(100),
+    CONSTRAINT pk_example2 PRIMARY KEY (id),
+    CONSTRAINT uq_example2_email UNIQUE (email)
+);
+    </pre>
+
+    <p class="note">
+      Both styles work; naming constraints with CONSTRAINT is helpful for debugging
+      and for understanding error messages in larger projects.
+    </p>
+
+    <h3>5️⃣ Normalization – basic link to constraints</h3>
+    <p>
+      Normalization such as 1NF, 2NF, and 3NF is a design approach that reduces
+      redundancy and avoids strange update or deletion anomalies.
+    </p>
+    <ul>
+      <li>1NF: each column holds atomic values and tables avoid repeating groups of columns.</li>
+      <li>2NF/3NF: every non‑key column depends on the whole key and not on other non‑key columns, which removes partial and transitive dependencies.</li>
+    </ul>
+
+    <p class="note">
+      Good keys and constraints support normalization by clearly defining primary
+      keys and preventing duplicated or inconsistent data.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for SQL Stage 10:</strong>
+      <ul>
+        <li>Add a FOREIGN KEY from your <code>marks</code> table to <code>students</code> if you have not already, then try inserting a marks row with a non‑existing student_id and observe the error.</li>
+        <li>Create a <code>users</code> or <code>teachers</code> table that uses NOT NULL, UNIQUE, CHECK, and DEFAULT at least once.</li>
+        <li>Insert rows that violate each constraint, such as duplicate email or age below 18, and see how the database blocks them.</li>
+        <li>Draw one of your tables and mark the primary key, any foreign keys, and which normal form you think it roughly follows in simple words.</li>
+        <li>Optional: Experiment with named constraints using CONSTRAINT and inspect them in your DB tool’s UI to see their names.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 10 as completed in localStorage
+    localStorage.setItem("sql_step10_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

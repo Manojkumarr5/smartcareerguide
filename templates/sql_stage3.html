@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 3 – Learn CREATE, DROP, and ALTER TABLE</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 3: Learn CREATE, DROP, and ALTER TABLE</h2>
+    <p>
+      In this stage you learn the main DDL (Data Definition Language) commands:
+      <code>CREATE TABLE</code>, <code>ALTER TABLE</code>, and <code>DROP TABLE</code>, which control
+      the structure of your tables.
+    </p>
+    <p>
+      You will create new tables, change existing tables by adding or removing columns,
+      and safely drop test tables you no longer need.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ CREATE TABLE – make a new table</h3>
+    <p>
+      <code>CREATE TABLE</code> defines a new table with its columns and data types.
+    </p>
+
+    <pre>
+CREATE TABLE students (
+    id      INTEGER PRIMARY KEY,
+    name    VARCHAR(100) NOT NULL,
+    branch  VARCHAR(50),
+    cgpa    DECIMAL(3,1)
+);
+    </pre>
+
+    <ul>
+      <li><code>id INTEGER PRIMARY KEY</code> – unique id for each student.</li>
+      <li><code>name VARCHAR(100) NOT NULL</code> – text up to 100 characters, cannot be empty.</li>
+      <li><code>cgpa DECIMAL(3,1)</code> – numeric value like 8.5 or 9.0.</li>
+    </ul>
+
+    <p class="note">
+      In your tool (MySQL, PostgreSQL, or SQLite GUI), run this command in the SQL editor
+      connected to your practice database.
+    </p>
+
+    <h3>2️⃣ CREATE another table – example marks table</h3>
+    <p>
+      Here is a second table that can store exam scores for students.
+    </p>
+
+    <pre>
+CREATE TABLE marks (
+    id         INTEGER PRIMARY KEY,
+    student_id INTEGER,
+    subject    VARCHAR(50),
+    score      INTEGER
+);
+    </pre>
+
+    <p class="note">
+      Later you will connect <code>student_id</code> to <code>students.id</code> with a foreign key;
+      here the focus is just on table structure.
+    </p>
+
+    <h3>3️⃣ ALTER TABLE – add a new column</h3>
+    <p>
+      <code>ALTER TABLE</code> changes the structure of an existing table, such as
+      adding, modifying, or dropping columns.
+    </p>
+
+    <pre>
+-- Add a new column 'email' to students
+ALTER TABLE students
+ADD COLUMN email VARCHAR(100);
+    </pre>
+
+    <p class="note">
+      After this, the students table has an extra column at the end; existing rows get
+      NULL for email until updated.
+    </p>
+
+    <h3>4️⃣ ALTER TABLE – rename or change column (concept)</h3>
+    <p>
+      Different database systems have slightly different syntax for renaming or changing
+      column types, but the idea is to ALTER the column definition.
+    </p>
+
+    <pre>
+-- Example pattern (exact syntax may differ per DB)
+-- Rename column 'branch' to 'department'
+-- Example (PostgreSQL-style idea):
+-- ALTER TABLE students RENAME COLUMN branch TO department;
+
+-- Change data type idea:
+-- ALTER TABLE students ALTER COLUMN cgpa TYPE DECIMAL(4,2);
+    </pre>
+
+    <p class="note">
+      At beginner level, focus on adding and dropping columns; renaming and type changes
+      are less frequent but useful to recognize.
+    </p>
+
+    <h3>5️⃣ DROP TABLE – delete a whole table</h3>
+    <p>
+      <code>DROP TABLE</code> removes a table and all of its data from the database, so use
+      it carefully.
+    </p>
+
+    <pre>
+-- Remove the marks table completely
+DROP TABLE marks;
+    </pre>
+
+    <p class="note">
+      You usually drop tables only in test databases, during development, or when cleaning
+      structures you no longer need.
+    </p>
+
+    <h3>6️⃣ DDL vs DML – quick distinction</h3>
+    <p>
+      CREATE, ALTER, and DROP are DDL (Data Definition Language) because they
+      define or change the structure of tables.
+    </p>
+    <ul>
+      <li>DDL: CREATE TABLE, ALTER TABLE, DROP TABLE, TRUNCATE, RENAME, etc.</li>
+      <li>DML: SELECT, INSERT, UPDATE, DELETE – used to work with the actual data rows.</li>
+    </ul>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for SQL Stage 3:</strong>
+      <ul>
+        <li>Create a fresh test table (for example, <code>courses</code>) with at least 3 columns using <code>CREATE TABLE</code>.</li>
+        <li>Add a new column to <code>courses</code> using <code>ALTER TABLE ... ADD COLUMN</code> (for example, <code>credits INT</code>).</li>
+        <li>Drop that extra column again using <code>ALTER TABLE ... DROP COLUMN</code> if your database supports it.</li>
+        <li>Create a small practice table (for example, <code>temp_test</code>), then safely remove it with <code>DROP TABLE temp_test;</code>.</li>
+        <li>In your notebook, write in your own words when you would use CREATE, ALTER, and DROP in a real college or project scenario.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 3 as completed in localStorage
+    localStorage.setItem("sql_step3_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

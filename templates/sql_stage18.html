@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 18 – Build Dashboard-Ready Queries</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 18: Build Dashboard-Ready Queries</h2>
+    <p>
+      In this stage you design SQL queries (and views) that are ready to plug into
+      dashboard tools like Power BI, Tableau, Metabase, or custom UI charts.
+    </p>
+    <p>
+      The focus is on clean, stable schemas with clear metrics and dimensions that
+      BI tools can filter, group, and visualize easily.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Think in metrics and dimensions</h3>
+    <p>
+      Dashboard queries typically expose a few numeric metrics grouped by one or
+      more descriptive dimensions.
+    </p>
+    <ul>
+      <li>Metrics: values to measure such as <code>total_sales</code>, <code>total_orders</code>, <code>avg_cgpa</code>, <code>borrowings_count</code>.</li>
+      <li>Dimensions: ways to slice data such as date, month, branch, category, country, or student.</li>
+    </ul>
+
+    <p class="note">
+      The BI tool uses dimensions on axes and filters and metrics in chart values;
+      SQL’s job is to provide these columns clearly.
+    </p>
+
+    <h3>2️⃣ Create views for reusable metrics</h3>
+    <p>
+      Views act as saved queries that BI tools can read directly without copying
+      long SQL into every visualization.
+    </p>
+
+    <pre>
+-- example: student performance summary by branch and year
+CREATE VIEW vw_branch_year_summary AS
+SELECT
+    branch,
+    year         AS year_of_study,
+    COUNT(*)     AS total_students,
+    AVG(cgpa)    AS avg_cgpa
+FROM students
+GROUP BY branch, year;
+
+-- dashboard query
+SELECT
+    branch,
+    year_of_study,
+    total_students,
+    avg_cgpa
+FROM vw_branch_year_summary
+ORDER BY branch, year_of_study;
+    </pre>
+
+    <p class="note">
+      A BI tool can connect directly to <code>vw_branch_year_summary</code> and build
+      bar charts or tables without needing access to base tables.
+    </p>
+
+    <h3>3️⃣ Example: sales-style metrics for dashboards</h3>
+    <p>
+      For e‑commerce or orders data, dashboards often show total sales, order
+      counts, and averages by time and category.
+    </p>
+
+    <pre>
+-- fact table example
+CREATE TABLE orders (
+    order_id      INT PRIMARY KEY,
+    order_date    DATE,
+    customer_id   INT,
+    country       VARCHAR(100),
+    category      VARCHAR(100),
+    sales_amount  DECIMAL(10,2)
+);
+
+-- view for daily metrics
+CREATE VIEW vw_daily_sales AS
+SELECT
+    order_date,
+    COUNT(*)          AS total_orders,
+    SUM(sales_amount) AS total_sales,
+    AVG(sales_amount) AS avg_order_value
+FROM orders
+GROUP BY order_date;
+
+-- view for category metrics
+CREATE VIEW vw_category_sales AS
+SELECT
+    category,
+    SUM(sales_amount) AS total_sales,
+    COUNT(*)          AS total_orders
+FROM orders
+GROUP BY category;
+    </pre>
+
+    <p class="note">
+      These views support line charts for daily trends, bar charts by category,
+      and KPI cards for totals with almost no extra SQL.
+    </p>
+
+    <h3>4️⃣ Naming and structure best practices</h3>
+    <p>
+      Clear naming and stable column sets make dashboards easier to build and
+      maintain over time.
+    </p>
+    <ul>
+      <li>Use descriptive metric names like <code>total_orders</code>, <code>total_sales</code>, <code>avg_cgpa</code>, <code>borrowings_count</code>.</li>
+      <li>Keep a consistent style such as snake_case and avoid spaces in column names.</li>
+      <li>Keep each view focused: one for time-based metrics, another for category or branch, instead of one huge query.</li>
+    </ul>
+
+    <pre>
+-- clean, dashboard-friendly query example
+SELECT
+    branch,
+    DATE(borrow_date) AS borrow_date,
+    COUNT(*)          AS borrowings_count
+FROM borrowings AS br
+JOIN students   AS s
+  ON br.member_id = s.id
+GROUP BY branch, DATE(borrow_date)
+ORDER BY borrow_date, branch;
+    </pre>
+
+    <p class="note">
+      This layout lets dashboards filter by branch and date range without changing
+      the underlying SQL.
+    </p>
+
+    <h3>5️⃣ Connect queries to a BI tool (high level)</h3>
+    <p>
+      Most BI tools follow a similar flow: connect to SQL, pick tables or views,
+      and then design visuals.
+    </p>
+    <ul>
+      <li>Connect: in Power BI or Tableau, choose SQL database, enter server and database details, and authenticate.</li>
+      <li>Select source: pick your summary views such as <code>vw_daily_sales</code>, <code>vw_category_sales</code>, or <code>vw_branch_year_summary</code>.</li>
+      <li>Build visuals: drag dimensions to axes or slicers and metrics to values to create line, bar, and KPI visuals.</li>
+    </ul>
+
+    <p class="note">
+      With good SQL views, you can switch BI tools or redesign dashboards without
+      rewriting complex queries each time.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for SQL Stage 18:</strong>
+      <ul>
+        <li>Create at least two views in your project database: one time‑based (per day or month) and one category/branch‑based, each with 2–4 clear metrics.</li>
+        <li>Test each view with <code>SELECT * FROM view_name</code> to confirm column names and values look correct.</li>
+        <li>Connect a BI tool (Power BI, Tableau, Metabase, etc.) to your database and build 3–4 visuals using only these views.</li>
+        <li>Write down five “dashboard questions” such as “daily sales in last 30 days” or “top 5 branches by avg cgpa” and make sure each has a supporting SQL query or view.</li>
+        <li>Optional: take screenshots of your dashboard and save them with the SQL definitions of each view in your portfolio.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 18 as completed in localStorage
+    localStorage.setItem("sql_step18_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

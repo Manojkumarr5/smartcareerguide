@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS Step 2 – Descriptive and Inferential Statistics</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Data Science Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToDS()">&times;</div>
+
+    <h2>Step 2: Descriptive and Inferential Statistics</h2>
+    <p>
+      In this stage you learn two big ideas in statistics: <strong>descriptive</strong>
+      statistics (to summarize data you already have) and <strong>inferential</strong>
+      statistics (to make guesses about a bigger group using a small sample).
+    </p>
+    <p>
+      These ideas help you describe marks, sales, or rainfall data clearly and later
+      decide whether changes you see are real or just random noise.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Descriptive statistics – describing data</h3>
+    <p>
+      Descriptive statistics are numbers and charts that summarize a dataset, such as
+      mean, median, mode, range, variance, and standard deviation.
+    </p>
+    <ul>
+      <li><strong>Mean</strong>: the average value (sum of values ÷ number of values).</li>
+      <li><strong>Median</strong>: the middle value when data is sorted.</li>
+      <li><strong>Mode</strong>: the value that appears most often.</li>
+      <li><strong>Range</strong>: highest value minus lowest value.</li>
+      <li><strong>Variance / Standard Deviation</strong>: how spread out the values are around the mean.</li>
+    </ul>
+
+    <p>Example dataset: marks of 5 students in maths:</p>
+
+    <pre>
+marks = [60, 75, 80, 85, 90]
+    </pre>
+
+    <p class="note">
+      For this small list, you can compute mean, median, and mode by hand or with a
+      calculator; later you will use Python or Excel for larger datasets.
+    </p>
+
+    <h3>2️⃣ Inferential statistics – guessing about a population</h3>
+    <p>
+      Inferential statistics use a <strong>sample</strong> (small group) to say something
+      about a <strong>population</strong> (big group), using probability.
+    </p>
+    <ul>
+      <li>Example: survey 50 students in your college and use that data to estimate the
+          average marks of all students in the college.</li>
+      <li>Common tools include confidence intervals and hypothesis tests that help decide
+          if a difference is likely real or due to chance.</li>
+    </ul>
+
+    <p class="note">
+      At this stage, remember: descriptive = “describe what you see”, inferential =
+      “use what you see to guess about a bigger group”.
+    </p>
+
+    <h3>3️⃣ Mean, median, mode with a small example</h3>
+    <p>
+      Take the marks list again and practice these three measures first on paper, then
+      using simple Python code.
+    </p>
+
+    <pre>
+marks = [60, 75, 80, 85, 90]
+
+n = len(marks)
+mean = sum(marks) / n
+
+sorted_marks = sorted(marks)
+median = sorted_marks[n // 2]   # because there are 5 values
+
+# Mode is the value that appears most often.
+# For this simple example each value is unique, so there is no single mode.
+    </pre>
+
+    <p class="note">
+      Try another list where some values repeat (like daily attendance) and find which
+      value appears most often as the mode.
+    </p>
+
+    <h3>4️⃣ Basic idea of hypothesis testing (very simple)</h3>
+    <p>
+      A <strong>hypothesis test</strong> is a structured way to decide whether an observed
+      difference is likely real or just random variation.
+    <ul>
+      <li><strong>Null hypothesis (H₀)</strong>: states there is no effect or no difference (for example, “Section A and Section B have the same average marks”).[web:349]</li>
+      <li><strong>Alternative hypothesis (H₁)</strong>: states there is some effect or difference (for example, “Section A has higher average marks than Section B”).[web:349][web:352]</li>
+    </ul>
+
+    <p class="note">
+      For now, do not worry about test formulas; just know that hypothesis testing helps
+      you say “this change is probably real” or “this might be random”.
+    </p>
+
+    <h3>5️⃣ Descriptive vs inferential – quick comparison</h3>
+    <p>
+      Both branches are used together in real data projects: you first describe your
+      sample and then try to generalize to a population.
+    </p>
+
+    <ul>
+      <li><strong>Descriptive</strong>: summarize the data you collected (tables, charts, averages, measures of spread).</li>
+      <li><strong>Inferential</strong>: use sample data plus probability to draw conclusions about a larger population.</li>
+    </ul>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for DS Stage 2:</strong>
+      <ul>
+        <li>Take marks of at least 10 students (real or made‑up) and calculate mean, median, mode, range, and standard deviation on paper.</li>
+        <li>Write a short paragraph in simple English describing what these numbers say about the class, such as how high or spread‑out the marks are.</li>
+        <li>Think of one inferential question like “Do students in Section A score higher than Section B?” and write H₀ and H₁ in words.</li>
+        <li>When you start using Python libraries later, repeat the same calculations in code for practice.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToDS()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToDS() {
+    // Go back to index.html and open Data Science roadmap popup
+    window.location.href = "index.html#open-ds";
+  }
+
+  function markCompleted() {
+    // Mark DS Step 2 as completed in localStorage
+    localStorage.setItem("ds_step2_completed", "true");
+    window.location.href = "index.html#open-ds";
+  }
+</script>
+
+</body>
+</html>

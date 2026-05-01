@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Step 7 – APIs and Fetch Calls</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #005fa3;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #eaf4ff;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffea;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4f8ff;
+      padding: 15px;
+      border-left: 5px solid #0078d7;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .back-btn:hover {
+      background: #005fa3;
+    }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .complete-btn:hover {
+      background: #218838;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .demo-btn {
+      margin-top: 8px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: none;
+      background: #0078d7;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .demo-btn:hover {
+      background: #005fa3;
+    }
+
+    .output-box {
+      margin-top: 10px;
+      padding: 10px;
+      background: #f2f6ff;
+      border-radius: 6px;
+      font-family: Consolas, monospace;
+      font-size: 0.9rem;
+      min-height: 24px;
+      max-height: 200px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    .user-card {
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+    }
+
+    .user-card h4 {
+      margin-bottom: 4px;
+      color: #0078d7;
+      font-size: 0.95rem;
+    }
+
+    .user-card p {
+      margin: 0;
+      font-size: 0.85rem;
+    }
+
+    .small-note {
+      font-size: 0.85rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToWeb()">&times;</div>
+
+    <h2>Step 7: Learn APIs and Fetch Calls</h2>
+    <p>In Stage 6, you built small projects fully on the front‑end. In Stage 7, you learn how your web app can talk to servers using APIs and the Fetch API.</p>
+    <p>This is how websites get live data such as weather, user profiles, posts, and more, from other services.</p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is an API (simple explanation)?</h3>
+    <p>API stands for Application Programming Interface. In web development, it usually means a set of URLs that you can call to send or get data from a server.</p>
+    <p>Think of an API like a waiter in a restaurant: you ask for something, the API talks to the server, and brings back the result as data.</p>
+
+    <h3>2️⃣ What is the Fetch API?</h3>
+    <p>The Fetch API is a built‑in JavaScript feature that lets you make HTTP requests (GET, POST, etc.) to URLs and process the responses.</p>
+    <p>Basic pattern: call <code>fetch(url)</code>, wait for the response, convert it to JSON with <code>response.json()</code>, then use the data.</p>
+
+    <pre>
+// Basic Fetch example (GET request)
+fetch("https://jsonplaceholder.typicode.com/users")
+  .then(response => response.json())
+  .then(data => {
+    console.log("Users:", data);
+  })
+  .catch(error => {
+    console.error("Error fetching users:", error);
+  });
+    </pre>
+
+    <h3>3️⃣ Using Fetch to get JSON data</h3>
+    <p>Many APIs return data in JSON format (JavaScript Object Notation). It looks like objects and arrays in JavaScript and is easy to work with.</p>
+    <p>Below is a simple example that fetches a list of users from a free test API and shows them on the page as cards.</p>
+
+    <pre>
+// JavaScript: Fetch users and display them
+function loadUsers() {
+  const output = document.getElementById("apiOutput");
+  output.textContent = "Loading users...";
+
+  fetch("https://jsonplaceholder.typicode.com/users")
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok. Status: " + response.status);
+      }
+      return response.json();
+    })
+    .then(users => {
+      output.textContent = "";
+      users.forEach(user => {
+        const div = document.createElement("div");
+        div.className = "user-card";
+        div.innerHTML = `
+          <h4>${user.name}</h4>
+          <p>Email: ${user.email}</p>
+          <p>City: ${user.address.city}</p>
+        `;
+        output.appendChild(div);
+      });
+    })
+    .catch(error => {
+      output.textContent = "Error fetching users: " + error.message;
+    });
+}
+    </pre>
+
+    <button class="demo-btn" onclick="loadUsers()">Load sample users</button>
+    <div id="apiOutput" class="output-box small-note">
+      Click "Load sample users" to fetch data from a public test API.
+    </div>
+
+    <h3>4️⃣ Understanding promises (.then and .catch)</h3>
+    <p>Fetch returns a promise, which resolves when the response arrives or rejects on network errors.</p>
+    <p>You chain <code>.then()</code> to process the response and <code>.catch()</code> to handle errors.</p>
+
+    <pre>
+fetch("https://jsonplaceholder.typicode.com/posts/1")
+  .then(response => response.json())  // convert to JSON
+  .then(post => {
+    console.log("Title:", post.title);
+  })
+  .catch(error => {
+    console.error("Error:", error);
+  });
+    </pre>
+
+    <h3>5️⃣ Basic error handling with Fetch</h3>
+    <p>Fetch does not throw errors for HTTP status codes by itself, so you should check <code>response.ok</code> and throw an error if it is false.</p>
+    <p>This lets you show friendly messages instead of silent failures.</p>
+
+    <pre>
+fetch("https://jsonplaceholder.typicode.com/unknown-endpoint")
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("HTTP error! Status: " + response.status);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log("Data:", data);
+  })
+  .catch(error => {
+    console.error("Something went wrong:", error);
+  });
+    </pre>
+
+    <h3>6️⃣ Simple “quote loader” using Fetch</h3>
+    <p>Click a button, call a public quote API, and show the quote in a box.</p>
+
+    <pre>
+// JavaScript: Load a random quote
+function loadQuote() {
+  const box = document.getElementById("quoteBox");
+  box.textContent = "Loading quote...";
+
+  fetch("https://api.quotable.io/random")
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Status: " + response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      box.textContent = `"${data.content}" — ${data.author}`;
+    })
+    .catch(error => {
+      box.textContent = "Could not load quote: " + error.message;
+    });
+}
+    </pre>
+
+    <button class="demo-btn" onclick="loadQuote()">Load random quote</button>
+    <div id="quoteBox" class="output-box small-note">
+      Click the button to load a quote from a public API.
+    </div>
+
+    <h3>7️⃣ GET vs POST (simple overview)</h3>
+    <p>GET is used to read data, POST is used to send or create data on the server.</p>
+
+    <pre>
+// Example of a POST request (demo)
+fetch("https://jsonplaceholder.typicode.com/posts", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    title: "My first API post",
+    body: "This is just a test.",
+    userId: 1
+  })
+})
+  .then(response => response.json())
+  .then(data => {
+    console.log("Created post:", data);
+  })
+  .catch(error => {
+    console.error("Error creating post:", error);
+  });
+    </pre>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Stage 7:</strong>
+      <ul>
+        <li>Create <code>web_stage7_test.html</code> and add a “Load Users” button that fetches users and shows their names.</li>
+        <li>Build a small “Post Viewer” that fetches one post and shows title and body.</li>
+        <li>Add error handling with a friendly message for wrong URLs.</li>
+        <li>Create a form that sends a POST request with title and body as JSON.</li>
+        <li>Read about API rate limits and why servers may return “Too many requests”.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToWeb()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function goBackToWeb() {
+    // Go back to index.html and open Web roadmap popup
+    window.location.href = "index.html#open-web"; // [web:191][web:247]
+  }
+
+  function markCompleted() {
+    // Mark Web step 7 as completed
+    localStorage.setItem("web_step7_completed", "true"); // [web:192][web:193][web:181]
+    window.location.href = "index.html#open-web";
+  }
+
+  function loadUsers() {
+    const output = document.getElementById("apiOutput");
+    output.textContent = "Loading users...";
+
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok. Status: " + response.status);
+        }
+        return response.json();
+      })
+      .then(users => {
+        output.textContent = "";
+        users.forEach(user => {
+          const div = document.createElement("div");
+          div.className = "user-card";
+          div.innerHTML = `
+            <h4>${user.name}</h4>
+            <p>Email: ${user.email}</p>
+            <p>City: ${user.address.city}</p>
+          `;
+          output.appendChild(div);
+        });
+      })
+      .catch(error => {
+        output.textContent = "Error fetching users: " + error.message;
+      });
+  }
+
+  function loadQuote() {
+    const box = document.getElementById("quoteBox");
+    box.textContent = "Loading quote...";
+
+    fetch("https://api.quotable.io/random")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Status: " + response.status);
+        }
+        return response.json();
+      })
+      .then(data => {
+        box.textContent = `"${data.content}" — ${data.author}`;
+      })
+      .catch(error => {
+        box.textContent = "Could not load quote: " + error.message;
+      });
+  }
+</script>
+
+</body>
+</html>

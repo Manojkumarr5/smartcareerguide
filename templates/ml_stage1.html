@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ML Step 1 – Python Basics</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      background: #0078d7;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative; /* so close icon is inside this box */
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #005fa3;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #eaf4ff;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffea;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    .task-box {
+      background: #f4f8ff;
+      padding: 15px;
+      border-left: 5px solid #0078d7;
+      margin-top: 20px;
+      border-radius: 6px;
+    }
+
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 40px;
+    }
+
+    .back-btn {
+      background: #0078d7;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .complete-btn {
+      background: #28a745;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .back-btn:hover {
+      background: #005fa3;
+    }
+
+    .complete-btn:hover {
+      background: #218838;
+    }
+
+    /* black X inside content box, top-right */
+    .inner-close-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 16px;
+      user-select: none;
+    }
+
+    .inner-close-icon:hover {
+      background: #222;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- black X inside the content card, top-right -->
+    <div class="inner-close-icon" onclick="goBackToML()">✖</div>
+
+    <h2>Step 1: Python Basics & Data Structures</h2>
+    <p>This is the foundation you must learn before starting Machine Learning.</p>
+
+    <hr><br>
+
+    <h3>📌 Variables</h3>
+    <p>A variable stores data in a program.</p>
+    <pre>
+x = 10
+name = "Manoj"
+print(x, name)
+    </pre>
+
+    <h3>📌 Data Types</h3>
+    <ul>
+      <li>int → numbers (10, 25)</li>
+      <li>float → decimal numbers (3.14)</li>
+      <li>str → text ("hello")</li>
+      <li>bool → True / False</li>
+      <li>list → ordered & changeable → <code>[1,2,3]</code></li>
+      <li>tuple → ordered & immutable → <code>(1,2,3)</code></li>
+      <li>dict → key-value → <code>{"name":"Manoj"}</code></li>
+      <li>set → unique elements → <code>{1,2,3}</code></li>
+    </ul>
+
+    <h3>📌 Operators</h3>
+    <pre>
+a = 5
+b = 2
+print(a+b, a-b, a*b, a/b, a%b)
+print(a > b, a == b)
+    </pre>
+
+    <h3>📌 Input & Output</h3>
+    <pre>
+name = input("Enter your name: ")
+print("Hello", name)
+    </pre>
+
+    <h3>📌 If–Else Conditions</h3>
+    <pre>
+age = 18
+if age >= 18:
+    print("Eligible")
+else:
+    print("Not eligible")
+    </pre>
+
+    <h3>📌 Loops</h3>
+    <b>for loop</b>
+    <pre>
+for i in range(5):
+    print(i)
+    </pre>
+
+    <b>while loop</b>
+    <pre>
+count = 1
+while count <= 5:
+    print(count)
+    count += 1
+    </pre>
+
+    <h3>📌 break, continue, pass</h3>
+    <pre>
+for i in range(10):
+    if i == 5:
+        break
+    print(i)
+    </pre>
+
+    <pre>
+for i in range(5):
+    if i == 2:
+        continue
+    print(i)
+    </pre>
+
+    <pre>
+for i in range(3):
+    pass
+    print("Loop running")
+    </pre>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks:</strong>
+      <ul>
+        <li>Find bigger number from two inputs</li>
+        <li>Print even numbers from 1 to 20</li>
+        <li>Print multiplication table</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:30px;">
+      <button class="back-btn" onclick="goBackToML()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function goBackToML() {
+    window.location.href = "index.html#open-ml";
+  }
+
+  function markCompleted() {
+    localStorage.setItem("ml_step1_completed", "true");
+    window.location.href = "index.html#open-ml";
+  }
+</script>
+
+</body>
+</html>

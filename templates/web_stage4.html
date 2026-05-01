@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Step 4 – JavaScript Basics (Variables, Loops, Functions)</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #005fa3;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #eaf4ff;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffea;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4f8ff;
+      padding: 15px;
+      border-left: 5px solid #0078d7;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .back-btn:hover {
+      background: #005fa3;
+    }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .complete-btn:hover {
+      background: #218838;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .output-box {
+      margin-top: 10px;
+      padding: 10px;
+      background: #f2f6ff;
+      border-radius: 6px;
+      font-family: Consolas, monospace;
+      font-size: 0.9rem;
+      min-height: 24px;
+    }
+
+    .demo-btn {
+      margin-top: 8px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: none;
+      background: #0078d7;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .demo-btn:hover {
+      background: #005fa3;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToWeb()">&times;</div>
+
+    <h2>Step 4: JavaScript Basics (Variables, Loops, Functions)</h2>
+    <p>In Stage 1 and 2 you created structured and styled pages. In Stage 3 you built responsive layouts. Now, in Stage 4, you start adding “brain” to your website using JavaScript.</p>
+    <p>JavaScript lets your page react to user actions: click a button, show a message, change text, calculate results, and much more.</p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is JavaScript?</h3>
+    <p>JavaScript is a programming language that runs inside the browser. It can read and change HTML elements, handle events like clicks, and perform calculations.</p>
+    <p>With JavaScript you can build things like calculators, todo lists, quizzes, animations, and full web apps.</p>
+
+    <h3>2️⃣ How to add JavaScript to a page</h3>
+    <p>There are two main ways to add JavaScript in your project:</p>
+    <ul>
+      <li>Inline / internal: <code>&lt;script&gt;</code> tag directly inside your HTML file.</li>
+      <li>External file: a separate <code>.js</code> file linked with <code>&lt;script src="app.js"&gt;&lt;/script&gt;</code>.</li>
+    </ul>
+
+    <pre>
+<!-- Internal JavaScript -->
+<script>
+  console.log("Hello from JavaScript!");
+</script>
+
+
+<!-- External JavaScript -->
+<script src="app.js"></script>
+    </pre>
+
+    <h3>3️⃣ Variables: storing values</h3>
+    <p>Variables are like labeled boxes where you can store values such as numbers, text, or true/false values. In modern JavaScript, you usually use <code>let</code> and <code>const</code> to create variables.</p>
+    <p>Common data types: numbers (10, 3.14), strings ("Hello"), booleans (true/false).</p>
+
+    <pre>
+// Using let (value can change)
+let age = 20;
+age = 21;  // allowed
+
+
+// Using const (value cannot change)
+const appName = "Smart Career Guide";
+
+
+// Strings and numbers
+let studentName = "Manoj";
+let score = 95;
+
+
+// Boolean
+let isLoggedIn = true;
+    </pre>
+
+    <button class="demo-btn" onclick="showVariableDemo()">Run variable demo</button>
+    <div id="varOutput" class="output-box"></div>
+
+    <h3>4️⃣ Basic operators and expressions</h3>
+    <p>Operators let you do calculations or comparisons with variables.</p>
+    <ul>
+      <li><strong>Arithmetic</strong>: <code>+</code> (add), <code>-</code> (subtract), <code>*</code> (multiply), <code>/</code> (divide).</li>
+      <li><strong>Comparison</strong>: <code>==</code>, <code>===</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, etc.</li>
+      <li><strong>Logical</strong>: <code>&amp;&amp;</code> (and), <code>||</code> (or), <code>!</code> (not).</li>
+    </ul>
+
+    <pre>
+let a = 10;
+let b = 3;
+
+
+let sum = a + b;      // 13
+let multiply = a * b; // 30
+
+
+let isGreater = a > b;      // true
+let bothTrue = (a > 5) && (b > 5); // false
+    </pre>
+
+    <h3>5️⃣ Functions: reusable blocks of code</h3>
+    <p>A function is a block of code that does a specific task. You define it once and can call it many times. Functions can take input values (parameters) and can give back an output (return value).</p>
+    <p>Think of a function like a small machine: you give inputs, it processes them, and returns a result.</p>
+
+    <pre>
+// Function without parameters
+function sayHello() {
+  console.log("Hello, welcome to Smart Career Guide!");
+}
+
+
+// Function with parameters
+function addNumbers(x, y) {
+  const result = x + y;
+  return result;
+}
+
+
+// Calling (using) functions
+sayHello();
+let total = addNumbers(5, 7); // total will be 12
+    </pre>
+
+    <button class="demo-btn" onclick="runFunctionDemo()">Run function demo</button>
+    <div id="fnOutput" class="output-box"></div>
+
+    <h3>6️⃣ Loops: repeat something many times</h3>
+    <p>Loops let you run the same block of code multiple times. The most common beginner loops are <code>for</code> and <code>while</code>.</p>
+    <p>Example: count from 1 to 5 and build a message.</p>
+
+    <pre>
+// For loop example
+let message = "";
+for (let i = 1; i <= 5; i++) {
+  message = message + "Number: " + i + "\n";
+}
+
+
+// While loop example
+let count = 1;
+let msg2 = "";
+while (count <= 3) {
+  msg2 = msg2 + "Count is " + count + "\n";
+  count++;
+}
+    </pre>
+
+    <button class="demo-btn" onclick="runLoopDemo()">Run loop demo</button>
+    <div id="loopOutput" class="output-box"></div>
+
+    <h3>7️⃣ Connecting JavaScript with HTML (onclick)</h3>
+    <p>To make your page interactive, you connect HTML elements with JavaScript functions, often using events like <code>onclick</code> (when the user clicks a button).</p>
+    <p>Below is a simple example that changes text when you click a button.</p>
+
+    <pre>
+<!-- HTML -->
+<p id="jsMessage">Click the button to change this text.</p>
+<button onclick="changeText()">Change Text</button>
+
+
+<!-- JavaScript -->
+function changeText() {
+  const p = document.getElementById("jsMessage");
+  p.textContent = "Text changed using JavaScript!";
+}
+    </pre>
+
+    <p id="liveMessage">Click the button to change this text.</p>
+    <button class="demo-btn" onclick="changeTextLive()">Change Text</button>
+
+    <h3>8️⃣ Putting it together: small “score calculator”</h3>
+    <p>This example uses variables, a function, and a loop to calculate the total of an array of marks, and then shows the average.</p>
+
+    <pre>
+// Array of marks
+const marks = [80, 90, 75, 88];
+
+
+// Function to calculate sum
+function calculateSum(arr) {
+  let total = 0;
+  for (let i = 0; i < arr.length; i++) {
+    total = total + arr[i];
+  }
+  return total;
+}
+
+
+// Use the function
+const totalMarks = calculateSum(marks);
+const avgMarks = totalMarks / marks.length;
+
+
+console.log("Total:", totalMarks);
+console.log("Average:", avgMarks);
+    </pre>
+
+    <button class="demo-btn" onclick="runMarksDemo()">Run marks demo</button>
+    <div id="marksOutput" class="output-box"></div>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Stage 4:</strong>
+      <ul>
+        <li>Create a new file called <code>web_stage4_test.html</code>. Add a button that, when clicked, shows an alert saying “Welcome to JavaScript Stage 4!”.</li>
+        <li>Make a script that has a variable <code>userName</code> and a function <code>greetUser(name)</code> which returns a greeting string. Show the greeting on the page using <code>textContent</code>.</li>
+        <li>Write a <code>for</code> loop that prints numbers from 1 to 10 inside a <code>&lt;pre&gt;</code> tag on the page.</li>
+        <li>Create an array of 5 course names (like "HTML", "CSS", "JS" etc.). Use a loop to build a bullet list (<code>&lt;ul&gt;</code>) and insert it into the page.</li>
+        <li>Experiment: Change your loops to stop earlier or later (1 to 3, 1 to 20) and see how the output changes.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToWeb()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function goBackToWeb() {
+    // Go back to index.html and open Web roadmap popup
+    window.location.href = "index.html#open-web"; // [web:241][web:238]
+  }
+
+  function markCompleted() {
+    // Mark Web step 4 as completed
+    localStorage.setItem("web_step4_completed", "true"); // [web:192][web:193][web:177]
+    window.location.href = "index.html#open-web";
+  }
+
+  function showVariableDemo() {
+    let age = 20;
+    const appName = "Smart Career Guide";
+    let isStudent = true;
+
+    const text =
+      "age = " + age + "\n" +
+      "appName = " + appName + "\n" +
+      "isStudent = " + isStudent;
+
+    document.getElementById("varOutput").textContent = text;
+  }
+
+  function runFunctionDemo() {
+    function addNumbers(x, y) {
+      return x + y;
+    }
+
+    const result1 = addNumbers(5, 7);
+    const result2 = addNumbers(10, 15);
+
+    const text =
+      "addNumbers(5, 7) = " + result1 + "\n" +
+      "addNumbers(10, 15) = " + result2;
+
+    document.getElementById("fnOutput").textContent = text;
+  }
+
+  function runLoopDemo() {
+    let message = "";
+    for (let i = 1; i <= 5; i++) {
+      message = message + "For loop number: " + i + "\n";
+    }
+
+    let count = 1;
+    let msg2 = "";
+    while (count <= 3) {
+      msg2 = msg2 + "While loop count: " + count + "\n";
+      count++;
+    }
+
+    document.getElementById("loopOutput").textContent = message + "\n" + msg2;
+  }
+
+  function changeTextLive() {
+    const p = document.getElementById("liveMessage");
+    p.textContent = "Text changed using JavaScript!";
+  }
+
+  function runMarksDemo() {
+    const marks = [80, 90, 75, 88];
+
+    function calculateSum(arr) {
+      let total = 0;
+      for (let i = 0; i < arr.length; i++) {
+        total = total + arr[i];
+      }
+      return total;
+    }
+
+    const totalMarks = calculateSum(marks);
+    const avgMarks = totalMarks / marks.length;
+
+    const text =
+      "Marks: " + marks.join(", ") + "\n" +
+      "Total: " + totalMarks + "\n" +
+      "Average: " + avgMarks.toFixed(2);
+
+    document.getElementById("marksOutput").textContent = text;
+  }
+</script>
+
+</body>
+</html>

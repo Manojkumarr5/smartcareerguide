@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Step 2 – CSS Fundamentals & Colors</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #005fa3;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #eaf4ff;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffea;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4f8ff;
+      padding: 15px;
+      border-left: 5px solid #0078d7;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .back-btn:hover {
+      background: #005fa3;
+    }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .complete-btn:hover {
+      background: #218838;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToWeb()">&times;</div>
+
+    <h2>Step 2: Master CSS Fundamentals and Colors</h2>
+    <p>In Stage 1, you learned how to build the structure of a page with HTML. Now, in Stage 2, you will learn how to make that page look beautiful using CSS (Cascading Style Sheets).</p>
+    <p>Think of HTML as the skeleton and CSS as the clothes and style: colors, fonts, spacing, borders, and layout.</p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is CSS?</h3>
+    <p>CSS is a language that controls how HTML elements look. It tells the browser things like “make this heading blue”, “add space here”, “give this box a border”, and so on.</p>
+    <p>CSS works with rules. Each rule has:
+      a selector (what to style) and
+      some properties (how to style it).</p>
+
+    <pre>
+/* Example CSS rule */
+h1 {
+  color: blue;           /* property: value; */
+  font-size: 32px;
+}
+    </pre>
+
+    <h3>2️⃣ Three ways to add CSS</h3>
+    <p>There are 3 main ways to write CSS for your HTML page:</p>
+    <ul>
+      <li><strong>Inline CSS</strong> – style inside a tag using the <code>style</code> attribute (good for quick tests).</li>
+      <li><strong>Internal CSS</strong> – CSS inside a <code>&lt;style&gt;</code> tag in the <code>&lt;head&gt;</code> of your HTML.</li>
+      <li><strong>External CSS</strong> – CSS in a separate <code>.css</code> file, linked from your HTML (best way for real projects).</li>
+    </ul>
+
+    <pre>
+<!-- 1) Inline CSS -->
+<h1 style="color: red;">Hello with inline CSS</h1>
+
+
+<!-- 2) Internal CSS in the head -->
+<head>
+  <style>
+    h2 {
+      color: green;
+    }
+  </style>
+</head>
+
+
+<!-- 3) External CSS (recommended) -->
+<head>
+  <link rel="stylesheet" href="style.css">
+</head>
+    </pre>
+
+    <h3>3️⃣ Basic selectors: element, class, id</h3>
+    <p>Selectors tell CSS which elements to style.</p>
+    <ul>
+      <li><strong>Element selector</strong> – selects all elements with that tag name (for example, all <code>&lt;p&gt;</code> tags).</li>
+      <li><strong>Class selector</strong> – starts with <code>.</code>, like <code>.card</code>. You can put the same class on many elements.</li>
+      <li><strong>ID selector</strong> – starts with <code>#</code>, like <code>#mainTitle</code>. IDs should be unique on the page.</li>
+    </ul>
+
+    <pre>
+/* Element selector: applies to every h1 */
+h1 {
+  color: #0078d7;
+}
+
+
+/* Class selector: applies to all elements with class="card" */
+.card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+
+/* ID selector: applies only to the element with id="mainTitle" */
+#mainTitle {
+  text-align: center;
+  font-size: 32px;
+}
+    </pre>
+
+    <h3>4️⃣ Common CSS properties</h3>
+    <p>Some basic properties you will use all the time:</p>
+    <ul>
+      <li><code>color</code> – text color.</li>
+      <li><code>background-color</code> – background color of an element.</li>
+      <li><code>font-size</code> – size of the text.</li>
+      <li><code>font-family</code> – font type (like Arial, Verdana).</li>
+      <li><code>margin</code> – space outside the element.</li>
+      <li><code>padding</code> – space inside the element, between border and content.</li>
+      <li><code>border</code> – outline around the element.</li>
+    </ul>
+
+    <pre>
+body {
+  font-family: Arial, sans-serif;  /* Font type for all text */
+  background-color: #f2f6ff;       /* Page background color */
+}
+
+h1 {
+  color: #005fa3;                  /* Text color */
+  font-size: 32px;                 /* Text size */
+}
+
+p {
+  color: #333333;
+  line-height: 1.6;                /* Space between lines of text */
+}
+    </pre>
+
+    <h3>5️⃣ Understanding colors in CSS</h3>
+    <p>There are different ways to write colors in CSS:</p>
+    <ul>
+      <li><strong>Color names</strong> – like <code>red</code>, <code>blue</code>, <code>green</code>.</li>
+      <li><strong>Hex values</strong> – like <code>#ff0000</code> (red), <code>#00ff00</code> (green), <code>#0000ff</code> (blue).</li>
+      <li><strong>RGB</strong> – like <code>rgb(255, 0, 0)</code> (red).</li>
+    </ul>
+
+    <pre>
+h2 {
+  color: red;                   /* color name */
+}
+
+.highlight {
+  background-color: #ffeb3b;   /* hex color (a light yellow) */
+}
+
+button {
+  background-color: rgb(0, 120, 215); /* rgb color (blue) */
+  color: white;
+}
+    </pre>
+
+    <h3>6️⃣ The CSS box model: margin, border, padding</h3>
+    <p>Every element on a web page is a “box”. The box has:</p>
+    <ul>
+      <li>Content (text or image).</li>
+      <li>Padding (space around the content, inside the box).</li>
+      <li>Border (line around the box).</li>
+      <li>Margin (space outside the box, separating it from other boxes).</li>
+    </ul>
+
+    <pre>
+.card {
+  background-color: #ffffff;         /* White background */
+  padding: 20px;                     /* Space inside the box */
+  border: 1px solid #dddddd;         /* Thin gray border */
+  margin: 20px auto;                 /* Space outside, auto center */
+  max-width: 600px;                  /* Maximum width of the card */
+}
+    </pre>
+
+    <h3>7️⃣ Putting it all together: simple styled card</h3>
+    <p>This example shows HTML + CSS working together. It creates a simple card with a title, some text, and a button.</p>
+
+    <pre>
+<!-- HTML -->
+<div class="card">
+  <h2 class="card-title">Web Development Roadmap</h2>
+  <p class="card-text">
+    Start with HTML, then learn CSS to style your pages, and JavaScript to add interactivity.
+  </p>
+  <button class="primary-btn">Get Started</button>
+</div>
+
+<!-- CSS -->
+.card {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #dddddd;
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.card-title {
+  color: #0078d7;
+  margin-bottom: 10px;
+}
+
+.card-text {
+  color: #333333;
+}
+
+.primary-btn {
+  background-color: #0078d7;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.primary-btn:hover {
+  background-color: #005fa3;  /* Darker on hover */
+}
+    </pre>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Stage 2:</strong>
+      <ul>
+        <li>Create a file called <code>web_stage2_test.html</code>. Inside it, build a simple page with an <code>&lt;h1&gt;</code>, one <code>&lt;h2&gt;</code>, and two <code>&lt;p&gt;</code> paragraphs.</li>
+        <li>Add an internal <code>&lt;style&gt;</code> tag in the <code>&lt;head&gt;</code> and change the colors and font sizes of the headings and paragraphs.</li>
+        <li>Create a <code>.card</code> class and style it with background color, padding, border radius, and margin. Put some text inside the card.</li>
+        <li>Try using all three color formats once: a color name, a hex color, and an rgb color.</li>
+        <li>Add a button and change its background color on hover using the <code>:hover</code> selector.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToWeb()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function goBackToWeb() {
+    // Go back to index.html and open Web roadmap popup
+    window.location.href = "index.html#open-web"; // [web:191][web:238]
+  }
+
+  function markCompleted() {
+    // Mark Web step 2 as completed
+    localStorage.setItem("web_step2_completed", "true"); // [web:192][web:193][web:177]
+    window.location.href = "index.html#open-web";
+  }
+</script>
+
+</body>
+</html>

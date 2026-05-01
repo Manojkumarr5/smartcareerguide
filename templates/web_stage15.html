@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Step 15 – Enhance UI/UX with Animations</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #005fa3;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #eaf4ff;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffea;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4f8ff;
+      padding: 15px;
+      border-left: 5px solid #0078d7;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .back-btn:hover {
+      background: #005fa3;
+    }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .complete-btn:hover {
+      background: #218838;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    /* Demo components */
+
+    .demo-section {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #dde6ff;
+      background: #f9fbff;
+    }
+
+    .demo-heading {
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #005fa3;
+    }
+
+    /* Button hover micro-interaction */
+    .cta-button {
+      display: inline-block;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: none;
+      background: #0078d7;
+      color: #fff;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    }
+
+    .cta-button:hover {
+      background-color: #005fa3;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+    }
+
+    .cta-button:active {
+      transform: translateY(0);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+
+    /* Card hover effect */
+    .hover-card {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #ffffff;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .hover-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+    }
+
+    /* Simple fade-in on scroll */
+    .fade-in-on-scroll {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .fade-in-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* CSS keyframes demo */
+    .pulse-badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #ff4081;
+      color: #fff;
+      font-size: 0.8rem;
+      position: relative;
+      overflow: visible;
+    }
+
+    .pulse-badge::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 100%;
+      border-radius: 999px;
+      transform: translate(-50%, -50%);
+      border: 2px solid rgba(255,64,129,0.6);
+      animation: pulse 1.8s ease-out infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1.6);
+        opacity: 0;
+      }
+    }
+
+    /* Focus / active micro-interaction for input */
+    .animated-input {
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 0.9rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .animated-input:focus {
+      outline: none;
+      border-color: #0078d7;
+      box-shadow: 0 0 0 3px rgba(0,120,215,0.2);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToWeb()">&times;</div>
+
+    <h2>Step 15: Enhance UI/UX with Animations & Micro-interactions</h2>
+    <p>Up to Stage 14 you made your app functional and secure. In Stage 15 you will make it feel smooth and professional by adding subtle animations and micro‑interactions using CSS transitions, animations, and small JavaScript helpers.</p>
+    <p>Good UI/UX is not only about colors and layout. It is also about how the interface responds when the user moves the mouse, clicks, scrolls, or types.</p>
+
+    <hr><br>
+
+    <h3>1️⃣ Transitions vs animations (simple view)</h3>
+    <p>CSS transitions smoothly animate a change between two states, for example normal to hover when the user interacts.</p>
+    <p>CSS animations use keyframes to define multiple steps over time and can run automatically or loop without direct user input.</p>
+
+    <pre>
+/* Transition example */
+.button {
+  background: #0078d7;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.button:hover {
+  background: #005fa3;
+  transform: translateY(-2px);
+}
+
+/* Animation example with keyframes */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.loader {
+  animation: spin 1s linear infinite;
+}
+    </pre>
+
+    <h3>2️⃣ Micro‑interaction: animated CTA button</h3>
+    <p>A call‑to‑action button feels more inviting with small hover effects like color and shadow changes.</p>
+
+    <div class="demo-section">
+      <div class="demo-heading">Demo: CTA Button</div>
+      <button class="cta-button">Explore Roadmap</button>
+      <p class="note">Hover over the button to feel the micro‑interaction.</p>
+    </div>
+
+    <pre>
+.cta-button {
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: #0078d7;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.cta-button:hover {
+  background-color: #005fa3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+
+.cta-button:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+    </pre>
+
+    <h3>3️⃣ Card hover effect to show depth</h3>
+    <p>Cards can appear clickable and alive by slightly lifting or changing shadow on hover.</p>
+
+    <div class="demo-section fade-in-on-scroll">
+      <div class="demo-heading">Demo: Hover Card</div>
+      <div class="hover-card">
+        <strong>Web Development Roadmap</strong>
+        <p style="margin-top:4px; font-size:0.9rem;">
+          Learn HTML, CSS, JavaScript, frameworks, backend, and more with guided stages.
+        </p>
+      </div>
+      <p class="note">Hover over the card to see the effect.</p>
+    </div>
+
+    <pre>
+.hover-card {
+  padding: 12px;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hover-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+}
+    </pre>
+
+    <h3>4️⃣ Scroll‑based reveal (fade‑in on scroll)</h3>
+    <p>Scroll‑based reveal draws attention to sections as they appear in the viewport.</p>
+
+    <pre>
+/* Base state */
+.fade-in-on-scroll {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* When visible */
+.fade-in-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+// JavaScript
+const observers = document.querySelectorAll(".fade-in-on-scroll");
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+    }
+  });
+}, { threshold: 0.2 });
+
+observers.forEach(el => observer.observe(el));
+    </pre>
+
+    <p class="note">Apply <code>fade-in-on-scroll</code> to any section you want to reveal smoothly.</p>
+
+    <h3>5️⃣ Micro‑interaction: pulse badge for new features</h3>
+    <p>A pulsing badge can highlight new stages or features without being too aggressive.</p>
+
+    <div class="demo-section fade-in-on-scroll">
+      <div class="demo-heading">Demo: Pulse Badge</div>
+      <span class="pulse-badge">New Stage</span>
+      <p class="note" style="margin-top:8px;">
+        This kind of animation draws attention in a gentle way.
+      </p>
+    </div>
+
+    <pre>
+.pulse-badge {
+  position: relative;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #ff4081;
+  color: #fff;
+  font-size: 0.8rem;
+}
+
+.pulse-badge::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  border: 2px solid rgba(255,64,129,0.6);
+  animation: pulse 1.8s ease-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.6);
+    opacity: 0;
+  }
+}
+    </pre>
+
+    <h3>6️⃣ Input focus micro‑interaction</h3>
+    <p>Clear focus styles on inputs show users where they are typing and improve usability.</p>
+
+    <div class="demo-section fade-in-on-scroll">
+      <div class="demo-heading">Demo: Animated Input</div>
+      <input type="text" class="animated-input" placeholder="Type something...">
+      <p class="note" style="margin-top:8px;">
+        Click inside the input to see the focus effect.
+      </p>
+    </div>
+
+    <pre>
+.animated-input {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.animated-input:focus {
+  outline: none;
+  border-color: #0078d7;
+  box-shadow: 0 0 0 3px rgba(0,120,215,0.2);
+}
+    </pre>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Stage 15:</strong>
+      <ul>
+        <li>Add hover micro‑interactions to main navigation buttons and course cards using CSS transitions.</li>
+        <li>Implement a scroll‑reveal effect for a section like “Popular Courses” using <code>fade-in-on-scroll</code> with Intersection Observer.</li>
+        <li>Create a subtle loading animation (spinner or pulsing dot) with CSS keyframes and show it during API calls.</li>
+        <li>Improve forms (login, signup, contact) with input focus styles so users clearly see where they are typing.</li>
+        <li>Review animations to ensure they are consistent, short (0.15–0.3s), and not distracting, focusing on helping the user.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToWeb()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function goBackToWeb() {
+    // Go back to index.html and open Web roadmap popup
+    window.location.href = "index.html#open-web"; // [web:254][web:238]
+  }
+
+  function markCompleted() {
+    // Mark Web step 15 as completed
+    localStorage.setItem("web_step15_completed", "true"); // [web:193][web:181][web:258]
+    window.location.href = "index.html#open-web";
+  }
+
+  // Simple Intersection Observer for fade-in-on-scroll
+  const fadeEls = document.querySelectorAll(".fade-in-on-scroll");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+      }
+    });
+  }, { threshold: 0.2 });
+
+  fadeEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

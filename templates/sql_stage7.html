@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 7 – Use GROUP BY, HAVING, and Aggregation Functions</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 7: Use GROUP BY, HAVING, and Aggregation Functions</h2>
+    <p>
+      In this stage you learn how to summarize data using aggregate functions
+      like <code>COUNT</code>, <code>SUM</code>, <code>AVG</code>, <code>MIN</code>, and <code>MAX</code>, together with
+      <code>GROUP BY</code> and <code>HAVING</code>.
+    </p>
+    <p>
+      These tools let you answer questions such as “average CGPA by branch” or
+      “how many students scored above a certain value”.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Aggregate functions basics</h3>
+    <p>
+      Aggregate functions take many rows and return a single value such as a
+      count, sum, or average.
+    </p>
+
+    <pre>
+-- count all students
+SELECT COUNT(*) AS total_students
+FROM students;
+
+-- average cgpa of all students
+SELECT AVG(cgpa) AS avg_cgpa
+FROM students;
+
+-- minimum and maximum cgpa
+SELECT MIN(cgpa) AS min_cgpa,
+       MAX(cgpa) AS max_cgpa
+FROM students;
+    </pre>
+
+    <p class="note">
+      COUNT(*) counts all rows, while COUNT(column) counts only rows where that
+      column is not NULL.
+    </p>
+
+    <h3>2️⃣ GROUP BY – summarize by category</h3>
+    <p>
+      GROUP BY groups rows that share the same values in one or more columns
+      and then applies aggregates per group.
+    </p>
+
+    <pre>
+-- average cgpa by branch
+SELECT branch,
+       AVG(cgpa) AS avg_cgpa
+FROM students
+GROUP BY branch;
+
+-- number of students per branch
+SELECT branch,
+       COUNT(*) AS students_in_branch
+FROM students
+GROUP BY branch;
+    </pre>
+
+    <p class="note">
+      Every column in the SELECT list must be either inside an aggregate function
+      or listed in the GROUP BY clause.
+    </p>
+
+    <h3>3️⃣ GROUP BY with multiple columns</h3>
+    <p>
+      You can group by more than one column, for example branch together with
+      year_of_study or gender.
+    </p>
+
+    <pre>
+-- example table students_extended with (branch, year_of_study)
+-- count students per branch and year
+SELECT branch,
+       year_of_study,
+       COUNT(*) AS total_students
+FROM students_extended
+GROUP BY branch, year_of_study
+ORDER BY branch, year_of_study;
+    </pre>
+
+    <p class="note">
+      The GROUP BY columns define the “level” of summarization that appears
+      in the result.
+    </p>
+
+    <h3>4️⃣ HAVING – filter after grouping</h3>
+    <p>
+      HAVING filters groups after aggregation, similar to how WHERE filters
+      individual rows before grouping.
+    </p>
+
+    <pre>
+-- branches where average cgpa is at least 8.0
+SELECT branch,
+       AVG(cgpa) AS avg_cgpa
+FROM students
+GROUP BY branch
+HAVING AVG(cgpa) >= 8.0;
+
+-- branches with more than 5 students
+SELECT branch,
+       COUNT(*) AS total_students
+FROM students
+GROUP BY branch
+HAVING COUNT(*) > 5;
+    </pre>
+
+    <p class="note">
+      Use WHERE to filter rows before grouping and HAVING to filter the aggregated
+      groups, especially when using aggregate functions in conditions.
+    </p>
+
+    <h3>5️⃣ Combined example: WHERE + GROUP BY + HAVING</h3>
+    <p>
+      In real scenarios you often filter rows, group them, filter groups, and
+      finally sort the summary in one query.
+    </p>
+
+    <pre>
+-- average cgpa by branch for only CSE and ECE students,
+-- but show only branches where avg_cgpa >= 8.0, sorted by avg_cgpa
+SELECT branch,
+       AVG(cgpa) AS avg_cgpa
+FROM students
+WHERE branch IN ('CSE', 'ECE')
+GROUP BY branch
+HAVING AVG(cgpa) >= 8.0
+ORDER BY avg_cgpa DESC;
+    </pre>
+
+    <p class="note">
+      A useful mental execution order is:
+      WHERE (filter rows) → GROUP BY (group rows) → HAVING (filter groups) → ORDER BY (sort results).
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for SQL Stage 7:</strong>
+      <ul>
+        <li>Write a query to show <code>branch</code> and <code>COUNT(*)</code> for students grouped by branch.</li>
+        <li>Write a query to show <code>branch</code> and <code>AVG(cgpa)</code> and filter with HAVING so that only branches with average CGPA ≥ 8.0 appear.</li>
+        <li>If you have a marks or attendance table, get total marks per student or total attendance days per student using GROUP BY and SUM/COUNT.</li>
+        <li>Combine WHERE and GROUP BY, for example group only final‑year students by branch and count them.</li>
+        <li>In your notebook, write one “story” query in words (for example, “find total fees collected per branch where total &gt; some amount”) and then implement it using GROUP BY plus HAVING.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+   <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 7 as completed in localStorage
+    localStorage.setItem("sql_step7_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

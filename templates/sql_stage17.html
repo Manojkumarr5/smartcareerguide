@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 17 – Practice SQL Interview Questions</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 17: Practice SQL Interview Questions</h2>
+    <p>
+      In this stage you convert your SQL knowledge into interview strength by
+      solving common coding and theory questions on your own tables.
+    </p>
+    <p>
+      Focus on recognizing patterns such as filters, joins, aggregates, and
+      subqueries instead of memorizing fixed answers.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Basic query and filtering questions</h3>
+    <p>
+      Interviews usually start with SELECT and WHERE questions that test your
+      comfort with basic row filtering.
+    </p>
+
+    <pre>
+-- Q1: list all CSE students with cgpa >= 8.0
+SELECT id, name, branch, cgpa
+FROM students
+WHERE branch = 'CSE'
+  AND cgpa >= 8.0;
+
+-- Q2: fetch students whose name starts with 'A'
+SELECT id, name
+FROM students
+WHERE name LIKE 'A%';
+
+-- Q3: show students who are not from CSE or ECE
+SELECT id, name, branch
+FROM students
+WHERE branch NOT IN ('CSE', 'ECE');
+    </pre>
+
+    <p class="note">
+      Similar questions appear for employees, products, or orders tables using
+      WHERE, IN/NOT IN, BETWEEN, and LIKE.
+    </p>
+
+    <h3>2️⃣ JOIN and relationship questions</h3>
+    <p>
+      Next, interviewers check whether you can combine related tables using joins
+      to answer business-style questions.
+    </p>
+
+    <pre>
+-- Q4: list students who have at least one marks record
+SELECT DISTINCT s.id, s.name
+FROM students AS s
+JOIN marks    AS m
+  ON s.id = m.student_id;
+
+-- Q5: list students who do NOT have any marks record
+SELECT s.id, s.name
+FROM students AS s
+LEFT JOIN marks AS m
+  ON s.id = m.student_id
+WHERE m.student_id IS NULL;
+
+-- Q6: fetch student names with their total marks
+SELECT s.name,
+       SUM(m.score) AS total_score
+FROM students AS s
+JOIN marks    AS m
+  ON s.id = m.student_id
+GROUP BY s.name;
+    </pre>
+
+    <p class="note">
+      Patterns like “in A but not in B” or “join then aggregate per group” show
+      up frequently in analytics and engineering interviews.
+    </p>
+
+    <h3>3️⃣ Aggregation, GROUP BY, and HAVING</h3>
+    <p>
+      Many questions use COUNT, SUM, AVG, GROUP BY, and HAVING to check your
+      ability to summarize and filter groups.
+    </p>
+
+    <pre>
+-- Q7: count students in each branch
+SELECT branch,
+       COUNT(*) AS total_students
+FROM students
+GROUP BY branch;
+
+-- Q8: branches with average cgpa >= 8.0
+SELECT branch,
+       AVG(cgpa) AS avg_cgpa
+FROM students
+GROUP BY branch
+HAVING AVG(cgpa) >= 8.0;
+
+-- Q9: find duplicate emails in users table
+SELECT email,
+       COUNT(*) AS cnt
+FROM users
+GROUP BY email
+HAVING COUNT(*) > 1;
+    </pre>
+
+    <p class="note">
+      Variations include “top N by some metric”, “find duplicates”, and “filter
+      groups using HAVING after GROUP BY”.
+    </p>
+
+    <h3>4️⃣ Subquery and top‑N questions</h3>
+    <p>
+      Subqueries appear in tasks like “above average”, “nth highest value”, or
+      comparing against aggregated results.
+    </p>
+
+    <pre>
+-- Q10: students with cgpa above overall average
+SELECT name, branch, cgpa
+FROM students
+WHERE cgpa > (
+    SELECT AVG(cgpa)
+    FROM students
+);
+
+-- Q11: top 3 students by total score
+SELECT name, total_score
+FROM (
+    SELECT s.name,
+           SUM(m.score) AS total_score
+    FROM students AS s
+    JOIN marks    AS m
+      ON s.id = m.student_id
+    GROUP BY s.name
+) AS t
+ORDER BY total_score DESC
+LIMIT 3;
+    </pre>
+
+    <p class="note">
+      The same idea is reused for employees with above-average salary or
+      customers with top revenue.
+    </p>
+
+    <h3>5️⃣ Theory and scenario-style questions</h3>
+    <p>
+      You will also face short theory and scenario questions to test core
+      concepts and communication skills.
+    </p>
+    <ul>
+      <li>Explain the difference between WHERE and HAVING with a simple grouped query.</li>
+      <li>Explain INNER JOIN vs LEFT JOIN using a students/marks example.</li>
+      <li>Explain DELETE, TRUNCATE, and DROP at a high level: row-level delete, table reset, and structure removal.</li>
+      <li>Discuss how to speed up a slow query: indexes, avoiding SELECT *, better filters, and reviewing execution plans.</li>
+    </ul>
+
+    <p class="note">
+      Practice answering aloud in simple language; interviewers care about clear
+      explanations as much as correct SQL.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for SQL Stage 17:</strong>
+      <ul>
+        <li>Create a file like <code>sql_interview_practice.sql</code> and run your solutions to Q1–Q11 on your own database.</li>
+        <li>Pick five extra questions from any online SQL interview list and solve them using your <code>students</code>, <code>marks</code>, or project tables.[web:313][web:314]</li>
+        <li>Choose one JOIN, one GROUP BY, and one subquery question and practice explaining your solution step by step as in a real interview.</li>
+        <li>Time yourself: try to solve five questions in 30 minutes to simulate interview pressure.</li>
+        <li>Optional: Upload your question set and answers to GitHub as “SQL Interview Practice” to showcase ongoing preparation.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 17 as completed in localStorage
+    localStorage.setItem("sql_step17_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

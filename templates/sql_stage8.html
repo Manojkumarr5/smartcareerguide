@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 8 – Subqueries and Nested Queries</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 8: Write Subqueries and Nested Queries</h2>
+    <p>
+      In this stage you learn how to write subqueries (queries inside another query)
+      to answer slightly more complex questions, plus a very small introduction to CTEs
+      (WITH).
+    </p>
+    <p>
+      Subqueries are useful when one query needs the result of another query, such as
+      “students with above‑average CGPA”.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is a subquery?</h3>
+    <p>
+      A subquery is a query nested inside another SQL statement, often in the WHERE,
+      FROM, or SELECT clause.
+    </p>
+    <ul>
+      <li>The inner query runs first and produces a result set or single value.[web:226]</li>
+      <li>The outer query then uses that result to filter or compute its final output.</li>
+    </ul>
+
+    <h3>2️⃣ Subquery in WHERE – compare with a single value</h3>
+    <p>
+      A common pattern is to use a subquery in WHERE to compare against an aggregate
+      such as a maximum or average.
+    </p>
+
+    <pre>
+-- students with cgpa equal to the maximum cgpa
+SELECT name, branch, cgpa
+FROM students
+WHERE cgpa = (
+    SELECT MAX(cgpa)
+    FROM students
+);
+
+-- students with cgpa above overall average
+SELECT name, branch, cgpa
+FROM students
+WHERE cgpa > (
+    SELECT AVG(cgpa)
+    FROM students
+);
+    </pre>
+
+    <p class="note">
+      Here the inner query returns a single value (MAX or AVG), and the outer query
+      compares each row’s cgpa with that value.
+    </p>
+
+    <h3>3️⃣ Subquery with IN – filter by a list</h3>
+    <p>
+      When the subquery returns multiple values, you typically use operators like IN
+      or NOT IN to filter rows based on that list.
+    </p>
+
+    <pre>
+-- students who have at least one marks record
+SELECT name
+FROM students
+WHERE id IN (
+    SELECT DISTINCT student_id
+    FROM marks
+);
+
+-- students who currently have no marks
+SELECT name
+FROM students
+WHERE id NOT IN (
+    SELECT DISTINCT student_id
+    FROM marks
+);
+    </pre>
+
+    <p class="note">
+      The inner query on <code>marks</code> returns a list of student_id values, and the
+      outer query keeps only matching or non‑matching students.
+    </p>
+
+    <h3>4️⃣ Subquery in FROM – derived table</h3>
+    <p>
+      A subquery in the FROM clause acts like a temporary table whose result you
+      can query again, which helps break complex logic into clear steps.
+    </p>
+
+    <pre>
+-- first compute average score per student in a subquery,
+-- then select only those with avg_score >= 80
+SELECT t.student_id,
+       t.avg_score
+FROM (
+    SELECT student_id,
+           AVG(score) AS avg_score
+    FROM marks
+    GROUP BY student_id
+) AS t
+WHERE t.avg_score >= 80;
+    </pre>
+
+    <p class="note">
+      Many people find this easier to read: first imagine the inner query’s result
+      as a table, then filter it in the outer query.
+    </p>
+
+    <h3>5️⃣ Very short intro to CTE (WITH)</h3>
+    <p>
+      A Common Table Expression (CTE) is like a named subquery defined with WITH,
+      which can make complex queries more readable and reusable.
+    </p>
+
+    <pre>
+-- same idea as the previous example but with a CTE
+WITH avg_marks AS (
+    SELECT student_id,
+           AVG(score) AS avg_score
+    FROM marks
+    GROUP BY student_id
+)
+SELECT student_id,
+       avg_score
+FROM avg_marks
+WHERE avg_score >= 80;
+    </pre>
+
+    <p class="note">
+      CTEs are widely used in modern SQL to improve readability and can be referenced
+      multiple times within the same query.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for SQL Stage 8:</strong>
+      <ul>
+        <li>Write a subquery in WHERE to list all students whose cgpa is above the overall average cgpa.</li>
+        <li>Write a query that shows students who have at least one marks record using a subquery with IN.</li>
+        <li>Write a query that shows students who do not have any marks using NOT IN.</li>
+        <li>Create a derived table (subquery in FROM) that calculates average score per student and then filters for avg_score ≥ 80.</li>
+        <li>Optional: Rewrite the derived‑table query as a CTE using WITH and compare which version feels easier to read.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 8 as completed in localStorage
+    localStorage.setItem("sql_step8_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

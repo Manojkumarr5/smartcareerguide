@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Step 6 – Explore OS, Math, and Random Libraries</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Python Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToPython()">&times;</div>
+
+    <h2>Step 6: Explore Useful Libraries – os, math, and random</h2>
+    <p>
+      In this stage you will meet three very useful standard libraries: <code>os</code> for
+      talking to your operating system (files, folders), <code>math</code> for extra
+      mathematical functions, and <code>random</code> for random numbers and choices.
+    </p>
+    <p>
+      These come built‑in with Python, so you can use them without installing anything,
+      and they will appear again in many projects (automation, games, simulations, data work).
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Using modules with import</h3>
+    <p>
+      A <strong>module</strong> is just a Python file with extra functions and tools.
+      To use it, you need to import it.
+    </p>
+    <p>Basic patterns:</p>
+
+    <pre>
+import math           # import whole module
+import os             # import whole module
+import random         # import whole module
+
+# or
+from math import sqrt  # import only sqrt function
+    </pre>
+
+    <p class="note">
+      At this stage, it is fine to use simple <code>import math</code>, <code>import os</code>,
+      <code>import random</code> and then call functions as <code>math.sqrt()</code>,
+      <code>os.getcwd()</code>, <code>random.randint()</code>.
+    </p>
+
+    <h3>2️⃣ math module – extra maths power</h3>
+    <p>
+      The <code>math</code> module gives you many functions for more serious math:
+      square root, powers, trigonometry, rounding, and more.
+    </p>
+
+    <pre>
+import math
+
+x = 25
+print("Square root of", x, "is", math.sqrt(x))
+
+angle_deg = 30
+angle_rad = math.radians(angle_deg)  # convert degrees to radians
+print("sin(30°) =", math.sin(angle_rad))
+
+print("Floor of 3.7 =", math.floor(3.7))
+print("Ceil of 3.1 =", math.ceil(3.1))
+    </pre>
+
+    <p class="note">
+      These are helpful for physics formulas, engineering calculations, and data analysis where
+      you need more than just <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>.
+    </p>
+
+    <h3>3️⃣ random module – random numbers and choices</h3>
+    <p>
+      The <code>random</code> module generates pseudo‑random numbers that are good enough
+      for games, simulations, practice questions, and more.
+    </p>
+
+    <pre>
+import random
+
+# random integer between 1 and 6 (like a dice)
+dice = random.randint(1, 6)
+print("Dice rolled:", dice)
+
+# random float between 0 and 1
+r = random.random()
+print("Random float between 0 and 1:", r)
+
+# choose a random item from a list
+students = ["Asha", "Ravi", "Kiran", "Meera"]
+winner = random.choice(students)
+print("Randomly selected student:", winner)
+    </pre>
+
+    <p class="note">
+      There are more functions like <code>random.shuffle()</code> to shuffle a list
+      and <code>random.sample()</code> to pick several unique items.
+    </p>
+
+    <h3>4️⃣ Small game – number guessing</h3>
+    <p>
+      Here is a simple guessing game using <code>random.randint()</code>.
+    </p>
+
+    <pre>
+import random
+
+secret = random.randint(1, 20)
+print("I am thinking of a number between 1 and 20.")
+
+for attempt in range(1, 6):
+    guess = int(input("Attempt " + str(attempt) + ": Enter your guess: "))
+
+    if guess &lt; secret:
+        print("Too low!")
+    elif guess &gt; secret:
+        print("Too high!")
+    else:
+        print("Correct! You guessed it.")
+        break
+
+if guess != secret:
+    print("Sorry, the number was:", secret)
+    </pre>
+
+    <p class="note">
+      This pattern (random + loop + if/else) is used in many beginner games and practice tools.
+    </p>
+
+    <h3>5️⃣ os module – working with folders and files</h3>
+    <p>
+      The <code>os</code> module lets Python talk to your operating system. You can check
+      which folder you are in, list files, create folders, and more.
+    </p>
+
+    <pre>
+import os
+
+# current working directory
+print("Current folder:", os.getcwd())
+
+# list files and folders in current directory
+items = os.listdir()
+print("Items here:", items)
+
+# make a new folder (if not exists)
+if "my_notes" not in items:
+    os.mkdir("my_notes")
+    print("Created folder my_notes")
+    </pre>
+
+    <p class="note">
+      Be careful with functions like <code>os.remove()</code> and <code>os.rmdir()</code>
+      because they delete files or folders. Use them only when you are sure.
+    </p>
+
+    <h3>6️⃣ Combining os with file handling</h3>
+    <p>
+      You can combine <code>os</code> with the file handling you learned in Stage 4 to make
+      small automation scripts.
+    </p>
+
+    <pre>
+import os
+
+folder = "logs"
+
+# create folder if needed
+if not os.path.exists(folder):
+    os.mkdir(folder)
+
+filepath = os.path.join(folder, "today_log.txt")
+
+with open(filepath, "a") as f:
+    f.write("Student opened the app.\n")
+
+print("Log updated at:", filepath)
+    </pre>
+
+    <p class="note">
+      <code>os.path.join()</code> helps build correct paths in a cross‑platform way
+      (works on Windows, macOS, Linux).
+    </p>
+
+    <h3>7️⃣ Putting it together – simple quiz generator</h3>
+    <p>
+      This example uses <code>random</code> and <code>math</code> to create a tiny
+      practice quiz for multiplication.
+    </p>
+
+    <pre>
+import random
+import math
+
+print("Simple multiplication quiz (5 questions)")
+
+score = 0
+
+for i in range(5):
+    a = random.randint(2, 10)
+    b = random.randint(2, 10)
+    correct = a * b
+
+    print("\nQuestion", i + 1, ":", a, "x", b, "= ?")
+    ans = int(input("Your answer: "))
+
+    if ans == correct:
+        print("✅ Correct!")
+        score += 1
+    else:
+        print("❌ Wrong. Correct answer is", correct)
+
+print("\nYour score:", score, "/ 5")
+    </pre>
+
+    <p class="note">
+      You can expand this idea later with file handling (save scores) or os (store logs),
+      slowly turning it into a real learning tool.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Python Stage 6:</strong>
+      <ul>
+        <li>Use <code>math</code> to calculate square roots and factorials of 5 different numbers.</li>
+        <li>Write a script that randomly selects a student from a list to answer a question.</li>
+        <li>Create a small “lucky draw” program using <code>random.choice()</code> or <code>random.sample()</code>.</li>
+        <li>Use <code>os</code> to create a folder called <code>python_practice</code> and automatically create a file <code>notes.txt</code> inside it.</li>
+        <li>Modify the number guessing game to save each guess to a log file using what you learned in Stage 4.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToPython()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToPython() {
+    // Go back to index.html and open Python roadmap popup
+    window.location.href = "index.html#open-python";
+  }
+
+  function markCompleted() {
+    // Mark Python Step 6 as completed in localStorage
+    localStorage.setItem("python_step6_completed", "true");
+    window.location.href = "index.html#open-python";
+  }
+</script>
+
+</body>
+</html>

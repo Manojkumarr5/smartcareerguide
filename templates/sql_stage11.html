@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 11 – Normalize Databases (1NF, 2NF, 3NF)</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 11: Normalize Databases (1NF, 2NF, 3NF)</h2>
+    <p>
+      In this stage you learn what database normalization is and how 1NF, 2NF, and
+      3NF help reduce duplication and strange update problems in relational tables.
+    </p>
+    <p>
+      You will see a simple “bad” design and then gradually improve it using these
+      normal forms so the rules feel more practical than theoretical.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is normalization and why?</h3>
+    <p>
+      Normalization is the process of structuring a relational database to minimize
+      redundancy and avoid insert, update, and delete anomalies.
+    </p>
+    <ul>
+      <li>Goal: store each fact in one place with clear keys and relationships.</li>
+      <li>For most real projects, bringing tables to 3NF is usually sufficient to keep data clean.</li>
+    </ul>
+
+    <h3>2️⃣ Start with a “bad” student table</h3>
+    <p>
+      Imagine a single table trying to store students and their enrolled subjects
+      in one row; this is intentionally not normalized.
+    </p>
+
+    <pre>
+-- Not normalized example (do NOT copy this design)
+CREATE TABLE student_subjects_raw (
+    student_id    INT,
+    student_name  VARCHAR(100),
+    branch        VARCHAR(50),
+    subject1      VARCHAR(100),
+    subject2      VARCHAR(100),
+    subject3      VARCHAR(100)
+);
+    </pre>
+
+    <p class="note">
+      Problems include repeating subject columns, difficulty adding a new subject,
+      duplicated student data, and risk of inconsistent updates.
+    </p>
+
+    <h3>3️⃣ First Normal Form (1NF) – make data atomic</h3>
+    <p>
+      First Normal Form requires that each column holds atomic values and that
+      there are no repeating groups of columns.
+    </p>
+    <ul>
+      <li>No lists or multiple values in a single column.</li>
+      <li>No subject1, subject2, subject3 style columns; use multiple rows instead.</li>
+    </ul>
+
+    <pre>
+-- 1NF: split subjects into separate rows
+CREATE TABLE students (
+    student_id   INT PRIMARY KEY,
+    student_name VARCHAR(100),
+    branch       VARCHAR(50)
+);
+
+CREATE TABLE enrollments (
+    student_id INT,
+    subject    VARCHAR(100)
+);
+    </pre>
+
+    <p class="note">
+      Now each row in <code>enrollments</code> represents one student–subject pair,
+      so adding another subject is just inserting another row.
+    </p>
+
+    <h3>4️⃣ Second Normal Form (2NF) – remove partial dependency</h3>
+    <p>
+      Second Normal Form applies when a table has a composite primary key and
+      requires that every non-key column depends on the whole key, not just part of it.
+    </p>
+    <p>
+      For example, if branch depends only on student_id in a table whose key is
+      (student_id, subject), then the design is not in 2NF.
+    </p>
+
+    <pre>
+-- not 2NF
+CREATE TABLE enrollments_with_branch (
+    student_id   INT,
+    subject      VARCHAR(100),
+    branch       VARCHAR(50),
+    PRIMARY KEY (student_id, subject)
+);
+    </pre>
+
+    <p class="note">
+      Branch depends only on student_id, so repeating it per subject causes partial
+      dependency and redundancy; branch should stay in students instead.
+    </p>
+
+    <pre>
+-- 2NF achieved by splitting tables
+-- students table already holds branch
+CREATE TABLE students (
+    student_id   INT PRIMARY KEY,
+    student_name VARCHAR(100),
+    branch       VARCHAR(50)
+);
+
+-- enrollments now only stores data that depends on both student and subject
+CREATE TABLE enrollments (
+    student_id INT,
+    subject    VARCHAR(100),
+    PRIMARY KEY (student_id, subject),
+    FOREIGN KEY (student_id) REFERENCES students(student_id)
+);
+    </pre>
+
+    <p class="note">
+      Now non-key attributes in each table depend on the whole key without partial
+      dependencies in composite primary keys.
+    </p>
+
+    <h3>5️⃣ Third Normal Form (3NF) – remove transitive dependency</h3>
+    <p>
+      Third Normal Form requires that non-key columns do not depend on other
+      non-key columns; they should depend only on the primary key.
+    </p>
+    <p>
+      For example, course_name and course_teacher depend on course_id rather than
+      directly on the combination of student_id and course_id.
+    </p>
+
+    <pre>
+-- not 3NF
+CREATE TABLE enrollments_full (
+    student_id     INT,
+    course_id      INT,
+    course_name    VARCHAR(100),
+    course_teacher VARCHAR(100),
+    PRIMARY KEY (student_id, course_id)
+);
+    </pre>
+
+    <p class="note">
+      Here course_name and course_teacher transitively depend on course_id, so they
+      belong in a separate courses table instead of in enrollments_full.
+    </p>
+
+    <pre>
+-- 3NF: split into separate tables
+CREATE TABLE courses (
+    course_id      INT PRIMARY KEY,
+    course_name    VARCHAR(100),
+    course_teacher VARCHAR(100)
+);
+
+CREATE TABLE enrollments (
+    student_id INT,
+    course_id  INT,
+    PRIMARY KEY (student_id, course_id),
+    FOREIGN KEY (student_id) REFERENCES students(student_id),
+    FOREIGN KEY (course_id)  REFERENCES courses(course_id)
+);
+    </pre>
+
+    <p class="note">
+      Now each fact such as student information, course information, and enrollment
+      links lives in exactly one place, reducing redundancy and anomalies.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for SQL Stage 11:</strong>
+      <ul>
+        <li>Take any “wide” table you designed earlier, for example with subject1, subject2, subject3, and rewrite it into 1NF using multiple rows.</li>
+        <li>Identify a table where the primary key has two columns and check whether any non-key column depends only on one part of the key; if so, split it to reach 2NF.</li>
+        <li>Find a table where a non-key column clearly depends on another non-key column, such as course_name depending on course_id, and move those columns into a separate lookup table for 3NF.</li>
+        <li>Draw your updated schema, including students, courses, and enrollments, and mark primary keys and foreign keys.</li>
+        <li>In your notebook, write one or two sentences in your own words for 1NF, 2NF, and 3NF with a simple example for each.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 11 as completed in localStorage
+    localStorage.setItem("sql_step11_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

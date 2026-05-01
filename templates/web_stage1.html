@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Step 1 – HTML Structure & Semantics</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #005fa3;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #eaf4ff;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffea;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4f8ff;
+      padding: 15px;
+      border-left: 5px solid #0078d7;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .back-btn:hover {
+      background: #005fa3;
+    }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .complete-btn:hover {
+      background: #218838;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToWeb()">&times;</div>
+
+    <h2>Step 1: Understand HTML Structure and Semantics</h2>
+    <p>This step starts from absolute zero. Imagine you have never seen code before. You will learn what an HTML file is, what each line means, and how the browser reads it.</p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is a website and a web page?</h3>
+    <p>A website is a collection of web pages. A web page is what you see in your browser when you open a link like https://example.com.</p>
+    <p>Each web page is usually built using three main technologies: HTML (structure), CSS (design), and JavaScript (behavior). In this step, you focus only on HTML.</p>
+
+    <h3>2️⃣ What is HTML?</h3>
+    <p>HTML means HyperText Markup Language. It is not a programming language. It is a way to tell the browser “this is a heading, this is a paragraph, this is a link, this is an image”.</p>
+    <p>HTML uses tags. A tag looks like this: <code>&lt;p&gt; ... &lt;/p&gt;</code>. The opening tag starts an element, the closing tag ends it, and inside you write your content.</p>
+
+    <h3>3️⃣ Full example of a basic HTML page</h3>
+    <p>Here is a complete but very small HTML page. Every part is explained line by line after the code.</p>
+    <pre>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My First Web Page</title>
+</head>
+<body>
+  <h1>Hello, World!</h1>
+  <p>This is my first HTML page.</p>
+</body>
+</html>
+    </pre>
+
+    <h3>4️⃣ Explanation of each line</h3>
+    <p>Now see what each line in the above example means, in simple words.</p>
+    <ul>
+      <li><code>&lt;!DOCTYPE html&gt;</code> → This tells the browser “this document is written in HTML5” (modern HTML). It should always be the first line.</li>
+      <li><code>&lt;html lang="en"&gt;</code> → This is the root of the page. Everything else goes inside &lt;html&gt; and &lt;/html&gt;. The attribute <code>lang="en"</code> says the language of the page is English.</li>
+      <li><code>&lt;head&gt; ... &lt;/head&gt;</code> → The head section holds information about the page which is not shown directly, like the title, character settings, and links to CSS.</li>
+      <li><code>&lt;meta charset="UTF-8"&gt;</code> → This line tells the browser which character set to use. UTF-8 allows almost all languages and symbols to display correctly.</li>
+      <li><code>&lt;title&gt;My First Web Page&lt;/title&gt;</code> → This sets the title that appears on the browser tab and in bookmarks. It does not appear inside the main page area.</li>
+      <li><code>&lt;body&gt; ... &lt;/body&gt;</code> → The body contains everything that the user can actually see: headings, text, images, buttons, etc.</li>
+      <li><code>&lt;h1&gt;Hello, World!&lt;/h1&gt;</code> → This is the main big heading of the page. Usually used for the most important title.</li>
+      <li><code>&lt;p&gt;This is my first HTML page.&lt;/p&gt;</code> → This is a paragraph of normal text.</li>
+      <li><code>&lt;/html&gt;</code> → This closes the html tag and ends the document.</li>
+    </ul>
+
+    <h3>5️⃣ More headings and paragraphs</h3>
+    <p>You can use more headings to create sections. h1 is biggest, h6 is smallest. Paragraphs are for regular text.</p>
+    <pre>
+<h1>Smart Career Guide</h1>          <!-- Biggest heading -->
+<h2>Web Development Roadmap</h2>    <!-- Section heading -->
+<h3>Step 1: HTML Basics</h3>        <!-- Smaller heading -->
+
+<p>HTML helps you tell the browser what to show on the screen.</p>
+<p>You use different tags for different types of content.</p>
+    </pre>
+
+    <h3>6️⃣ Links (clickable text)</h3>
+    <p>Links let users move to another page or website. The <code>href</code> attribute says where the link goes.</p>
+    <pre>
+<a href="https://www.google.com" target="_blank">Open Google</a>
+<!-- href = where to go, target="_blank" = open in a new tab -->
+    </pre>
+
+    <h3>7️⃣ Semantic layout: header, nav, main, section, footer</h3>
+    <p>Semantic elements give meaning to parts of your page. They help search engines and screen readers understand the structure.</p>
+    <ul>
+      <li><code>&lt;header&gt;</code> → Top part of the page (logo, title, navigation).</li>
+      <li><code>&lt;nav&gt;</code> → Navigation menu with links.</li>
+      <li><code>&lt;main&gt;</code> → Main content for this page.</li>
+      <li><code>&lt;section&gt;</code> → A logical section of content (like “Courses” or “Contact”).</li>
+      <li><code>&lt;footer&gt;</code> → Bottom part of the page (copyright, extra links).</li>
+    </ul>
+    <pre>
+<header>
+  <h1>Smart Career Guide</h1>
+  <nav>
+    <a href="#courses">Courses</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <section id="courses">
+    <h2>Popular Courses</h2>
+    <p>Here you will see ML, Web, Python, SQL, and Data Science roadmaps.</p>
+  </section>
+
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <p>You can email us at support@example.com.</p>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2025 Smart Career Guide</p>
+</footer>
+    </pre>
+
+    <h3>8️⃣ Lists (bullets and numbers)</h3>
+    <p>Lists help you show multiple items. Use <code>&lt;ul&gt;</code> for bullet lists and <code>&lt;ol&gt;</code> for numbered lists.</p>
+    <pre>
+<h2>Things to Learn in HTML</h2>
+
+<ul> <!-- Bullet list -->
+  <li>Page structure (html, head, body)</li>
+  <li>Headings and paragraphs</li>
+  <li>Links and basic layout</li>
+</ul>
+
+<ol> <!-- Numbered list -->
+  <li>Create your first HTML file.</li>
+  <li>Add headings and paragraphs.</li>
+  <li>Open it in the browser and see the result.</li>
+</ol>
+    </pre>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks (start truly from zero):</strong>
+      <ul>
+        <li>Open a text editor (like VS Code or Notepad). Create a new file called <code>my_first_page.html</code> and type the basic HTML skeleton from section 3.</li>
+        <li>Change the page <code>&lt;title&gt;</code> to your own name (for example, “Manoj’s First Page”). Save and reload in the browser to see it on the browser tab.</li>
+        <li>Inside <code>&lt;body&gt;</code>, change the <code>&lt;h1&gt;</code> text to “Welcome to My Website” and add two <code>&lt;p&gt;</code> paragraphs describing yourself.</li>
+        <li>Add a <code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, and <code>&lt;footer&gt;</code> like in the example, and put your own text in each part.</li>
+        <li>Add a bullet list of 3 goals you have for learning web development (for example, “Get a job”, “Build my own website”, “Understand how the web works”).</li>
+      </ul>
+    </div>
+
+    <!-- Bottom buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToWeb()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function goBackToWeb() {
+    // Go back to index and open Web roadmap popup
+    window.location.href = "index.html#open-web"; // [web:191][web:238]
+  }
+
+  function markCompleted() {
+    // Save completion for Web step 1
+    localStorage.setItem("web_step1_completed", "true"); // [web:192][web:193][web:177]
+    window.location.href = "index.html#open-web";
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Step 4 – File Handling and Error Handling</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Python Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToPython()">&times;</div>
+
+    <h2>Step 4: File Handling and Error Handling</h2>
+    <p>
+      In this stage you learn how to work with files on your computer (reading and writing text files)
+      and how to handle errors safely using <code>try</code> and <code>except</code>. These skills are
+      very important for automation, log analysis, simple tools, and real projects.
+    </p>
+    <p>
+      After this step, you will be able to save data from your programs into files, read it back later,
+      and avoid crashes when something goes wrong.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Why file handling matters</h3>
+    <p>
+      Until now, your programs mostly printed to the screen and took input from the keyboard.
+      But real applications often read data from files and write results to files: marks records,
+      logs, configuration, reports, and more.
+    </p>
+    <p>
+      Python gives simple functions to work with files using the built‑in <code>open()</code> function.
+    </p>
+
+    <h3>2️⃣ Basic file operations: open, read, write, close</h3>
+    <p>
+      The general idea is:
+    </p>
+    <ul>
+      <li>Use <code>open("filename", "mode")</code> to open a file.[web:39]</li>
+      <li>Use methods like <code>read()</code>, <code>readline()</code>, or <code>write()</code>.[web:39]</li>
+      <li>Close the file when done using <code>close()</code> or the <code>with</code> statement.[web:39]</li>
+    </ul>
+
+    <p><strong>Example – writing to a file:</strong></p>
+
+    <pre>
+# create and write to a text file
+f = open("notes.txt", "w")   # "w" = write mode (overwrites)
+f.write("This is my first line.\n")
+f.write("Python file handling is easy.\n")
+f.close()
+    </pre>
+
+    <p><strong>Example – reading from a file:</strong></p>
+
+    <pre>
+f = open("notes.txt", "r")   # "r" = read mode
+content = f.read()
+f.close()
+
+print("File content:")
+print(content)
+    </pre>
+
+    <p class="note">
+      Mode <code>"w"</code> creates a new file or clears an existing file,
+      while <code>"r"</code> expects the file to already exist.
+    </p>
+
+    <h3>3️⃣ Using with open – safer and cleaner</h3>
+    <p>
+      A better way is to use <code>with open(...)</code>. It automatically closes the file,
+      even if an error happens inside the block.
+    </p>
+
+    <pre>
+# write using "with"
+with open("students.txt", "w") as f:
+    f.write("Asha - CSE\n")
+    f.write("Ravi - ECE\n")
+
+# read using "with"
+with open("students.txt", "r") as f:
+    for line in f:
+        print("Line:", line.strip())
+    </pre>
+
+    <p class="note">
+      The variable after <code>as</code> (here <code>f</code>) is your file object.
+      <code>line.strip()</code> removes extra spaces and the newline at the end.
+    </p>
+
+    <h3>4️⃣ File modes – what "r", "w", "a" mean</h3>
+    <p>
+      Common modes for <code>open()</code> are:
+    </p>
+    <ul>
+      <li><code>"r"</code> – read only, file must exist.</li>
+      <li><code>"w"</code> – write, create new or erase existing file.</li>
+      <li><code>"a"</code> – append, add new content at the end of file.</li>
+      <li><code>"r+"</code> – read and write (advanced, later use).</li>
+    </ul>
+
+    <p><strong>Append example:</strong></p>
+
+    <pre>
+# append a new line to existing file
+with open("students.txt", "a") as f:
+    f.write("Kiran - ME\n")
+    </pre>
+
+    <p class="note">
+      Use <code>"a"</code> when you want to keep the old data and only add new lines
+      (for example, adding new log entries).
+    </p>
+
+    <h3>5️⃣ What are errors (exceptions)?</h3>
+    <p>
+      When something unexpected happens in Python (for example, file not found,
+      wrong input, divide by zero), Python raises an <strong>exception</strong>.
+      If no one handles it, the program stops with an error message.
+    </p>
+    <p>
+      Example of a common error:
+    </p>
+
+    <pre>
+x = 10
+y = 0
+
+result = x / y   # ZeroDivisionError
+print(result)
+    </pre>
+
+    <p class="note">
+      Instead of letting the program crash, you can catch such errors with
+      <code>try</code> and <code>except</code>.
+    </p>
+
+    <h3>6️⃣ try–except – catching errors</h3>
+    <p>
+      Basic structure of error handling:
+    </p>
+
+    <pre>
+try:
+    # risky code
+    x = int(input("Enter a number: "))
+    result = 100 / x
+    print("Result:", result)
+
+except ZeroDivisionError:
+    print("You cannot divide by zero. Please try again.")
+
+except ValueError:
+    print("Please enter a valid integer.")
+    </pre>
+
+    <ul>
+      <li><code>try</code> block: put the code that may raise an error.</li>
+      <li><code>except SomeError</code>: what to do if that specific error occurs.</li>
+      <li>You can have multiple <code>except</code> blocks for different error types.</li>
+    </ul>
+
+    <p class="note">
+      This makes your programs more user‑friendly because users see a clear message instead of a long traceback.
+    </p>
+
+    <h3>7️⃣ Handling file errors with try–except</h3>
+    <p>
+      A very common real‑world case is trying to open a file that does not exist.
+      You can catch this and show a helpful message.
+    </p>
+
+    <pre>
+filename = "students.txt"
+
+try:
+    with open(filename, "r") as f:
+        content = f.read()
+        print(content)
+
+except FileNotFoundError:
+    print("File", filename, "not found. Please check the name or create it first.")
+    </pre>
+
+    <p class="note">
+      This is useful if your program depends on a file provided by the user, like a marks list,
+      log file, or configuration file.
+    </p>
+
+    <h3>8️⃣ Small mini-project – simple log writer</h3>
+    <p>
+      Here is a small example that asks the user for events and saves them into a log file.
+      It also handles empty input.
+    </p>
+
+    <pre>
+print("Simple log writer (type 'exit' to stop)")
+
+while True:
+    text = input("Enter an event: ")
+
+    if text.lower() == "exit":
+        print("Stopping logger.")
+        break
+
+    if text.strip() == "":
+        print("Empty line ignored.")
+        continue
+
+    try:
+        with open("events.log", "a") as f:
+            f.write(text + "\n")
+        print("Saved!")
+    except Exception as e:
+        print("Something went wrong while writing to file:", e)
+    </pre>
+
+    <p class="note">
+      This pattern (loop + file + try/except) is the base for many automation scripts,
+      like saving errors, user actions, or sensor readings.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Python Stage 4:</strong>
+      <ul>
+        <li>Create a text file manually (for example, <code>quotes.txt</code>) and write 3–4 lines in it. Then write a Python program to read and print the file.</li>
+        <li>Write a program that asks the user’s name and appends it to a file <code>names.txt</code> every time it runs.</li>
+        <li>Modify the program so that if the file is missing, it shows a friendly message instead of crashing.</li>
+        <li>Write a program that asks the user for two numbers and safely divides them, using <code>try</code>/<code>except</code> to handle zero and invalid input.</li>
+        <li>Design your own small log file (for example, <code>study_log.txt</code>) where you save what you studied today and for how many minutes.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToPython()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToPython() {
+    // Go back to index.html and open Python roadmap popup
+    window.location.href = "index.html#open-python";
+  }
+
+  function markCompleted() {
+    // Mark Python Step 4 as completed in localStorage
+    localStorage.setItem("python_step4_completed", "true");
+    window.location.href = "index.html#open-python";
+  }
+</script>
+
+</body>
+</html>

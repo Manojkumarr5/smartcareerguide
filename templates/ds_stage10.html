@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS Step 10 – Handle Imbalanced Datasets</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Data Science Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToDS()">&times;</div>
+
+    <h2>Step 10: Handle Imbalanced Datasets</h2>
+    <p>
+      In this stage you learn how to work with <strong>imbalanced datasets</strong>, where
+      one class (like “no fraud”) is much more common than the other class (like
+      “fraud”).
+    </p>
+    <p>
+      Such imbalance can make accuracy misleading and cause models to ignore the rare
+      but important minority class, so you need special metrics and resampling
+      techniques.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is class imbalance and why accuracy is tricky?</h3>
+    <p>
+      A dataset is imbalanced when one label dominates, for example 99% class 0 and only
+      1% class 1.
+    </p>
+    <ul>
+      <li>Example: 990 non‑fraud transactions and 10 fraud transactions.[web:415]</li>
+      <li>A model that always predicts “no fraud” will be 99% accurate but completely
+          useless for catching fraud.
+      </li>
+    </ul>
+
+    <p class="note">
+      In imbalanced problems you should focus on metrics like precision, recall,
+      F1‑score, and the confusion matrix, not only accuracy.
+    </p>
+
+    <h3>2️⃣ Basic metrics beyond accuracy</h3>
+    <p>
+      For binary classification with minority class 1, important metrics include
+      precision, recall, and F1‑score.
+    </p>
+
+    <pre>
+from sklearn.metrics import classification_report, confusion_matrix
+
+y_true = [0, 0, 0, 1, 1, 1]
+y_pred = [0, 0, 0, 0, 1, 1]
+
+print(confusion_matrix(y_true, y_pred))
+print(classification_report(y_true, y_pred))
+    </pre>
+
+    <p class="note">
+      Recall and F1‑score for the minority class are especially important in domains
+      like fraud detection, medical tests, or safety alerts.
+    </p>
+
+    <h3>3️⃣ Resampling: oversampling and undersampling</h3>
+    <p>
+      A common way to handle imbalance is to change the training data so classes become
+      more balanced.
+    </p>
+    <ul>
+      <li><strong>Oversampling</strong>: add more minority samples (by copying or
+          synthesizing new ones).[web:415][web:416]</li>
+      <li><strong>Undersampling</strong>: remove some majority samples to reduce
+          dominance.</li>
+    </ul>
+
+    <p class="note">
+      Popular techniques are random oversampling, SMOTE (synthetic minority
+      oversampling), and random undersampling, each with different trade‑offs.
+    </p>
+
+    <h3>4️⃣ Using class weights and SMOTE (example)</h3>
+    <p>
+      In scikit‑learn you can give higher weight to the minority class, and with the
+      imbalanced‑learn library you can apply SMOTE to generate synthetic minority
+      samples.
+    </p>
+
+    <pre>
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
+from sklearn.utils.class_weight import compute_class_weight
+from imblearn.over_sampling import SMOTE
+
+# X, y should come from your dataset (binary classification)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42, stratify=y
+)
+
+# 1) Class weights
+classes = sorted(y_train.unique())
+class_weights = compute_class_weight(
+    class_weight="balanced",
+    classes=classes,
+    y=y_train
+)
+class_weights_dict = dict(zip(classes, class_weights))
+
+model_weighted = LogisticRegression(class_weight=class_weights_dict)
+model_weighted.fit(X_train, y_train)
+y_pred_w = model_weighted.predict(X_test)
+print("With class weights:")
+print(classification_report(y_test, y_pred_w))
+
+# 2) SMOTE oversampling on training data
+smote = SMOTE(random_state=42)
+X_res, y_res = smote.fit_resample(X_train, y_train)
+
+model_smote = LogisticRegression()
+model_smote.fit(X_res, y_res)
+y_pred_s = model_smote.predict(X_test)
+print("With SMOTE:")
+print(classification_report(y_test, y_pred_s))
+    </pre>
+
+    <p class="note">
+      Class weights make the model “care more” about minority errors, while SMOTE
+      balances the training set by adding synthetic minority examples.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for DS Stage 10:</strong>
+      <ul>
+        <li>Create a toy highly imbalanced dataset (for example 95% class 0, 5% class 1)
+            and train a simple classifier; record accuracy, precision, recall, and the
+            confusion matrix.
+        </li>
+        <li>Apply either class weights or SMOTE oversampling and train again; compare
+            the minority‑class metrics and note the improvement.
+        </li>
+        <li>Write in simple language why accuracy alone can be misleading and which
+            metric you would prioritize for a real‑world case like fraud or disease
+            detection.
+        </li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+   <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToDS()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToDS() {
+    // Go back to index.html and open Data Science roadmap popup
+    window.location.href = "index.html#open-ds";
+  }
+
+  function markCompleted() {
+    // Mark DS Step 10 as completed in localStorage
+    localStorage.setItem("ds_step10_completed", "true");
+    window.location.href = "index.html#open-ds";
+  }
+</script>
+
+</body>
+</html>

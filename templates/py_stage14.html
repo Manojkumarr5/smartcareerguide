@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Step 14 – Integrate Database (SQLite, MySQL)</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Python Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToPython()">&times;</div>
+
+    <h2>Step 14: Integrate Database (SQLite, MySQL)</h2>
+    <p>
+      In this stage you learn how to connect Python to databases so your apps can store
+      and retrieve data permanently, starting with SQLite (file‑based, built into
+      Python) and briefly seeing how MySQL fits in.
+    </p>
+    <p>
+      This is a key step for building real apps such as student portals, mark systems,
+      log systems, and any app that needs to remember data between runs.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Why use a database?</h3>
+    <p>
+      Storing data in text, CSV, or JSON works for small scripts, but databases give
+      more powerful querying, relationships, and safer updates.
+    </p>
+    <ul>
+      <li><strong>SQLite</strong> – lightweight, serverless, stores data in a <code>.db</code> file, and is built into Python.</li>
+      <li><strong>MySQL</strong> – a full database server commonly used in production web apps.</li>
+    </ul>
+
+    <h3>2️⃣ Getting started with SQLite (sqlite3 module)</h3>
+    <p>
+      Python has a built‑in module <code>sqlite3</code> for working with SQLite databases.
+    </p>
+
+    <pre>
+import sqlite3
+
+# connect creates the file 'students.db' if it does not exist
+conn = sqlite3.connect("students.db")
+
+cursor = conn.cursor()
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS students (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    branch TEXT NOT NULL,
+    cgpa REAL
+)
+""")
+
+conn.commit()
+conn.close()
+    </pre>
+
+    <p class="note">
+      Always call <code>commit()</code> after changes and <code>close()</code> when done,
+      or use <code>with</code> to manage the connection automatically.
+    </p>
+
+    <h3>3️⃣ Insert and read data (CRUD basics)</h3>
+    <p>
+      CRUD stands for Create, Read, Update, and Delete, which are the four basic operations
+      performed on database records.
+    </p>
+
+    <pre>
+import sqlite3
+
+conn = sqlite3.connect("students.db")
+cursor = conn.cursor()
+
+# CREATE – insert data (use ? placeholders to avoid SQL injection)
+cursor.execute(
+    "INSERT INTO students (name, branch, cgpa) VALUES (?, ?, ?)",
+    ("Asha", "CSE", 8.5)
+)
+cursor.execute(
+    "INSERT INTO students (name, branch, cgpa) VALUES (?, ?, ?)",
+    ("Ravi", "ECE", 7.8)
+)
+conn.commit()
+
+# READ – fetch data
+cursor.execute("SELECT id, name, branch, cgpa FROM students")
+rows = cursor.fetchall()
+
+for r in rows:
+    print(r)
+
+conn.close()
+    </pre>
+
+    <p class="note">
+      Parameterized queries with <code>?</code> placeholders help prevent SQL injection
+      and handle values safely.
+    </p>
+
+    <h3>4️⃣ Update and delete records</h3>
+    <p>
+      You can update and delete rows using <code>UPDATE</code> and <code>DELETE</code> statements.
+    </p>
+
+    <pre>
+import sqlite3
+
+conn = sqlite3.connect("students.db")
+cursor = conn.cursor()
+
+# UPDATE
+cursor.execute(
+    "UPDATE students SET cgpa = ? WHERE name = ?",
+    (8.8, "Asha")
+)
+
+# DELETE
+cursor.execute(
+    "DELETE FROM students WHERE name = ?",
+    ("Ravi",)
+)
+
+conn.commit()
+conn.close()
+    </pre>
+
+    <p class="note">
+      In real apps, rows are usually identified by a unique <code>id</code> instead of just a name.
+    </p>
+
+    <h3>5️⃣ Using SQLite with context managers</h3>
+    <p>
+      Context managers with <code>with</code> can automatically handle commits and closing
+      connections for cleaner database code.
+    </p>
+
+    <pre>
+import sqlite3
+
+with sqlite3.connect("students.db") as conn:
+    cursor = conn.cursor()
+    cursor.execute("SELECT name, branch, cgpa FROM students")
+    for name, branch, cgpa in cursor.fetchall():
+        print(name, "-", branch, "-", cgpa)
+    </pre>
+
+    <p class="note">
+      This pattern reduces the chance of leaving connections open or forgetting to commit.
+    </p>
+
+    <h3>6️⃣ Very small MySQL example (for awareness)</h3>
+    <p>
+      MySQL is a separate database server; to connect from Python you install a connector
+      and provide host, user, password, and database name.
+    </p>
+
+    <div class="cmd-box">
+      <div># example connector</div>
+      <div><span>pip install mysql-connector-python</span></div>
+    </div>
+
+    <pre>
+import mysql.connector
+
+conn = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="your_password",
+    database="college_db"
+)
+
+cursor = conn.cursor()
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    branch VARCHAR(50),
+    cgpa FLOAT
+)
+""")
+
+cursor.execute(
+    "INSERT INTO students (name, branch, cgpa) VALUES (%s, %s, %s)",
+    ("Kiran", "ME", 9.1)
+)
+conn.commit()
+
+cursor.execute("SELECT id, name, branch, cgpa FROM students")
+for row in cursor.fetchall():
+    print(row)
+
+cursor.close()
+conn.close()
+    </pre>
+
+    <p class="note">
+      MySQL needs a running server and some setup, so SQLite is usually easier for a
+      single‑machine learning environment.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Python Stage 14:</strong>
+      <ul>
+        <li>Create a new SQLite database (for example, <code>library.db</code>) and a table <code>books</code> with columns like title, author, and year.</li>
+        <li>Write a script to insert at least 5 book records and then print all of them.</li>
+        <li>Add an update operation (for example, change the year of one book) and a delete operation (remove one book).</li>
+        <li>Integrate your SQLite code with one of your earlier projects (quiz, marks app, or Flask app) to store data in the database instead of a list.</li>
+        <li>If you have MySQL installed, try connecting once and creating a simple table to see the full flow.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToPython()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToPython() {
+    // Go back to index.html and open Python roadmap popup
+    window.location.href = "index.html#open-python";
+  }
+
+  function markCompleted() {
+    // Mark Python Step 14 as completed in localStorage
+    localStorage.setItem("python_step14_completed", "true");
+    window.location.href = "index.html#open-python";
+  }
+</script>
+
+</body>
+</html>

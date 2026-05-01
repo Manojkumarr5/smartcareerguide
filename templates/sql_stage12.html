@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 12 – Create Stored Procedures and Triggers</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 12: Create Stored Procedures and Triggers</h2>
+    <p>
+      In this stage you learn what stored procedures and triggers are, how they
+      differ, and how to create simple examples for your projects.
+    </p>
+    <p>
+      These features move some logic into the database itself so you can reuse SQL
+      code, enforce rules, and log changes automatically.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Stored procedures – idea and why they’re useful</h3>
+    <p>
+      A stored procedure is a named block of precompiled SQL statements stored in
+      the database that you can execute whenever needed.
+    </p>
+    <ul>
+      <li>Useful for repeating queries or multi‑step operations such as combined inserts, updates, and joins.</li>
+      <li>Can accept parameters like branch name or minimum CGPA so the same logic works for many inputs.</li>
+    </ul>
+
+    <h3>2️⃣ Create and execute a simple stored procedure</h3>
+    <p>
+      Exact syntax varies by database; this example shows a SQL Server–style procedure and mentions the MySQL CALL style.
+    </p>
+
+    <pre>
+-- example: stored procedure to get students by branch
+-- syntax will be very similar in many SQL systems,
+-- but check your DB docs for exact DELIMITER / GO usage.
+
+-- create the procedure
+CREATE PROCEDURE GetStudentsByBranch
+  @BranchName VARCHAR(50)
+AS
+BEGIN
+  SELECT id, name, branch, cgpa
+  FROM students
+  WHERE branch = @BranchName;
+END;
+
+-- execute (SQL Server style)
+EXEC GetStudentsByBranch @BranchName = 'CSE';
+
+-- execute (MySQL style, if parameters defined slightly differently)
+-- CALL GetStudentsByBranch('CSE');
+    </pre>
+
+    <p class="note">
+      Stored procedures can contain multiple SQL statements, including INSERT, UPDATE,
+      DELETE, SELECT, and even transaction logic with COMMIT and ROLLBACK.
+    </p>
+
+    <h3>3️⃣ Stored procedure with INSERT logic</h3>
+    <p>
+      You can standardize how new data is inserted by wrapping INSERT logic inside a
+      stored procedure.
+    </p>
+
+    <pre>
+-- procedure to add a new student
+CREATE PROCEDURE AddStudent
+  @Name   VARCHAR(100),
+  @Branch VARCHAR(50),
+  @Cgpa   DECIMAL(3,1)
+AS
+BEGIN
+  INSERT INTO students (name, branch, cgpa)
+  VALUES (@Name, @Branch, @Cgpa);
+END;
+
+-- run it
+EXEC AddStudent
+  @Name   = 'Asha',
+  @Branch = 'CSE',
+  @Cgpa   = 8.7;
+    </pre>
+
+    <p class="note">
+      In real applications, backend code such as Python, Java, or C# often calls
+      stored procedures instead of sending raw SQL strings each time.
+    </p>
+
+    <h3>4️⃣ Triggers – idea and simple example</h3>
+    <p>
+      A trigger is a special stored program that runs automatically in response to
+      table events such as INSERT, UPDATE, or DELETE.
+    </p>
+    <ul>
+      <li>You do not call a trigger manually; it fires when its defined event occurs.</li>
+      <li>Typical uses include audit logging, automatic calculations, and enforcing extra business rules.</li>
+    </ul>
+
+    <pre>
+-- example: log inserts into students table
+CREATE TABLE students_audit (
+    id          INT IDENTITY PRIMARY KEY,  -- or AUTO_INCREMENT
+    student_id  INT,
+    action      VARCHAR(20),
+    action_time DATETIME
+);
+
+-- simple AFTER INSERT trigger (syntax varies by DB)
+CREATE TRIGGER trg_students_after_insert
+ON students
+AFTER INSERT
+AS
+BEGIN
+  INSERT INTO students_audit (student_id, action, action_time)
+  SELECT id, 'INSERT', GETDATE()
+  FROM inserted;   -- 'inserted' is a virtual table with new rows
+END;
+    </pre>
+
+    <p class="note">
+      Whenever a new row is inserted into <code>students</code>, this trigger
+      automatically writes a record into <code>students_audit</code> as an audit trail.
+    </p>
+
+    <h3>5️⃣ Difference between stored procedures and triggers</h3>
+    <p>
+      Both are stored code in the database, but they are invoked in different ways
+      and used for different purposes.
+    </p>
+    <ul>
+      <li>Stored procedure: executed explicitly using EXEC or CALL and can be invoked from applications or scripts with parameters.</li>
+      <li>Trigger: executed automatically when its table event occurs and cannot be called directly from client code.</li>
+    </ul>
+
+    <p class="note">
+      A stored procedure behaves like a function you choose to run, while a trigger
+      behaves like an automatic alarm that reacts to data changes.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for SQL Stage 12:</strong>
+      <ul>
+        <li>Create a stored procedure that returns all students with cgpa ≥ a parameter such as @MinCgpa.</li>
+        <li>Create a stored procedure that inserts a new row into your <code>marks</code> table using parameters for student_id, subject, and score.</li>
+        <li>Create an audit table for one of your main tables and write a trigger that logs each INSERT into that table.</li>
+        <li>Test your trigger by inserting rows and then selecting from the audit table to see logged actions.</li>
+        <li>In your notebook, write a few bullet points in your own words explaining the difference between a stored procedure and a trigger.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 12 as completed in localStorage
+    localStorage.setItem("sql_step12_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

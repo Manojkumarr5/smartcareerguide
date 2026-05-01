@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS Step 5 – Perform Exploratory Data Analysis (EDA)</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Data Science Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToDS()">&times;</div>
+
+    <h2>Step 5: Perform Exploratory Data Analysis (EDA)</h2>
+    <p>
+      In this stage you learn how to “explore” a dataset: understand its shape,
+      distributions, relationships, and unusual values before building any model.
+    </p>
+    <p>
+      EDA is like doing a health check of your data using summaries, plots, and good
+      questions, so you can later choose better features and models.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Start with questions and load the data</h3>
+    <p>
+      Good EDA begins by asking simple questions such as “What does each column mean?”
+      and “What do we want to find out from this dataset?”.
+    </p>
+    <ul>
+      <li>Example goal: “Understand how student branch and study hours relate to marks.”</li>
+      <li>Example questions: “What is the average mark?”, “Do some branches score higher?”, “Are there any extreme values?”.</li>
+    </ul>
+
+    <pre>
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set_style("whitegrid")
+
+df = pd.read_csv("students_clean.csv")
+print(df.head())
+print(df.info())
+print(df.describe())
+    </pre>
+
+    <p class="note">
+      <code>info()</code> shows data types and missing values, while
+      <code>describe()</code> gives basic descriptive statistics for numeric columns.
+    </p>
+
+    <h3>2️⃣ Understand distributions (single variable)</h3>
+    <p>
+      First look at each important numeric column alone to see its range, center,
+      and spread using histograms or box plots.
+    </p>
+
+    <pre>
+# Histogram of marks
+plt.figure(figsize=(6, 4))
+sns.histplot(data=df, x="marks", kde=True)
+plt.xlabel("Marks")
+plt.title("Distribution of Marks")
+plt.tight_layout()
+plt.show()
+
+# Box plot of marks
+plt.figure(figsize=(4, 5))
+sns.boxplot(y="marks", data=df)
+plt.title("Marks – Box Plot")
+plt.tight_layout()
+plt.show()
+    </pre>
+
+    <p class="note">
+      Histograms and box plots help you spot skewed data and outliers (very high or very
+      low points compared to most of the class).
+    </p>
+
+    <h3>3️⃣ Explore relationships (two variables)</h3>
+    <p>
+      Next, check how two variables move together: for example, study hours vs marks,
+      or attendance vs marks.
+    </p>
+
+    <pre>
+# Scatter plot: study_hours vs marks
+plt.figure(figsize=(6, 4))
+sns.scatterplot(data=df, x="study_hours", y="marks")
+plt.xlabel("Study Hours")
+plt.ylabel("Marks")
+plt.title("Study Hours vs Marks")
+plt.tight_layout()
+plt.show()
+
+# Average marks by branch (categorical vs numeric)
+plt.figure(figsize=(6, 4))
+sns.barplot(data=df, x="branch", y="marks", estimator="mean")
+plt.xlabel("Branch")
+plt.ylabel("Average Marks")
+plt.title("Average Marks by Branch")
+plt.tight_layout()
+plt.show()
+    </pre>
+
+    <p class="note">
+      Looking at relationships highlights patterns like “more hours → higher marks” or
+      differences between groups such as branches or sections.
+    </p>
+
+    <h3>4️⃣ Spot outliers and simple data issues</h3>
+    <p>
+      EDA also includes checking for strange values (like marks above 100) or records
+      that do not make sense, which may indicate data quality problems.
+    </p>
+
+    <pre>
+# Quick rule-based outlier check
+outliers = df[df["marks"] > 100]
+print("Rows with marks > 100:")
+print(outliers)
+
+# You can also look at the top/bottom values
+print(df["marks"].sort_values().head())
+print(df["marks"].sort_values(ascending=False).head())
+    </pre>
+
+    <p class="note">
+      When you find outliers, decide whether they are data entry mistakes (to fix or
+      remove) or real extreme cases that must be kept and explained.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for DS Stage 5:</strong>
+      <ul>
+        <li>Pick one small real dataset (students, shop sales, or rainfall) and:
+          load it with Pandas, print <code>info()</code>, <code>describe()</code>, and count missing values.</li>
+        <li>Create at least:
+          a histogram, a box plot, one scatter plot, and one bar plot comparing groups
+          (for example average marks by branch).</li>
+        <li>Write a short EDA summary (6–8 simple sentences) answering questions like:
+          “What is the typical value?”, “How much variation is there?”, “Any outliers?”,
+          and “Any clear relationship between two variables?”.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToDS()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToDS() {
+    // Go back to index.html and open Data Science roadmap popup
+    window.location.href = "index.html#open-ds";
+  }
+
+  function markCompleted() {
+    // Mark DS Step 5 as completed in localStorage
+    localStorage.setItem("ds_step5_completed", "true");
+    window.location.href = "index.html#open-ds";
+  }
+</script>
+
+</body>
+</html>

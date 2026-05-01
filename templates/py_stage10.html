@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Step 10 – Work with JSON and CSV Files</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Python Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToPython()">&times;</div>
+
+    <h2>Step 10: Work with JSON and CSV Files</h2>
+    <p>
+      In this stage you learn how to read and write two very common data formats:
+      <strong>CSV</strong> (tables like Excel) and <strong>JSON</strong> (nested key‑value data
+      often used by APIs).
+    </p>
+    <p>
+      These formats are everywhere in real projects – from marks sheets and logs to
+      API responses and configuration files.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ What are CSV and JSON?</h3>
+    <p>
+      <strong>CSV (Comma‑Separated Values)</strong> stores data in rows and columns
+      like a simple Excel sheet saved as text where each line is a row and values are separated
+      by commas.
+    </p>
+    <p>
+      <strong>JSON (JavaScript Object Notation)</strong> stores data as nested
+      key–value pairs, lists, and basic types and is the standard for many web APIs.
+    </p>
+
+    <h3>2️⃣ Working with CSV using the csv module</h3>
+    <p>
+      Python has a built‑in <code>csv</code> module for reading and writing CSV files.
+    </p>
+
+    <p><strong>Reading a CSV file:</strong></p>
+
+    <pre>
+import csv
+
+with open("students.csv", mode="r", newline="") as file:
+    reader = csv.reader(file)
+
+    # optionally skip header
+    header = next(reader, None)
+    print("Header:", header)
+
+    for row in reader:
+        print("Row:", row)
+    </pre>
+
+    <p class="note">
+      Each <code>row</code> is a list of strings, and you can convert items to <code>int</code> or <code>float</code> if needed.
+    </p>
+
+    <p><strong>Writing to a CSV file:</strong></p>
+
+    <pre>
+import csv
+
+rows = [
+    ["name", "branch", "marks"],
+    ["Asha", "CSE", 85],
+    ["Ravi", "ECE", 78],
+    ["Kiran", "ME", 92],
+]
+
+with open("students.csv", mode="w", newline="") as file:
+    writer = csv.writer(file)
+    writer.writerows(rows)
+    </pre>
+
+    <p class="note">
+      Using <code>newline=""</code> avoids extra blank lines on some systems.
+    </p>
+
+    <h3>3️⃣ Using DictReader and DictWriter</h3>
+    <p>
+      Instead of working with lists, you can read CSV rows as dictionaries
+      with keys taken from the header row, which is more readable.
+    </p>
+
+    <pre>
+import csv
+
+with open("students.csv", mode="r", newline="") as file:
+    reader = csv.DictReader(file)  # each row is a dict
+
+    for row in reader:
+        print(row["name"], "-", row["branch"], "-", row["marks"])
+    </pre>
+
+    <p><strong>Writing with DictWriter:</strong></p>
+
+    <pre>
+import csv
+
+fieldnames = ["name", "branch", "marks"]
+
+data = [
+    {"name": "Asha", "branch": "CSE", "marks": 85},
+    {"name": "Ravi", "branch": "ECE", "marks": 78},
+]
+
+with open("students2.csv", mode="w", newline="") as file:
+    writer = csv.DictWriter(file, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(data)
+    </pre>
+
+    <p class="note">
+      This style matches many real‑world CSVs where each row represents a record with named fields.
+    </p>
+
+    <h3>4️⃣ JSON basics and the json module</h3>
+    <p>
+      JSON maps naturally to Python types: objects to dicts, arrays to lists,
+      strings to <code>str</code>, numbers to <code>int</code>/<code>float</code>, booleans to <code>bool</code>, and null to <code>None</code>.
+    </p>
+
+    <p><strong>Reading JSON from a file:</strong></p>
+
+    <pre>
+import json
+
+with open("config.json", "r") as f:
+    data = json.load(f)
+
+print("Data:", data)
+print("Type:", type(data))
+    </pre>
+
+    <p class="note">
+      <code>json.load()</code> parses JSON text from a file and returns Python objects
+      such as dicts or lists.
+    </p>
+
+    <p><strong>Writing JSON to a file:</strong></p>
+
+    <pre>
+import json
+
+settings = {
+    "app_name": "Smart Career Guide",
+    "version": 1,
+    "features": ["python_track", "ml_track"],
+    "dark_mode": False
+}
+
+with open("config.json", "w") as f:
+    json.dump(settings, f, indent=4)
+    </pre>
+
+    <p class="note">
+      <code>indent=4</code> makes the JSON file nicely formatted and readable.
+    </p>
+
+    <h3>5️⃣ JSON from APIs (combined with requests)</h3>
+    <p>
+      Many APIs return JSON, and you can use <code>response.json()</code> and then
+      save that data to a JSON file for later analysis.
+    </p>
+
+    <pre>
+import requests, json
+
+url = "https://jsonplaceholder.typicode.com/users"
+response = requests.get(url)
+
+users = response.json()
+
+with open("users.json", "w") as f:
+    json.dump(users, f, indent=4)
+
+print("Saved", len(users), "users to users.json")
+    </pre>
+
+    <p class="note">
+      This pattern (API → JSON file) is common in data collection and ETL scripts.
+    </p>
+
+    <h3>6️⃣ Converting between CSV and JSON</h3>
+    <p>
+      Sometimes you need to convert a CSV file to JSON or the other way around.
+    </p>
+
+    <p><strong>CSV → JSON:</strong></p>
+
+    <pre>
+import csv, json
+
+rows = []
+
+with open("students.csv", "r", newline="") as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        rows.append(row)
+
+with open("students.json", "w") as f:
+    json.dump(rows, f, indent=4)
+    </pre>
+
+    <p><strong>JSON → CSV:</strong></p>
+
+    <pre>
+import csv, json
+
+with open("students.json", "r") as f:
+    data = json.load(f)   # list of dicts
+
+fieldnames = data[0].keys()
+
+with open("students_from_json.csv", "w", newline="") as f:
+    writer = csv.DictWriter(f, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(data)
+    </pre>
+
+    <p class="note">
+      This is useful when someone gives you JSON but your college or company
+      wants CSV, or the other way around.
+    </p>
+
+    <h3>7️⃣ Small mini‑project – simple contact book</h3>
+    <p>
+      Here is a tiny contact book that stores contacts in a JSON file.
+    </p>
+
+    <pre>
+import json
+import os
+
+FILENAME = "contacts.json"
+
+def load_contacts():
+    if not os.path.exists(FILENAME):
+        return []
+    with open(FILENAME, "r") as f:
+        return json.load(f)
+
+def save_contacts(contacts):
+    with open(FILENAME, "w") as f:
+        json.dump(contacts, f, indent=4)
+
+def add_contact(name, phone):
+    contacts = load_contacts()
+    contacts.append({"name": name, "phone": phone})
+    save_contacts(contacts)
+    print("Contact saved!")
+
+# simple usage
+name = input("Enter name: ")
+phone = input("Enter phone: ")
+add_contact(name, phone)
+
+print("All contacts:")
+for c in load_contacts():
+    print("-", c["name"], ":", c["phone"])
+    </pre>
+
+    <p class="note">
+      This small tool uses JSON as a lightweight database without needing SQL for small projects.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Python Stage 10:</strong>
+      <ul>
+        <li>Create a small <code>students.csv</code> file, read it using <code>csv.reader()</code>, and print each row.</li>
+        <li>Switch to <code>csv.DictReader()</code> and print only the name and marks for each row.</li>
+        <li>Create a Python dictionary with your own details and save it to <code>me.json</code> using <code>json.dump()</code>.</li>
+        <li>Convert your <code>students.csv</code> to <code>students.json</code> (CSV → JSON conversion).</li>
+        <li>Try the contact book mini‑project and add 3–4 contacts, then open the JSON file in a text editor to see how the data is stored.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToPython()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToPython() {
+    // Go back to index.html and open Python roadmap popup
+    window.location.href = "index.html#open-python";
+  }
+
+  function markCompleted() {
+    // Mark Python Step 10 as completed in localStorage
+    localStorage.setItem("python_step10_completed", "true");
+    window.location.href = "index.html#open-python";
+  }
+</script>
+
+</body>
+</html>

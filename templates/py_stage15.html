@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Step 15 – Build REST APIs</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Python Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToPython()">&times;</div>
+
+    <h2>Step 15: Build REST APIs</h2>
+    <p>
+      In this stage you learn how to build simple REST APIs in Python using Flask:
+      endpoints that send and receive JSON instead of HTML pages so they can power
+      web frontends, mobile apps, or other services.
+    </p>
+    <p>
+      You will create basic GET and POST endpoints, handle JSON data, and see how
+      CRUD operations look in an API, building on your database and Flask skills.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is a REST API in simple words?</h3>
+    <p>
+      A REST API is a set of URLs (endpoints) that clients call using HTTP methods
+      like GET, POST, PUT, and DELETE to work with data.
+    </p>
+    <ul>
+      <li>GET – read data.</li>
+      <li>POST – create new data.</li>
+      <li>PUT/PATCH – update existing data.</li>
+      <li>DELETE – remove data.</li>
+    </ul>
+
+    <h3>2️⃣ Setup: minimal Flask API project</h3>
+    <p>
+      Use a separate virtual environment if possible, then install Flask.
+    </p>
+
+    <div class="cmd-box">
+      <div># install once</div>
+      <div><span>pip install flask</span></div>
+    </div>
+
+    <p>Create a folder (for example, <code>student_api</code>) and inside it create <code>app.py</code>:</p>
+
+    <pre>
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.route("/api/health", methods=["GET"])
+def health_check():
+    return jsonify({"status": "ok", "message": "API is running"})
+
+if __name__ == "__main__":
+    app.run(debug=True)
+    </pre>
+
+    <p class="note">
+      <code>jsonify()</code> converts Python dicts to JSON responses and sets the correct
+      <code>Content-Type</code> header.
+    </p>
+
+    <h3>3️⃣ Simple GET endpoint returning JSON</h3>
+    <p>
+      Next, create a basic in‑memory <code>students</code> list and return it as JSON via a GET endpoint.
+    </p>
+
+    <pre>
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+students = [
+    {"id": 1, "name": "Asha", "branch": "CSE", "cgpa": 8.5},
+    {"id": 2, "name": "Ravi", "branch": "ECE", "cgpa": 7.8},
+]
+
+@app.route("/api/students", methods=["GET"])
+def get_students():
+    return jsonify(students)
+
+@app.route("/api/students/&lt;int:student_id&gt;", methods=["GET"])
+def get_student(student_id):
+    for s in students:
+        if s["id"] == student_id:
+            return jsonify(s), 200
+    return jsonify({"error": "Student not found"}), 404
+
+if __name__ == "__main__":
+    app.run(debug=True)
+    </pre>
+
+    <p class="note">
+      Returning a tuple <code>(data, status_code)</code> lets you set HTTP status codes
+      like 200 (OK) or 404 (Not Found).
+    </p>
+
+    <h3>4️⃣ Simple POST endpoint: create data</h3>
+    <p>
+      A POST endpoint receives JSON from the client, validates it, and appends it to
+      the list or inserts it into a database in a real app.
+    </p>
+
+    <pre>
+from flask import Flask, jsonify, request
+
+app = Flask(__name__)
+
+students = [
+    {"id": 1, "name": "Asha", "branch": "CSE", "cgpa": 8.5},
+    {"id": 2, "name": "Ravi", "branch": "ECE", "cgpa": 7.8},
+]
+
+@app.route("/api/students", methods=["POST"])
+def create_student():
+    data = request.get_json()
+
+    if not data or "name" not in data or "branch" not in data:
+        return jsonify({"error": "name and branch are required"}), 400
+
+    new_id = max(s["id"] for s in students) + 1 if students else 1
+    student = {
+        "id": new_id,
+        "name": data["name"],
+        "branch": data["branch"],
+        "cgpa": data.get("cgpa", 0.0),
+    }
+    students.append(student)
+    return jsonify(student), 201
+    </pre>
+
+    <p class="note">
+      Use tools like Postman, Thunder Client, or curl to send JSON POST requests
+      during testing.
+    </p>
+
+    <h3>5️⃣ Adding PUT and DELETE (full CRUD)</h3>
+    <p>
+      PUT updates a student and DELETE removes a student so that together with GET and
+      POST you have a full CRUD API.
+    </p>
+
+    <pre>
+@app.route("/api/students/&lt;int:student_id&gt;", methods=["PUT"])
+def update_student(student_id):
+    data = request.get_json()
+    for s in students:
+        if s["id"] == student_id:
+            s["name"] = data.get("name", s["name"])
+            s["branch"] = data.get("branch", s["branch"])
+            s["cgpa"] = data.get("cgpa", s["cgpa"])
+            return jsonify(s), 200
+    return jsonify({"error": "Student not found"}), 404
+
+@app.route("/api/students/&lt;int:student_id&gt;", methods=["DELETE"])
+def delete_student(student_id):
+    for s in students:
+        if s["id"] == student_id:
+            students.remove(s)
+            return jsonify({"message": "Deleted"}), 200
+    return jsonify({"error": "Student not found"}), 404
+    </pre>
+
+    <p class="note">
+      In a real project, these endpoints would talk to a database like your Stage 14
+      SQLite tables instead of an in‑memory list.
+    </p>
+
+    <h3>6️⃣ Brief note: Django REST Framework (optional)</h3>
+    <p>
+      For Django users, Django REST Framework (DRF) is a powerful toolkit to build APIs
+      with serializers, viewsets, and routers.
+    </p>
+    <ul>
+      <li>Install: <code>pip install djangorestframework</code>.</li>
+      <li>Add <code>'rest_framework'</code> to <code>INSTALLED_APPS</code>, then define models, serializers, and API views.</li>
+    </ul>
+    <p class="note">
+      DRF is more advanced but is a natural “next step” if Django becomes your main
+      web framework.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Python Stage 15:</strong>
+      <ul>
+        <li>Create the basic Flask API with <code>/api/health</code> and test it in a browser.[web:139]</li>
+        <li>Implement the <code>/api/students</code> GET and POST endpoints and test POST with a tool like Postman or Thunder Client.</li>
+        <li>Add PUT and DELETE for <code>/api/students/&lt;id&gt;</code> and verify that they change the in‑memory list correctly.</li>
+        <li>Connect your Stage 14 SQLite <code>students</code> table to the API instead of using the in‑memory list.[web:142]</li>
+        <li>Write down 3 real API ideas for your context (for example, <code>/api/marks</code>, <code>/api/events</code>, <code>/api/tasks</code>) and what data they would return.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToPython()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToPython() {
+    // Go back to index.html and open Python roadmap popup
+    window.location.href = "index.html#open-python";
+  }
+
+  function markCompleted() {
+    // Mark Python Step 15 as completed in localStorage
+    localStorage.setItem("python_step15_completed", "true");
+    window.location.href = "index.html#open-python";
+  }
+</script>
+
+</body>
+</html>

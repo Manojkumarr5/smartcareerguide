@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Step 13 – Work with Flask or Django Basics</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Python Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToPython()">&times;</div>
+
+    <h2>Step 13: Work with Flask or Django Basics</h2>
+    <p>
+      In this stage you meet Python web frameworks: <strong>Flask</strong> (lightweight) and
+      <strong>Django</strong> (full‑stack). You will build a tiny Flask app with routes and
+      templates, and briefly see how Django structures a project.
+    </p>
+    <p>
+      This step connects your Python skills to real web pages that open in a browser,
+      which is the base for APIs, dashboards, and full web apps.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Flask vs Django – quick mental picture</h3>
+    <p>
+      Flask is a micro‑framework that is small, flexible, and great for learning and small apps,
+      while Django is a larger “batteries‑included” framework with more built‑in features.
+    </p>
+    <ul>
+      <li>Start with Flask if you want simple apps and to understand web basics step by step.</li>
+      <li>Move to Django when you want a more structured, larger application with built‑in admin, auth, and more.</li>
+    </ul>
+
+    <h3>2️⃣ Install Flask and create first app</h3>
+    <p>
+      First, install Flask with <code>pip</code>.
+    </p>
+
+    <div class="cmd-box">
+      <div># install once</div>
+      <div><span>pip install flask</span></div>
+    </div>
+
+    <p>Create a new file <code>app.py</code> and add:</p>
+
+    <pre>
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello from Smart Career Guide!"
+
+if __name__ == "__main__":
+    app.run(debug=True)
+    </pre>
+
+    <p class="note">
+      <code>@app.route("/")</code> maps the URL <code>/</code> to the <code>home</code> function,
+      and <code>app.run(debug=True)</code> starts the development server.
+    </p>
+
+    <h3>3️⃣ Run the Flask app</h3>
+    <p>
+      In a terminal, go to the folder where <code>app.py</code> is saved and run:
+    </p>
+
+    <div class="cmd-box">
+      <div><span>python app.py</span></div>
+    </div>
+
+    <p>
+      Open the URL shown in the terminal (usually <code>http://127.0.0.1:5000</code>) in a browser
+      to see the “Hello from Smart Career Guide!” message.
+    </p>
+
+    <h3>4️⃣ Flask with templates (HTML files)</h3>
+    <p>
+      Instead of returning plain text, you normally return HTML templates from a
+      <code>templates</code> folder.
+    </p>
+
+    <p>Project structure:</p>
+    <pre>
+your_folder/
+    app.py
+    templates/
+        home.html
+    </pre>
+
+    <p><strong>home.html (inside templates):</strong></p>
+
+    <pre>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Career Guide – Home</title>
+</head>
+<body>
+    <h1>Welcome to Smart Career Guide</h1>
+    <p>This page is rendered using a Flask template.</p>
+</body>
+</html>
+    </pre>
+
+    <p><strong>Update app.py to use render_template:</strong></p>
+
+    <pre>
+from flask import Flask, render_template
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return render_template("home.html")
+    </pre>
+
+    <p class="note">
+      <code>render_template</code> searches the <code>templates</code> folder for the given file name
+      and returns it as the HTTP response.
+    </p>
+
+    <h3>5️⃣ Simple multi‑page Flask app</h3>
+    <p>
+      You can add more routes and templates to create multiple pages such as home, about, and contact.
+    </p>
+
+    <pre>
+@app.route("/about")
+def about():
+    return "<h1>About</h1><p>This is a small Flask demo app.</p>"
+
+@app.route("/hello/&lt;name&gt;")
+def hello_name(name):
+    return f"<h1>Hello, {name}!</h1>"
+    </pre>
+
+    <p class="note">
+      Dynamic routes like <code>/hello/&lt;name&gt;</code> let you capture parts of the URL as parameters.
+    </p>
+
+    <h3>6️⃣ Very quick look at Django structure (optional)</h3>
+    <p>
+      Django has a slightly heavier setup but is powerful for larger projects and follows a project/app structure.
+    </p>
+
+    <div class="cmd-box">
+      <div># install once</div>
+      <div><span>pip install django</span></div>
+    </div>
+
+    <p>Basic commands to start (just for awareness):</p>
+
+    <pre>
+django-admin startproject mysite
+cd mysite
+python manage.py runserver
+    </pre>
+
+    <p class="note">
+      Django organizes code into projects and apps and follows the MVT (Model‑View‑Template)
+      pattern; at this stage, knowing the names and structure is enough.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Python Stage 13:</strong>
+      <ul>
+        <li>Install Flask and run the “Hello from Smart Career Guide” app on your machine.</li>
+        <li>Create a <code>home.html</code> template and show a welcome message with your name and your college.</li>
+        <li>Add an <code>/about</code> route that returns a short description of what you want to build in the future (dashboard, portal, etc.).</li>
+        <li>Add a dynamic route <code>/hello/&lt;name&gt;</code> and test it with different names in the browser.</li>
+        <li>Optionally, install Django once and run <code>django-admin startproject mysite</code> to see the folder structure.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+   <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToPython()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToPython() {
+    // Go back to index.html and open Python roadmap popup
+    window.location.href = "index.html#open-python";
+  }
+
+  function markCompleted() {
+    // Mark Python Step 13 as completed in localStorage
+    localStorage.setItem("python_step13_completed", "true");
+    window.location.href = "index.html#open-python";
+  }
+</script>
+
+</body>
+</html>

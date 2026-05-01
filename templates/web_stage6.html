@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Step 6 – Small Projects (To-Do App & Calculator)</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #005fa3;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #eaf4ff;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffea;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4f8ff;
+      padding: 15px;
+      border-left: 5px solid #0078d7;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .back-btn:hover {
+      background: #005fa3;
+    }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .complete-btn:hover {
+      background: #218838;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .demo-btn {
+      margin-top: 8px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: none;
+      background: #0078d7;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .demo-btn:hover {
+      background: #005fa3;
+    }
+
+    .output-box {
+      margin-top: 10px;
+      padding: 10px;
+      background: #f2f6ff;
+      border-radius: 6px;
+      font-family: Consolas, monospace;
+      font-size: 0.9rem;
+      min-height: 24px;
+    }
+
+    /* To-Do mini app styles */
+    .todo-container {
+      margin-top: 12px;
+      padding: 12px;
+      background: #f9fbff;
+      border-radius: 8px;
+      border: 1px solid #dde6ff;
+    }
+
+    .todo-input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .todo-input-row input {
+      flex: 1;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 0.9rem;
+    }
+
+    .todo-list {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 8px;
+    }
+
+    .todo-list li {
+      padding: 6px 8px;
+      margin-bottom: 4px;
+      background: #ffffff;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+
+    .todo-list li.completed span {
+      text-decoration: line-through;
+      color: #888;
+    }
+
+    .todo-actions button {
+      margin-left: 4px;
+      padding: 2px 6px;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-complete {
+      background: #4caf50;
+      color: #fff;
+    }
+
+    .btn-delete {
+      background: #e53935;
+      color: #fff;
+    }
+
+    /* Calculator mini app styles */
+    .calc-container {
+      margin-top: 16px;
+      padding: 12px;
+      background: #f9fbff;
+      border-radius: 8px;
+      border: 1px solid #dde6ff;
+      max-width: 260px;
+    }
+
+    .calc-display {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      text-align: right;
+    }
+
+    .calc-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .calc-btn {
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+      background: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+
+    .calc-btn.operator {
+      background: #e3f2fd;
+    }
+
+    .calc-btn.equal {
+      background: #0078d7;
+      color: #fff;
+      grid-column: span 2;
+    }
+
+    .calc-btn.clear {
+      background: #ffebee;
+      color: #c62828;
+      grid-column: span 2;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToWeb()">&times;</div>
+
+    <h2>Step 6: Build Small Projects (To-Do App & Calculator)</h2>
+    <p>In Stage 5 you learned how to manipulate the DOM and handle events. Now you will use those skills to build two small but powerful mini projects: a To‑Do List and a simple Calculator.</p>
+    <p>These projects help you connect HTML, CSS, and JavaScript into real, interactive tools.</p>
+
+    <hr><br>
+
+    <h3>1️⃣ Why small projects are important</h3>
+    <p>Small projects turn theory into practice. They help you remember concepts better, improve problem‑solving, and give you something to show in your portfolio.</p>
+    <p>Even a simple To‑Do List or Calculator teaches you variables, functions, DOM manipulation, events, and basic logic.</p>
+
+    <h3>2️⃣ To-Do List – basic idea</h3>
+    <p>A simple To‑Do app lets you:</p>
+    <ul>
+      <li>Type a task in an input box.</li>
+      <li>Click “Add” to insert the task into a list.</li>
+      <li>Mark a task as completed.</li>
+      <li>Delete a task.</li>
+    </ul>
+
+    <h3>3️⃣ To-Do List – HTML and CSS structure</h3>
+
+    <pre>
+<!-- To-Do HTML -->
+<div class="todo-container">
+  <h3>Mini Project 1: To-Do List</h3>
+  <div class="todo-input-row">
+    <input type="text" id="todoInput" placeholder="Enter a task">
+    <button id="addTodoBtn" class="demo-btn">Add</button>
+  </div>
+  <ul id="todoList" class="todo-list"></ul>
+</div>
+    </pre>
+
+    <div class="todo-container">
+      <h3>Mini Project 1: To-Do List</h3>
+      <div class="todo-input-row">
+        <input type="text" id="todoInput" placeholder="Enter a task">
+        <button id="addTodoBtn" class="demo-btn">Add</button>
+      </div>
+      <ul id="todoList" class="todo-list"></ul>
+    </div>
+
+    <h3>4️⃣ To-Do List – JavaScript logic</h3>
+
+    <pre>
+// JavaScript for To-Do List
+const todoInput = document.getElementById("todoInput");
+const addTodoBtn = document.getElementById("addTodoBtn");
+const todoList = document.getElementById("todoList");
+
+function addTodo() {
+  const text = todoInput.value.trim();
+  if (text === "") return;
+
+  const li = document.createElement("li");
+
+  const span = document.createElement("span");
+  span.textContent = text;
+
+  const actions = document.createElement("div");
+  actions.className = "todo-actions";
+
+  const completeBtn = document.createElement("button");
+  completeBtn.textContent = "Done";
+  completeBtn.className = "btn-complete";
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "X";
+  deleteBtn.className = "btn-delete";
+
+  actions.appendChild(completeBtn);
+  actions.appendChild(deleteBtn);
+
+  li.appendChild(span);
+  li.appendChild(actions);
+  todoList.appendChild(li);
+
+  todoInput.value = "";
+
+  completeBtn.addEventListener("click", () => {
+    li.classList.toggle("completed");
+  });
+
+  deleteBtn.addEventListener("click", () => {
+    todoList.removeChild(li);
+  });
+}
+
+addTodoBtn.addEventListener("click", addTodo);
+
+todoInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    addTodo();
+  }
+});
+    </pre>
+
+    <h3>5️⃣ Calculator – basic idea</h3>
+    <p>A simple calculator lets the user click buttons for numbers and operators, and see the result.</p>
+
+    <h3>6️⃣ Calculator – HTML and CSS structure</h3>
+
+    <pre>
+<!-- Calculator HTML -->
+<div class="calc-container">
+  <h3>Mini Project 2: Calculator</h3>
+  <input type="text" id="calcDisplay" class="calc-display" readonly>
+
+  <div class="calc-buttons">
+    <button class="calc-btn clear" data-key="C">C</button>
+    <button class="calc-btn clear" data-key="DEL">DEL</button>
+    <button class="calc-btn operator" data-key="/">/</button>
+    <button class="calc-btn operator" data-key="*">*</button>
+
+    <button class="calc-btn" data-key="7">7</button>
+    <button class="calc-btn" data-key="8">8</button>
+    <button class="calc-btn" data-key="9">9</button>
+    <button class="calc-btn operator" data-key="-">-</button>
+
+    <button class="calc-btn" data-key="4">4</button>
+    <button class="calc-btn" data-key="5">5</button>
+    <button class="calc-btn" data-key="6">6</button>
+    <button class="calc-btn operator" data-key="+">+</button>
+
+    <button class="calc-btn" data-key="1">1</button>
+    <button class="calc-btn" data-key="2">2</button>
+    <button class="calc-btn" data-key="3">3</button>
+    <button class="calc-btn" data-key=".">.</button>
+
+    <button class="calc-btn" data-key="0">0</button>
+    <button class="calc-btn equal" data-key="=">=</button>
+  </div>
+</div>
+    </pre>
+
+    <div class="calc-container">
+      <h3>Mini Project 2: Calculator</h3>
+      <input type="text" id="calcDisplay" class="calc-display" readonly>
+
+      <div class="calc-buttons">
+        <button class="calc-btn clear" data-key="C">C</button>
+        <button class="calc-btn clear" data-key="DEL">DEL</button>
+        <button class="calc-btn operator" data-key="/">/</button>
+        <button class="calc-btn operator" data-key="*">*</button>
+
+        <button class="calc-btn" data-key="7">7</button>
+        <button class="calc-btn" data-key="8">8</button>
+        <button class="calc-btn" data-key="9">9</button>
+        <button class="calc-btn operator" data-key="-">-</button>
+
+        <button class="calc-btn" data-key="4">4</button>
+        <button class="calc-btn" data-key="5">5</button>
+        <button class="calc-btn" data-key="6">6</button>
+        <button class="calc-btn operator" data-key="+">+</button>
+
+        <button class="calc-btn" data-key="1">1</button>
+        <button class="calc-btn" data-key="2">2</button>
+        <button class="calc-btn" data-key="3">3</button>
+        <button class="calc-btn" data-key=".">.</button>
+
+        <button class="calc-btn" data-key="0">0</button>
+        <button class="calc-btn equal" data-key="=">=</button>
+      </div>
+    </div>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Stage 6:</strong>
+      <ul>
+        <li>Create a new file <code>web_stage6_test.html</code> and rebuild the To‑Do List from scratch.</li>
+        <li>Add a “Clear All” button to your To‑Do List that removes all tasks.</li>
+        <li>Extend the calculator to support keyboard input using <code>keydown</code> events.</li>
+        <li>Add validation to avoid two operators in a row.</li>
+        <li>Style both apps to match the Smart Career Guide theme.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToWeb()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function goBackToWeb() {
+    // Go back to index.html and open Web roadmap popup
+    window.location.href = "index.html#open-web"; // [web:241][web:238]
+  }
+
+  function markCompleted() {
+    // Mark Web step 6 as completed
+    localStorage.setItem("web_step6_completed", "true"); // [web:192][web:193][web:177]
+    window.location.href = "index.html#open-web";
+  }
+
+  // ===== To-Do List Logic =====
+  const todoInput = document.getElementById("todoInput");
+  const addTodoBtn = document.getElementById("addTodoBtn");
+  const todoList = document.getElementById("todoList");
+
+  function addTodo() {
+    const text = todoInput.value.trim();
+    if (text === "") return;
+
+    const li = document.createElement("li");
+
+    const span = document.createElement("span");
+    span.textContent = text;
+
+    const actions = document.createElement("div");
+    actions.className = "todo-actions";
+
+    const completeBtn = document.createElement("button");
+    completeBtn.textContent = "Done";
+    completeBtn.className = "btn-complete";
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "X";
+    deleteBtn.className = "btn-delete";
+
+    actions.appendChild(completeBtn);
+    actions.appendChild(deleteBtn);
+
+    li.appendChild(span);
+    li.appendChild(actions);
+    todoList.appendChild(li);
+
+    todoInput.value = "";
+
+    completeBtn.addEventListener("click", () => {
+      li.classList.toggle("completed");
+    });
+
+    deleteBtn.addEventListener("click", () => {
+      todoList.removeChild(li);
+    });
+  }
+
+  if (addTodoBtn && todoInput && todoList) {
+    addTodoBtn.addEventListener("click", addTodo);
+    todoInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        addTodo();
+      }
+    });
+  }
+
+  // ===== Calculator Logic =====
+  const calcDisplay = document.getElementById("calcDisplay");
+  const calcButtons = document.querySelectorAll(".calc-btn");
+
+  let expression = "";
+
+  calcButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const key = btn.getAttribute("data-key");
+
+      if (key === "C") {
+        expression = "";
+        calcDisplay.value = "";
+        return;
+      }
+
+      if (key === "DEL") {
+        expression = expression.slice(0, -1);
+        calcDisplay.value = expression;
+        return;
+      }
+
+      if (key === "=") {
+        if (expression.trim() === "") return;
+        try {
+          const result = eval(expression);
+          calcDisplay.value = result;
+          expression = String(result);
+        } catch (err) {
+          calcDisplay.value = "Error";
+          expression = "";
+        }
+        return;
+      }
+
+      expression += key;
+      calcDisplay.value = expression;
+    });
+  });
+</script>
+
+</body>
+</html>

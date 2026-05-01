@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Step 12 – Automate Tasks with Python Scripts</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Python Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToPython()">&times;</div>
+
+    <h2>Step 12: Automate Tasks with Python Scripts</h2>
+    <p>
+      In this stage you use Python to automate small, repetitive tasks on your computer:
+      working with files and folders, renaming, simple reports, and basic scheduling.
+    </p>
+    <p>
+      These skills are very practical for students and working professionals because they
+      save time and reduce manual mistakes.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is automation with Python?</h3>
+    <p>
+      Automation means letting Python do boring repetitive work for you, such as moving
+      files, renaming them, generating simple reports, or cleaning up folders.
+    </p>
+    <ul>
+      <li>Instead of clicking many times, write a script that does it in seconds.</li>
+      <li>Good targets: file organization, log cleanup, renaming, simple data processing.</li>
+    </ul>
+
+    <h3>2️⃣ File and folder automation basics</h3>
+    <p>
+      You already know <code>os</code> from earlier stages; now you use it to build real
+      scripts that operate on many files at once.
+    </p>
+
+    <pre>
+import os
+
+folder = "downloads_sample"   # change to your folder name
+
+for name in os.listdir(folder):
+    path = os.path.join(folder, name)
+    if os.path.isfile(path):
+        print("File:", path)
+    else:
+        print("Folder:", path)
+    </pre>
+
+    <p class="note">
+      Listing files is often the first step before renaming, moving, or analyzing them.
+    </p>
+
+    <h3>3️⃣ Script: simple file organizer</h3>
+    <p>
+      This script organizes files into subfolders by extension (for example, <code>.pdf</code>, <code>.jpg</code>, <code>.py</code>). 
+    </p>
+
+    <pre>
+import os
+import shutil
+
+folder = "downloads_sample"   # your folder
+folder = os.path.abspath(folder)
+
+# mapping extension to folder name
+mapping = {
+    ".pdf": "PDFs",
+    ".jpg": "Images",
+    ".png": "Images",
+    ".jpeg": "Images",
+    ".py": "Python",
+    ".txt": "Text",
+}
+
+for name in os.listdir(folder):
+    path = os.path.join(folder, name)
+
+    if not os.path.isfile(path):
+        continue
+
+    _, ext = os.path.splitext(name)
+    ext = ext.lower()
+
+    target_dir = mapping.get(ext, "Others")
+    target_path = os.path.join(folder, target_dir)
+
+    os.makedirs(target_path, exist_ok=True)
+
+    new_location = os.path.join(target_path, name)
+    print("Moving:", path, "->", new_location)
+    shutil.move(path, new_location)
+    </pre>
+
+    <p class="note">
+      This is a classic real‑world automation: tidying up a messy downloads folder with
+      one script instead of manual drag‑and‑drop.
+    </p>
+
+    <h3>4️⃣ Script: batch rename files</h3>
+    <p>
+      Another common automation is renaming many files in a pattern, for example,
+      <code>project_1.jpg</code>, <code>project_2.jpg</code>, and so on.
+    </p>
+
+    <pre>
+import os
+
+folder = "images_sample"
+folder = os.path.abspath(folder)
+
+base_name = "project"
+counter = 1
+
+for name in os.listdir(folder):
+    path = os.path.join(folder, name)
+    if not os.path.isfile(path):
+        continue
+
+    root, ext = os.path.splitext(name)
+    new_name = f"{base_name}_{counter}{ext}"
+    new_path = os.path.join(folder, new_name)
+
+    print("Renaming:", path, "->", new_path)
+    os.rename(path, new_path)
+    counter += 1
+    </pre>
+
+    <p class="note">
+      Always test batch scripts in a small test folder first, not on important files.
+    </p>
+
+    <h3>5️⃣ Script: quick report generator</h3>
+    <p>
+      You can combine file handling and basic calculations to create small local reports,
+      such as counting how many files of each type you have.
+    </p>
+
+    <pre>
+import os
+from collections import Counter
+
+folder = "downloads_sample"
+folder = os.path.abspath(folder)
+
+counter = Counter()
+
+for name in os.listdir(folder):
+    path = os.path.join(folder, name)
+    if os.path.isfile(path):
+        _, ext = os.path.splitext(name)
+        counter[ext.lower()] += 1
+
+print("File counts by extension:")
+for ext, count in counter.items():
+    print(ext or "(no extension)", ":", count)
+    </pre>
+
+    <p class="note">
+      This style (scan folder → count or aggregate → print summary) appears in many
+      small company and student scripts.
+    </p>
+
+    <h3>6️⃣ Very simple scheduling idea (beginner‑friendly)</h3>
+    <p>
+      For serious scheduling, tools like system schedulers or dedicated libraries are used,
+      but you can understand the idea with a simple loop and <code>time.sleep()</code>.
+    </p>
+
+    <pre>
+import time
+import datetime
+
+def my_job():
+    print("Job ran at", datetime.datetime.now())
+
+print("Starting simple scheduler. Press Ctrl+C to stop.")
+
+while True:
+    my_job()
+    time.sleep(60)   # wait 60 seconds
+    </pre>
+
+    <p class="note">
+      Later, you can explore libraries like <code>schedule</code> or OS‑level tools
+      (Task Scheduler, cron) for more reliable automation.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Python Stage 12:</strong>
+      <ul>
+        <li>Create a test folder with mixed files (txt, pdf, images) and run the organizer script on it.</li>
+        <li>Modify the organizer mapping to handle more file types that you actually use.</li>
+        <li>Use the batch rename script on a folder of sample images or documents.</li>
+        <li>Write a script that scans a folder and prints the total size (in MB) of all files.</li>
+        <li>Think of one real repetitive task in your college or daily life and sketch how a Python script could help automate it.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToPython()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToPython() {
+    // Go back to index.html and open Python roadmap popup
+    window.location.href = "index.html#open-python";
+  }
+
+  function markCompleted() {
+    // Mark Python Step 12 as completed in localStorage
+    localStorage.setItem("python_step12_completed", "true");
+    window.location.href = "index.html#open-python";
+  }
+</script>
+
+</body>
+</html>

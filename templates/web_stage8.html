@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Step 8 – Git & GitHub Basics</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #005fa3;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #eaf4ff;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffea;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4f8ff;
+      padding: 15px;
+      border-left: 5px solid #0078d7;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .back-btn:hover {
+      background: #005fa3;
+    }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .complete-btn:hover {
+      background: #218838;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .small-note {
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToWeb()">&times;</div>
+
+    <h2>Step 8: Use Git & GitHub for Version Control</h2>
+    <p>From Stage 1 to 7 you built real web pages and mini projects. Now it is time to learn how to save your work safely, track changes, and share your code using Git and GitHub.</p>
+    <p>Git is a version control system on your computer. GitHub is a website where you can store your Git repositories online and show them to others.</p>
+
+    <hr><br>
+
+    <h3>1️⃣ Why version control?</h3>
+    <p>Without version control, you may end up with many folders like <code>project_final</code>, <code>project_final2</code>, <code>project_really_final</code>.</p>
+    <p>With Git, every important change is saved as a commit with a message, and you can go back to older versions.</p>
+
+    <h3>2️⃣ Basic Git and GitHub concepts</h3>
+    <p>Some simple words you must know:</p>
+    <ul>
+      <li><strong>Repository (repo)</strong>: A project folder that Git tracks.</li>
+      <li><strong>Commit</strong>: A snapshot of your changes with a message.</li>
+      <li><strong>Remote</strong>: A copy of your repo stored online (for example, on GitHub).</li>
+      <li><strong>Push</strong>: Send commits from your computer to GitHub.</li>
+      <li><strong>Pull</strong>: Get latest commits from GitHub to your computer.</li>
+    </ul>
+
+    <h3>3️⃣ One-time setup (install Git and configure)</h3>
+    <p>Before using Git, install it and set your name and email (shown in commit history).</p>
+    <p>Open your terminal (Command Prompt, PowerShell, or Git Bash) and run:</p>
+
+    <div class="cmd-box">
+      <div># Set your name (shown in commits)</div>
+      <div><span>git config --global user.name "Your Name"</span></div>
+      <br>
+      <div># Set your email (should match your GitHub email)</div>
+      <div><span>git config --global user.email "you@example.com"</span></div>
+    </div>
+
+    <h3>4️⃣ Create a local Git repository</h3>
+    <p>Tell Git to track your existing Smart Career Guide project folder.</p>
+
+    <div class="cmd-box">
+      <div># 1. Go to your project folder</div>
+      <div><span>cd path/to/your/project</span></div>
+      <br>
+      <div># 2. Initialize git (create .git folder)</div>
+      <div><span>git init</span></div>
+      <br>
+      <div># 3. See current status</div>
+      <div><span>git status</span></div>
+    </div>
+
+    <p>After <code>git init</code>, Git starts watching your files but nothing is committed yet.</p>
+
+    <h3>5️⃣ Add and commit files</h3>
+    <p>Add files to the staging area, then commit them with a message.</p>
+
+    <div class="cmd-box">
+      <div># Add all files to staging area</div>
+      <div><span>git add .</span></div>
+      <br>
+      <div># Create first commit</div>
+      <div><span>git commit -m "Initial commit - Smart Career Guide project"</span></div>
+      <br>
+      <div># Check status again</div>
+      <div><span>git status</span></div>
+    </div>
+
+    <p>Now your local repository has one commit with all your current files.</p>
+
+    <h3>6️⃣ Create a GitHub repository</h3>
+    <p>Next, create a remote repo on GitHub to store your code online.</p>
+    <ul>
+      <li>Log in and click the <strong>+ New repository</strong> button.</li>
+      <li>Give it a name, for example <code>smart-career-guide</code>.</li>
+      <li>Keep it Public (or Private if you prefer).</li>
+      <li>Click <strong>Create repository</strong>.</li>
+    </ul>
+    <p>GitHub will show you a URL like <code>https://github.com/yourname/smart-career-guide.git</code>.</p>
+
+    <h3>7️⃣ Connect local repo to GitHub and push</h3>
+    <p>Connect your local repo to the remote and push your commits.</p>
+
+    <div class="cmd-box">
+      <div># 1. Add the remote (replace URL with your repo URL)</div>
+      <div><span>git remote add origin https://github.com/yourname/smart-career-guide.git</span></div>
+      <br>
+      <div># 2. Push commits from local 'main' branch to GitHub</div>
+      <div><span>git branch -M main</span></div>
+      <div><span>git push -u origin main</span></div>
+    </div>
+
+    <p>Refresh your GitHub repo page. You should see all your project files.</p>
+
+    <h3>8️⃣ Daily workflow: change, add, commit, push</h3>
+    <p>Whenever you work on your project, repeat this routine:</p>
+
+    <div class="cmd-box">
+      <div># See what changed</div>
+      <div><span>git status</span></div>
+      <br>
+      <div># Stage changed files</div>
+      <div><span>git add .</span></div>
+      <br>
+      <div># Commit with a useful message</div>
+      <div><span>git commit -m "Add web_stage7 and web_stage8 pages"</span></div>
+      <br>
+      <div># Push to GitHub</div>
+      <div><span>git push</span></div>
+    </div>
+
+    <p>On another day, before starting work, run <code>git pull</code> to get latest changes if you use multiple devices or teammates.</p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Stage 8 (do step by step):</strong>
+      <ul>
+        <li>Install Git and create a free GitHub account.</li>
+        <li>In your Smart Career Guide project folder run <code>git init</code>, <code>git add .</code>, and your first <code>git commit</code>.</li>
+        <li>Create a new public repository on GitHub named <code>smart-career-guide</code> (or another name).</li>
+        <li>Connect your local repo to GitHub using <code>git remote add origin &lt;your-url&gt;</code> and push with <code>git push -u origin main</code>.</li>
+        <li>Make a small change, then run the full flow: <code>git status</code> → <code>git add .</code> → <code>git commit -m "Update web_stage1 text"</code> → <code>git push</code>, and confirm on GitHub.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToWeb()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function goBackToWeb() {
+    // Go back to index.html and open Web roadmap popup
+    window.location.href = "index.html#open-web"; // [web:191][web:248]
+  }
+
+  function markCompleted() {
+    // Mark Web step 8 as completed
+    localStorage.setItem("web_step8_completed", "true"); // [web:193][web:251][web:177]
+    window.location.href = "index.html#open-web";
+  }
+</script>
+
+</body>
+</html>

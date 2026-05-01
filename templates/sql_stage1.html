@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 1 – Install Tools and Understand Basics</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 1: Install SQL Tools and Understand Basics</h2>
+    <p>
+      In this stage you set up your SQL environment and understand the basic words:
+      database, table, row, and column. You will use <strong>SQLite</strong> (easy for beginners)
+      and a GUI tool like <strong>DB Browser for SQLite</strong>.
+    </p>
+    <p>
+      Later stages will go deeper into queries, joins, and analysis, but first you just
+      need a tool where you can type SQL and see tables like a spreadsheet.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is a database, table, row, column?</h3>
+    <p>
+      A <strong>database</strong> is a structured collection of data, and in relational databases
+      data is stored in <strong>tables</strong> that look similar to Excel sheets.
+    </p>
+    <ul>
+      <li>A <strong>table</strong> has <strong>columns</strong> (fields like name, age, marks) and <strong>rows</strong> (each row is one record, for example one student).</li>
+      <li>SQL (Structured Query Language) is the language used to create tables and work with the data inside them.</li>
+    </ul>
+
+    <h3>2️⃣ Pick a beginner‑friendly tool</h3>
+    <p>
+      For this roadmap, SQLite plus DB Browser for SQLite is recommended because it is
+      simple, free, and runs as a single file on your laptop.
+    </p>
+    <ul>
+      <li><strong>SQLite</strong>: lightweight relational database stored in a single <code>.db</code> file.</li>
+      <li><strong>DB Browser for SQLite</strong>: a GUI where you can open the <code>.db</code> file, create tables, and run queries.</li>
+    </ul>
+
+    <h3>3️⃣ Install DB Browser for SQLite</h3>
+    <p>
+      On Windows, macOS, or Linux, download DB Browser for SQLite from the official
+      website’s downloads page and install it.
+    </p>
+
+    <p class="note">
+      Steps (summary): go to the download page, choose your OS, download the installer,
+      then run it like any other desktop app.
+    </p>
+
+    <h3>4️⃣ Create your first SQLite database and table</h3>
+    <p>
+      Once DB Browser for SQLite is installed, create a new database file and a
+      simple table called <code>students</code>.
+    </p>
+    <ul>
+      <li>Open DB Browser → “New Database” → choose a folder and name, for example <code>college.db</code>.</li>
+      <li>Use the table creation dialog to create columns: id, name, branch, cgpa.</li>
+    </ul>
+
+    <p>For reference, SQL to create a similar table would look like:</p>
+
+    <pre>
+CREATE TABLE students (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    branch TEXT NOT NULL,
+    cgpa REAL
+);
+    </pre>
+
+    <p class="note">
+      Even if you use the GUI to build the table, it is good to see the equivalent SQL
+      because later stages will write this by hand.
+    </p>
+
+    <h3>5️⃣ Insert a few sample rows (with SQL)</h3>
+    <p>
+      In the “Execute SQL” tab, you can type simple INSERT statements
+      to add data to your table.
+    </p>
+
+    <pre>
+INSERT INTO students (id, name, branch, cgpa)
+VALUES (1, 'Asha', 'CSE', 8.5);
+
+INSERT INTO students (id, name, branch, cgpa)
+VALUES (2, 'Ravi', 'ECE', 7.8);
+    </pre>
+
+    <p class="note">
+      After running these commands, switch to the “Browse Data” tab to see your rows
+      like a spreadsheet grid.
+    </p>
+
+    <h3>6️⃣ First SELECT query</h3>
+    <p>
+      To read data from the table, use a SELECT query, which you will use throughout
+      the SQL track.
+    </p>
+
+    <pre>
+SELECT * FROM students;
+    </pre>
+
+    <p class="note">
+      <code>*</code> means “all columns”; later you will select specific columns and
+      add filters, sorting, and joins.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for SQL Stage 1:</strong>
+      <ul>
+        <li>Install DB Browser for SQLite (or any similar SQLite GUI) on your laptop.</li>
+        <li>Create a new database file called <code>college.db</code>.</li>
+        <li>Create a table <code>students</code> with columns id, name, branch, cgpa.</li>
+        <li>Insert at least 3–4 student records using SQL INSERT statements.</li>
+        <li>Run <code>SELECT * FROM students;</code> and confirm that you can see all your rows in the result grid.</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 1 as completed in localStorage
+    localStorage.setItem("sql_step1_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

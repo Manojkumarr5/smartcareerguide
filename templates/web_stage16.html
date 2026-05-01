@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Step 16 – Deploy on Netlify or Vercel</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #005fa3;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #eaf4ff;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffea;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4f8ff;
+      padding: 15px;
+      border-left: 5px solid #0078d7;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .back-btn:hover {
+      background: #005fa3;
+    }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .complete-btn:hover {
+      background: #218838;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .compare-table th,
+    .compare-table td {
+      border: 1px solid #ddd;
+      padding: 6px 8px;
+      text-align: left;
+    }
+
+    .compare-table th {
+      background: #eaf4ff;
+    }
+
+    .highlight-box {
+      background: #f9fbff;
+      border-radius: 8px;
+      border: 1px solid #dde6ff;
+      padding: 10px;
+      margin-top: 8px;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToWeb()">&times;</div>
+
+    <h2>Step 16: Deploy Your App on Netlify or Vercel</h2>
+    <p>You built a complete web application locally. In Stage 16 you will learn how to put it online so anyone can access it from a URL using platforms like Netlify and Vercel.</p>
+    <p>These services connect directly to your GitHub repo and can automatically build and deploy your site when you push new changes.</p>
+
+    <hr><br>
+
+    <h3>1️⃣ Static vs full‑stack deployment (simple view)</h3>
+    <p>Netlify and Vercel work very well for static frontends such as HTML, CSS, JavaScript, or SPA frameworks.</p>
+    <p>For full‑stack apps, you typically host the frontend on Netlify or Vercel and run the backend on another service or as serverless functions, but for now focus on deploying the Smart Career Guide frontend.</p>
+
+    <h3>2️⃣ Prepare your project and push to GitHub</h3>
+    <p>Make sure your project is in a Git repository and pushed to GitHub so deployment platforms can pull the code.</p>
+
+    <div class="cmd-box">
+      <div># Inside your project folder (if not already a git repo)</div>
+      <div><span>git init</span></div>
+      <div><span>git add .</span></div>
+      <div><span>git commit -m "Initial Smart Career Guide"</span></div>
+      <br>
+      <div># Add GitHub remote (replace URL with your repo)</div>
+      <div><span>git remote add origin https://github.com/yourname/smart-career-guide.git</span></div>
+      <br>
+      <div># Push code</div>
+      <div><span>git push -u origin main</span></div>
+    </div>
+
+    <p class="note">Check that all your project files are visible in the GitHub repository.</p>
+
+    <h3>3️⃣ Deploy static site to Netlify (Git method)</h3>
+    <p>This flow deploys a static or SPA frontend from Git to Netlify.</p>
+
+    <ol>
+      <li>Go to <code>https://app.netlify.com</code> and sign in.</li>
+      <li>Click “New site from Git”.</li>
+      <li>Choose your Git provider, for example GitHub, and authorize access.</li>
+      <li>Select your repository such as <code>smart-career-guide</code>.</li>
+      <li>Set:
+        <ul>
+          <li>Build command: leave empty for pure static HTML/CSS/JS.</li>
+          <li>Publish directory: project root or <code>dist</code> if you use a bundler.</li>
+        </ul>
+      </li>
+      <li>Click “Deploy site” and wait until the deploy finishes, then copy the live URL.</li>
+    </ol>
+
+    <div class="highlight-box">
+      <strong>Tip:</strong> For basic static projects without build tools, no build command is required; Netlify can directly serve your files.
+    </div>
+
+    <h3>4️⃣ Deploy frontend to Vercel (Git method)</h3>
+    <p>Vercel provides a similar Git‑based deployment flow and is especially popular for modern frontends.</p>
+
+    <ol>
+      <li>Go to <code>https://vercel.com</code> and sign in with GitHub.</li>
+      <li>Click “Add New” → “Project”.</li>
+      <li>Import the same GitHub repo such as <code>smart-career-guide</code>.</li>
+      <li>Configure:
+        <ul>
+          <li>Framework Preset: choose “Other” for plain HTML or the matching framework for React, Vite, etc.</li>
+          <li>Root Directory: the main project folder.</li>
+          <li>Build and output: leave empty for static files or use the defaults for your framework.</li>
+        </ul>
+      </li>
+      <li>Click “Deploy” and wait for the build; Vercel gives you a public URL.</li>
+    </ol>
+
+    <p class="note">Whenever you <code>git push</code> to the connected branch, Netlify or Vercel can automatically rebuild and redeploy your site as a basic CI/CD pipeline.</p>
+
+    <h3>5️⃣ Environment variables and API URLs</h3>
+    <p>If your frontend calls a backend API, configure different base URLs for development and production using environment variables.</p>
+
+    <pre>
+// Example: using environment variable in frontend build tools
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+// On Netlify/Vercel, set VITE_API_URL to your production backend URL
+    </pre>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Stage 16:</strong>
+      <ul>
+        <li>Push the latest Smart Career Guide code to GitHub, including all <code>web_stage</code> pages and <code>index.html</code>.</li>
+        <li>Deploy the site to Netlify with “New site from Git” and verify the roadmap and stages work on the live URL.</li>
+        <li>Optionally deploy the same repo to Vercel and compare the deployment experience.</li>
+        <li>Configure API base URLs so production uses a hosted backend and local runs use <code>localhost</code>.</li>
+        <li>Write down your pipeline steps: code → commit → push → platform builds → site deployed as a mental CI/CD model.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToWeb()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function goBackToWeb() {
+    // Go back to index.html and open Web roadmap popup
+    window.location.href = "index.html#open-web"; // [web:254][web:238]
+  }
+
+  function markCompleted() {
+    // Mark Web step 16 as completed
+    localStorage.setItem("web_step16_completed", "true"); // [web:193][web:258]
+    window.location.href = "index.html#open-web";
+  }
+</script>
+
+</body>
+</html>
+  

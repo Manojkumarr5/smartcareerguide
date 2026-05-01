@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Step 9 – Responsive Design Principles</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #005fa3;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #eaf4ff;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffea;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4f8ff;
+      padding: 15px;
+      border-left: 5px solid #0078d7;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .back-btn:hover {
+      background: #005fa3;
+    }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .complete-btn:hover {
+      background: #218838;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .demo-layout {
+      border: 1px solid #dde6ff;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    .demo-header,
+    .demo-footer {
+      background: #eaf4ff;
+      padding: 8px;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .demo-main {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .demo-sidebar {
+      flex: 1;
+      background: #f9fbff;
+      border-radius: 6px;
+      padding: 8px;
+    }
+
+    .demo-content {
+      flex: 2;
+      background: #f9fbff;
+      border-radius: 6px;
+      padding: 8px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .card-grid .card {
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      padding: 10px;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .card h4 {
+      margin-bottom: 6px;
+      color: #0078d7;
+    }
+
+    .responsive-img-wrapper {
+      margin-top: 10px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #dde6ff;
+    }
+
+    .responsive-img-wrapper img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    @media (max-width: 768px) {
+      .demo-main {
+        flex-direction: column;
+      }
+      .card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToWeb()">&times;</div>
+
+    <h2>Step 9: Understand Responsive Design Principles</h2>
+    <p>In Stage 3 you used Flexbox and Grid to build responsive layouts. In Stage 9 you will go deeper into the principles behind responsive design, so your pages work well on all devices.</p>
+    <p>You will learn about mobile‑first thinking, breakpoints, fluid layouts, responsive images, and typography.</p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is responsive design?</h3>
+    <p>Responsive design means your website adapts to different screen sizes and devices automatically.</p>
+    <p>The same HTML works on phones, tablets, and desktops, with layout changes controlled by CSS.</p>
+
+    <h3>2️⃣ Mobile-first approach</h3>
+    <p>Mobile‑first means designing and coding for the smallest screens first, then enhancing the layout for larger screens.</p>
+    <p>In CSS, mobile‑first usually means writing base styles for mobile and then using <code>@media (min-width: ...)</code> queries to adjust for tablets and desktops.</p>
+
+    <pre>
+/* Base styles: mobile first */
+body {
+  font-size: 16px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* 1 column on small screens */
+  gap: 10px;
+}
+
+/* Tablet and up */
+@media (min-width: 600px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop and up */
+@media (min-width: 992px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+    </pre>
+
+    <h3>3️⃣ Let content determine breakpoints</h3>
+    <p>Instead of only using common device widths, resize your layout and add breakpoints where the design starts to break.</p>
+    <p>Breakpoints should follow content needs, not just device names.</p>
+
+    <h3>4️⃣ Example: responsive two-column layout</h3>
+    <p>This example shows a header, sidebar, main content, and footer that switch from two columns to stacked on small screens.</p>
+
+    <pre>
+/* Layout container */
+.demo-layout {
+  border: 1px solid #dde6ff;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* Main area using Flexbox */
+.demo-main {
+  display: flex;
+  gap: 10px;
+}
+
+/* Sidebar and content */
+.demo-sidebar {
+  flex: 1;
+}
+
+.demo-content {
+  flex: 2;
+}
+
+/* On small screens, stack vertically */
+@media (max-width: 768px) {
+  .demo-main {
+    flex-direction: column;
+  }
+}
+    </pre>
+
+    <div class="demo-layout">
+      <div class="demo-header">Header</div>
+      <div class="demo-main">
+        <div class="demo-sidebar">Sidebar (navigation, filters)</div>
+        <div class="demo-content">Main content area (articles, cards)</div>
+      </div>
+      <div class="demo-footer" style="margin-top:8px;">Footer</div>
+    </div>
+
+    <h3>5️⃣ Responsive typography</h3>
+    <p>Use relative units like <code>rem</code> and <code>em</code> and adjust sizes slightly at larger breakpoints for comfortable reading.</p>
+
+    <pre>
+/* Base font sizing */
+html {
+  font-size: 16px; /* 1rem = 16px */
+}
+
+h1 {
+  font-size: 1.8rem;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Larger screens: slightly bigger text */
+@media (min-width: 992px) {
+  h1 {
+    font-size: 2.2rem;
+  }
+  p {
+    font-size: 1.05rem;
+  }
+}
+    </pre>
+
+    <h3>6️⃣ Responsive images</h3>
+    <p>Make images scale down using <code>max-width: 100%</code> and <code>height: auto</code> so they do not overflow the container.</p>
+
+    <pre>
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Example HTML */
+<div class="responsive-img-wrapper">
+  <img src="your-image.jpg" alt="Sample responsive image">
+</div>
+    </pre>
+
+    <div class="responsive-img-wrapper">
+      <img src="https://via.placeholder.com/800x300?text=Responsive+Image+Example" alt="Responsive example image">
+    </div>
+    <p class="note">Resize the browser window to see how the image scales with the container.</p>
+
+    <h3>7️⃣ Putting principles together with cards</h3>
+    <p>This card grid shows one card per row on mobile, two on tablet, and three on desktop.</p>
+
+    <pre>
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 600px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+    </pre>
+
+    <div class="card-grid">
+      <div class="card">
+        <h4>HTML & CSS</h4>
+        <p>Build solid foundations with structure and styling.</p>
+      </div>
+      <div class="card">
+        <h4>Responsive Layouts</h4>
+        <p>Use Flexbox and Grid to adapt to different screens.</p>
+      </div>
+      <div class="card">
+        <h4>JavaScript Basics</h4>
+        <p>Add interactivity with DOM and events.</p>
+      </div>
+    </div>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Stage 9:</strong>
+      <ul>
+        <li>Create <code>web_stage9_test.html</code> with header, main (two columns), and footer that stack on small screens using a media query.</li>
+        <li>Build a mobile‑first card grid: 1 card per row on phones, 2 on tablets, 3 on desktop using <code>min-width</code> breakpoints.</li>
+        <li>Experiment with responsive typography using <code>rem</code> units and larger headings on big screens.</li>
+        <li>Add at least one big image and make it responsive with <code>max-width: 100%</code> and <code>height: auto</code>.</li>
+        <li>Resize the browser and add or adjust breakpoints where the layout looks cramped or stretched.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToWeb()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function goBackToWeb() {
+    // Go back to index.html and open Web roadmap popup
+    window.location.href = "index.html#open-web"; // [web:241][web:254]
+  }
+
+  function markCompleted() {
+    // Mark Web step 9 as completed
+    localStorage.setItem("web_step9_completed", "true"); // [web:193][web:192][web:177]
+    window.location.href = "index.html#open-web";
+  }
+</script>
+
+</body>
+</html>

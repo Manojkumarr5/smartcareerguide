@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Step 3 – Responsive Layouts (Flexbox & Grid)</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0078d7;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #005fa3;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #eaf4ff;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #00ffea;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4f8ff;
+      padding: 15px;
+      border-left: 5px solid #0078d7;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .back-btn:hover {
+      background: #005fa3;
+    }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .complete-btn:hover {
+      background: #218838;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    /* Extra styles for examples in this page */
+    .flex-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .flex-box {
+      background: #eaf4ff;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+      flex: 1;
+    }
+
+    .grid-two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .grid-box {
+      background: #eaf4ff;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .responsive-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .responsive-card {
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid #dddddd;
+      padding: 16px;
+      flex: 1 1 calc(33.333% - 16px);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    }
+
+    .responsive-card h4 {
+      margin-bottom: 8px;
+      color: #0078d7;
+    }
+
+    .responsive-card p {
+      font-size: 0.9rem;
+      color: #333333;
+    }
+
+    @media (max-width: 768px) {
+      .responsive-card {
+        flex: 1 1 calc(50% - 16px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .responsive-card {
+        flex: 1 1 100%;
+      }
+
+      .grid-two-column {
+        grid-template-columns: 1fr;
+      }
+
+      .flex-row {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToWeb()">&times;</div>
+
+    <h2>Step 3: Create Responsive Layouts (Flexbox & Grid)</h2>
+    <p>In Stage 2, you learned how to style elements with CSS. In Stage 3, you will learn how to arrange those elements on the page so they look good on mobile, tablet, and desktop screens.</p>
+    <p>You will use Flexbox and CSS Grid to create flexible layouts, and a small media query to make them responsive.</p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is a layout?</h3>
+    <p>A layout is how elements are arranged on the page: side by side, in rows, in columns, or in a grid. In old websites, people used tables for layout, but now modern CSS uses Flexbox and Grid for this.</p>
+    <p>Responsive layout means the same page automatically adjusts to different screen sizes, without the user needing to zoom or scroll sideways.</p>
+
+    <h3>2️⃣ Flexbox basics (one-dimensional layout)</h3>
+    <p>Flexbox is used to arrange items in a row or a column. It is called “one-dimensional” because it focuses on one direction at a time (horizontal OR vertical).</p>
+    <p>You turn a container into a flex container using <code>display: flex;</code>, then control how the items are spaced using properties like <code>justify-content</code> and <code>align-items</code>.</p>
+
+    <pre>
+<!-- HTML -->
+<div class="flex-row">
+  <div class="flex-box">Box 1</div>
+  <div class="flex-box">Box 2</div>
+  <div class="flex-box">Box 3</div>
+</div>
+
+
+<!-- CSS -->
+.flex-row {
+  display: flex;
+  gap: 16px;              /* Space between boxes */
+}
+
+
+.flex-box {
+  background: #eaf4ff;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  flex: 1;                /* All boxes share available space equally */
+}
+    </pre>
+
+    <div class="flex-row">
+      <div class="flex-box">Box 1</div>
+      <div class="flex-box">Box 2</div>
+      <div class="flex-box">Box 3</div>
+    </div>
+
+    <h3>3️⃣ CSS Grid basics (two-dimensional layout)</h3>
+    <p>CSS Grid is used when you want to control both rows and columns at the same time. It is perfect for dashboards, galleries, or pages with multiple sections.</p>
+    <p>You turn a container into a grid using <code>display: grid;</code>, then define columns and rows using <code>grid-template-columns</code> and <code>grid-template-rows</code>.</p>
+
+    <pre>
+<!-- HTML -->
+<div class="grid-two-column">
+  <div class="grid-box">Left content</div>
+  <div class="grid-box">Right content</div>
+</div>
+
+
+<!-- CSS -->
+.grid-two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal columns */
+  gap: 16px;                      /* Space between columns */
+}
+
+
+.grid-box {
+  background: #eaf4ff;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+}
+    </pre>
+
+    <div class="grid-two-column">
+      <div class="grid-box">Left content</div>
+      <div class="grid-box">Right content</div>
+    </div>
+
+    <h3>4️⃣ Making layouts responsive with Flexbox</h3>
+    <p>With Flexbox, you can allow items to wrap onto the next line using <code>flex-wrap: wrap;</code>. This means when the screen is narrow, some items can move to the next row automatically.</p>
+    <p>In a card layout, this helps cards stack nicely on smaller screens without extra work.</p>
+
+    <pre>
+<!-- HTML -->
+<div class="responsive-cards">
+  <div class="responsive-card">
+    <h4>HTML Basics</h4>
+    <p>Learn how to structure web pages using tags and elements.</p>
+  </div>
+  <div class="responsive-card">
+    <h4>CSS Styling</h4>
+    <p>Make your pages beautiful with colors, fonts, and spacing.</p>
+  </div>
+  <div class="responsive-card">
+    <h4>JavaScript Intro</h4>
+    <p>Add interactivity to buttons, forms, and more.</p>
+  </div>
+</div>
+
+
+<!-- CSS -->
+.responsive-cards {
+  display: flex;
+  flex-wrap: wrap;                 /* Allow wrapping to next row */
+  gap: 16px;
+}
+
+
+.responsive-card {
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #dddddd;
+  padding: 16px;
+  flex: 1 1 calc(33.333% - 16px);  /* 3 cards per row on large screens */
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+    </pre>
+
+    <div class="responsive-cards">
+      <div class="responsive-card">
+        <h4>HTML Basics</h4>
+        <p>Learn how to structure web pages using tags and elements.</p>
+      </div>
+      <div class="responsive-card">
+        <h4>CSS Styling</h4>
+        <p>Make your pages beautiful with colors, fonts, and spacing.</p>
+      </div>
+      <div class="responsive-card">
+        <h4>JavaScript Intro</h4>
+        <p>Add interactivity to buttons, forms, and more.</p>
+      </div>
+    </div>
+
+    <h3>5️⃣ Media queries: change layout on small screens</h3>
+    <p>Media queries let you apply different CSS rules when the screen is smaller than a certain width. This is how you adapt layouts for phones, tablets, and desktops.</p>
+    <p>In the example below, cards are 3 per row on big screens, 2 per row on tablets, and 1 per row on mobile.</p>
+
+    <pre>
+/* Base: 3 cards per row (handled by flex: 1 1 calc(33.333% - 16px)) */
+
+
+@media (max-width: 768px) {
+  .responsive-card {
+    flex: 1 1 calc(50% - 16px);   /* 2 cards per row on tablets */
+  }
+}
+
+
+@media (max-width: 480px) {
+  .responsive-card {
+    flex: 1 1 100%;               /* 1 card per row on small phones */
+  }
+
+  .grid-two-column {
+    grid-template-columns: 1fr;   /* Change grid to single column */
+  }
+
+  .flex-row {
+    flex-direction: column;       /* Stack boxes vertically */
+  }
+}
+    </pre>
+
+    <h3>6️⃣ When to use Flexbox vs Grid?</h3>
+    <p>Use Flexbox when you mainly care about arranging items in a single row or column, such as navigation menus, button groups, or card rows.</p>
+    <p>Use Grid when you want a full layout with rows and columns, like dashboards, main content + sidebar + footer, or image galleries.</p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Stage 3:</strong>
+      <ul>
+        <li>Create a new file called <code>web_stage3_test.html</code>. Add a simple header with a logo on the left and navigation links on the right using Flexbox.</li>
+        <li>Build a 2-column layout using CSS Grid where the left side has “Course Description” and the right side has “Skills You Will Learn”.</li>
+        <li>Create a card layout with at least 4 cards using Flexbox and <code>flex-wrap: wrap;</code>. Make each card have a title and a small paragraph.</li>
+        <li>Add media queries so that:
+          - On large screens: cards show 3 per row.
+          - On tablets: cards show 2 per row.
+          - On mobile: cards show 1 per row.</li>
+        <li>Try changing the breakpoint values in your media queries (for example, 992px, 768px, 576px) and see how the layout behaves.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToWeb()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function goBackToWeb() {
+    window.location.href = "index.html#open-web"; // [web:191][web:241]
+  }
+
+  function markCompleted() {
+    localStorage.setItem("web_step3_completed", "true"); // [web:192][web:193][web:177]
+    window.location.href = "index.html#open-web";
+  }
+</script>
+
+</body>
+</html>

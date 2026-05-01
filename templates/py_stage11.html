@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Step 11 – Mini Projects: Quiz App and Calculator</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .cmd-box {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    .cmd-box span {
+      color: #58a6ff;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Python Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToPython()">&times;</div>
+
+    <h2>Step 11: Build Mini Projects – Quiz App and Calculator</h2>
+    <p>
+      In this stage you combine what you have learned so far (data types, loops, functions,
+      files, error handling) to build two small but complete console projects:
+      a Quiz App and a basic Calculator.
+    </p>
+    <p>
+      These projects help you think like a programmer: break a problem into steps,
+      write clean functions, and interact with the user.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Project 1 – Simple Quiz App (console)</h3>
+    <p>
+      This quiz runs in the terminal, asks multiple‑choice questions, checks answers,
+      and shows your score at the end using a list of dictionaries for questions.
+    </p>
+
+    <pre>
+# quiz_app.py
+
+questions = [
+    {
+        "question": "1. Python is ______ language?",
+        "options": ["a) compiled", "b) interpreted", "c) machine", "d) markup"],
+        "answer": "b"
+    },
+    {
+        "question": "2. Which data type is mutable?",
+        "options": ["a) tuple", "b) string", "c) list", "d) int"],
+        "answer": "c"
+    },
+    {
+        "question": "3. Which keyword is used to define a function?",
+        "options": ["a) fun", "b) def", "c) function", "d) lambda"],
+        "answer": "b"
+    },
+    {
+        "question": "4. Which module is commonly used for HTTP requests?",
+        "options": ["a) math", "b) random", "c) requests", "d) os"],
+        "answer": "c"
+    },
+]
+
+def run_quiz(questions):
+    print("=== Smart Career Guide – Python Quiz ===")
+    score = 0
+
+    for q in questions:
+        print()
+        print(q["question"])
+        for opt in q["options"]:
+            print(opt)
+
+        user_ans = input("Your answer (a/b/c/d): ").strip().lower()
+
+        if user_ans == q["answer"]:
+            print("✅ Correct!")
+            score += 1
+        else:
+            print("❌ Wrong. Correct answer was:", q["answer"])
+
+    print("\nQuiz finished!")
+    print("Your score:", score, "/", len(questions))
+
+if __name__ == "__main__":
+    run_quiz(questions)
+    </pre>
+
+    <p class="note">
+      Later you can move questions into a JSON file and load them dynamically,
+      but for now keeping them in a list in the same file is simpler.
+    </p>
+
+    <h3>2️⃣ Improving the Quiz – shuffle questions</h3>
+    <p>
+      You can use <code>random</code> to shuffle the question order so the quiz
+      feels slightly different each time.
+    </p>
+
+    <pre>
+import random
+
+def run_quiz(questions):
+    print("=== Smart Career Guide – Python Quiz ===")
+    score = 0
+
+    random.shuffle(questions)   # shuffle in-place
+
+    for q in questions:
+        print()
+        print(q["question"])
+        for opt in q["options"]:
+            print(opt)
+
+        user_ans = input("Your answer (a/b/c/d): ").strip().lower()
+
+        if user_ans == q["answer"]:
+            print("✅ Correct!")
+            score += 1
+        else:
+            print("❌ Wrong. Correct answer was:", q["answer"])
+
+    print("\nQuiz finished!")
+    print("Your score:", score, "/", len(questions))
+    </pre>
+
+    <p class="note">
+      For more advanced practice, you can add levels, negative marking,
+      or categories such as Python basics, OOP, or libraries.
+    </p>
+
+    <h3>3️⃣ Project 2 – Basic Calculator (console)</h3>
+    <p>
+      This calculator asks the user to choose an operation and enter two numbers,
+      then prints the result using separate functions for each operation.
+    </p>
+
+    <pre>
+# calculator.py
+
+def add(a, b):
+    return a + b
+
+def sub(a, b):
+    return a - b
+
+def mul(a, b):
+    return a * b
+
+def div(a, b):
+    if b == 0:
+        return "Error: Cannot divide by zero"
+    return a / b
+
+def calculator():
+    print("=== Simple Calculator ===")
+    print("1) Add")
+    print("2) Subtract")
+    print("3) Multiply")
+    print("4) Divide")
+
+    choice = input("Choose operation (1/2/3/4): ").strip()
+
+    if choice not in ["1", "2", "3", "4"]:
+        print("Invalid choice.")
+        return
+
+    try:
+        a = float(input("Enter first number: "))
+        b = float(input("Enter second number: "))
+    except ValueError:
+        print("Please enter valid numbers.")
+        return
+
+    if choice == "1":
+        result = add(a, b)
+    elif choice == "2":
+        result = sub(a, b)
+    elif choice == "3":
+        result = mul(a, b)
+    else:
+        result = div(a, b)
+
+    print("Result:", result)
+
+if __name__ == "__main__":
+    calculator()
+    </pre>
+
+    <p class="note">
+      This is a console version; later you can build a GUI calculator using Tkinter
+      or a web version using Flask or Django.
+    </p>
+
+    <h3>4️⃣ Combining both into a small menu app</h3>
+    <p>
+      You can put both mini projects into a single file with a simple menu
+      so the user can choose “Quiz” or “Calculator”.
+    </p>
+
+    <pre>
+def main_menu():
+    while True:
+        print("\n=== Mini Project Hub ===")
+        print("1) Run Quiz")
+        print("2) Open Calculator")
+        print("3) Exit")
+
+        choice = input("Choose an option (1/2/3): ").strip()
+
+        if choice == "1":
+            run_quiz(questions)
+        elif choice == "2":
+            calculator()
+        elif choice == "3":
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid choice, please try again.")
+
+if __name__ == "__main__":
+    main_menu()
+    </pre>
+
+    <p class="note">
+      This starts to feel like a tiny command‑line app, and you can keep adding
+      new tools such as a notes app, log viewer, or marks calculator.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for Python Stage 11:</strong>
+      <ul>
+        <li>Add at least 5 more questions to your Quiz App and test it with your friends.</li>
+        <li>Modify the quiz to show the percentage score and a simple message (“Excellent”, “Good”, “Needs Practice”).</li>
+        <li>Extend the calculator to support modulus (<code>%</code>) and power (<code>**</code>) operations.</li>
+        <li>Make the calculator repeat until the user chooses to exit.</li>
+        <li>Write down which Python concepts you used in these projects (lists, dicts, functions, loops, <code>try</code>/<code>except</code>, etc.).</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToPython()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToPython() {
+    // Go back to index.html and open Python roadmap popup
+    window.location.href = "index.html#open-python";
+  }
+
+  function markCompleted() {
+    // Mark Python Step 11 as completed in localStorage
+    localStorage.setItem("python_step11_completed", "true");
+    window.location.href = "index.html#open-python";
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Step 13 – Optimize Queries for Performance</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – SQL Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToSQL()">&times;</div>
+
+    <h2>Step 13: Optimize Queries for Performance</h2>
+    <p>
+      In this stage you learn simple, practical techniques to make SQL queries run
+      faster, focusing on indexes, query structure, and understanding execution
+      plans.
+    </p>
+    <p>
+      The goal is not to become a full DBA but to avoid slow patterns and apply a few
+      best practices that work in most relational databases.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ Use indexes wisely</h3>
+    <p>
+      Indexes let the database jump directly to rows instead of scanning the entire
+      table, which can dramatically reduce query time.
+    </p>
+    <ul>
+      <li>Good candidates include columns often used in WHERE, JOIN, and ORDER BY clauses such as id, student_id, and email.</li>
+      <li>Most databases automatically index PRIMARY KEY and UNIQUE columns, so extra indexes on those are rarely needed.</li>
+    </ul>
+
+    <pre>
+-- index on branch (if you often filter by branch)
+CREATE INDEX idx_students_branch
+ON students(branch);
+
+-- index on student_id in marks (for joins / lookups)
+CREATE INDEX idx_marks_student_id
+ON marks(student_id);
+
+-- typical BEFORE vs AFTER:
+-- before index: full table scan
+-- after index: index seek / index scan (much faster)
+    </pre>
+
+    <p class="note">
+      Too many indexes can slow INSERT, UPDATE, and DELETE operations because each
+      change must also update all related indexes, so add them only where they help.
+    </p>
+
+    <h3>2️⃣ Avoid SELECT * and fetch only what you need</h3>
+    <p>
+      Selecting unnecessary columns forces the database to read and send more data
+      than required, which hurts performance and increases memory usage.
+    </p>
+
+    <pre>
+-- less efficient
+SELECT * 
+FROM students
+WHERE branch = 'CSE';
+
+-- better: only needed columns
+SELECT id, name, cgpa
+FROM students
+WHERE branch = 'CSE';
+    </pre>
+
+    <p class="note">
+      On large tables or across the network, reducing both columns and rows has a
+      big impact on overall speed and resource usage.
+    </p>
+
+    <h3>3️⃣ Write efficient WHERE clauses and JOINs</h3>
+    <p>
+      Queries are faster when filters can use indexes directly and when unnecessary
+      joins and complex expressions are avoided.
+    </p>
+    <ul>
+      <li>Avoid wrapping indexed columns in functions in WHERE (for example, LOWER or CAST) because it can prevent index usage.</li>
+      <li>Keep join chains reasonable; very deep or unnecessary joins are harder for the optimizer to tune.</li>
+    </ul>
+
+    <pre>
+-- less index-friendly (function on column)
+-- WHERE LOWER(branch) = 'cse';
+
+-- more index-friendly
+WHERE branch = 'CSE';
+
+-- example: efficient join + filter
+SELECT s.name,
+       s.branch,
+       m.subject,
+       m.score
+FROM students AS s
+JOIN marks AS m
+  ON s.id = m.student_id
+WHERE s.branch = 'CSE'
+  AND m.score >= 80;
+    </pre>
+
+    <p class="note">
+      Filtering early and clearly on indexed columns helps the optimizer choose
+      better execution plans and avoid unnecessary work.
+    </p>
+
+    <h3>4️⃣ Understand and use execution plans (overview)</h3>
+    <p>
+      An execution plan shows how the database engine actually runs your query,
+      including table scans, index seeks, join methods, and estimated costs.
+    </p>
+    <ul>
+      <li>Look for full table scans on large tables where an index could reduce work.</li>
+      <li>Review warnings about missing indexes or very expensive join operations.</li>
+    </ul>
+
+    <pre>
+-- Examples (syntax varies by tool/DB):
+
+-- SQL Server
+--   Use "Display Estimated Execution Plan" or:
+--   SET SHOWPLAN_ALL ON;
+
+-- MySQL / MariaDB
+EXPLAIN
+SELECT s.name, m.score
+FROM students s
+JOIN marks m ON s.id = m.student_id
+WHERE s.branch = 'CSE';
+
+-- PostgreSQL
+EXPLAIN ANALYZE
+SELECT ... ;
+    </pre>
+
+    <p class="note">
+      Even a quick look at the plan can reveal whether the database is scanning
+      entire tables instead of using indexes, guiding your next optimization step.
+    </p>
+
+    <h3>5️⃣ Simple performance habits to remember</h3>
+    <p>
+      A few consistent habits will prevent many performance issues before they show
+      up in production.
+    </p>
+    <ul>
+      <li>Index primary keys, foreign keys, and a few high‑traffic filter columns.</li>
+      <li>Avoid SELECT * and request only the columns you truly need.</li>
+      <li>Filter early with WHERE, avoid unnecessary DISTINCT, and remove unused joins.</li>
+      <li>Periodically review slow queries using your database’s monitoring or execution‑plan tools.</li>
+    </ul>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for SQL Stage 13:</strong>
+      <ul>
+        <li>Pick one frequently used query on your project tables and rewrite it to avoid <code>SELECT *</code> and any unnecessary joins.</li>
+        <li>Create indexes on 1–2 key columns such as <code>branch</code> in <code>students</code> and <code>student_id</code> in <code>marks</code>, then rerun your queries and compare speed.</li>
+        <li>Use EXPLAIN or your DB’s plan viewer on a join query before and after adding an index and note the change from table scan to index seek where applicable.[web:281][web:284]</li>
+        <li>List the three columns in your schema most frequently used in WHERE or JOIN clauses and mark them as index candidates in your notes.</li>
+        <li>Optional: Write a short checklist you will follow before calling any query “finished” (no SELECT *, indexed filters, reasonable joins, plan checked, etc.).</li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToSQL()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToSQL() {
+    // Go back to index.html and open SQL roadmap popup
+    window.location.href = "index.html#open-sql";
+  }
+
+  function markCompleted() {
+    // Mark SQL Step 13 as completed in localStorage
+    localStorage.setItem("sql_step13_completed", "true");
+    window.location.href = "index.html#open-sql";
+  }
+</script>
+
+</body>
+</html>

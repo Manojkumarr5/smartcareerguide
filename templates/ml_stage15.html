@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ML Step 15 – Deploy Models (Flask/Streamlit)</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: #f2f6ff; font-family: Arial, sans-serif; }
+    .content-box { max-width: 900px; margin: 40px auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); line-height: 1.7; position: relative; }
+    h2 { color: #0078d7; margin-bottom: 10px; font-size: 28px; }
+    h3 { color: #005fa3; margin-top: 20px; }
+    code { background: #eaf4ff; padding: 4px 6px; border-radius: 4px; font-size: 0.9rem; }
+    pre { background: #1e1e1e; color: #00ffea; padding: 12px; border-radius: 8px; overflow-x: auto; margin-top: 10px; }
+    .task-box { background: #f4f8ff; padding: 15px; border-left: 5px solid #0078d7; margin-top: 12px; border-radius: 6px; }
+
+    .back-btn {
+      background: #0078d7;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .back-btn:hover { background: #005fa3; }
+
+    .complete-btn {
+      background: #28a745;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .complete-btn:hover { background: #218838; }
+
+    .close-btn { position: absolute; top: 10px; right: 15px; font-size: 26px; font-weight: bold; color: #777; cursor: pointer; transition: 0.3s; }
+    .close-btn:hover { color: #000; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">Smart Career Guide</h1>
+</header>
+
+<main>
+  <div class="content-box">
+    <div class="close-btn" onclick="goBackToML()">&times;</div>
+
+    <h2>Step 15: Deploy Models with Flask or Streamlit</h2>
+    <p>Deployment lets others use your model through a web app interface.</p>
+
+    <hr><br>
+
+    <h3>📌 Simple Flask API (concept)</h3>
+    <pre>
+from flask import Flask, request, jsonify
+import joblib
+
+app = Flask(__name__)
+model = joblib.load("model.pkl")
+
+@app.route("/predict", methods=["POST"])
+def predict():
+    data = request.get_json()
+    # convert data to array X_new
+    # pred = model.predict(X_new)
+    return jsonify({"prediction": "demo"})
+
+if __name__ == "__main__":
+    app.run(debug=True)
+    </pre>
+
+    <h3>📌 Simple Streamlit App (concept)</h3>
+    <pre>
+import streamlit as st
+import joblib
+
+st.title("ML Model Demo")
+
+model = joblib.load("model.pkl")
+
+value = st.number_input("Enter feature value:")
+if st.button("Predict"):
+    # X_new = [[value]]
+    # pred = model.predict(X_new)
+    st.write("Prediction:", "demo")
+    </pre>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks:</strong>
+      <ul>
+        <li>Create a small Streamlit app for any trained model.</li>
+        <li>Take user input and show predictions.</li>
+        <li>Deploy to a free hosting platform when ready.</li>
+      </ul>
+    </div>
+
+    <!-- Bottom Buttons: Back + Mark Completed -->
+    <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToML()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToML() {
+    // Use ML roadmap hash so popup auto-opens
+    window.location.href = "index.html#open-ml"; 
+  }
+
+  function markCompleted() {
+    // Save completion for ML step 15
+    localStorage.setItem("ml_step15_completed", "true"); 
+    window.location.href = "index.html#open-ml";
+  }
+</script>
+
+</body>
+</html>

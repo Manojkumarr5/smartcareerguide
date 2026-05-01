@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS Step 12 – Understand Time Series Forecasting</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      background: #f2f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .content-box {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      line-height: 1.7;
+      position: relative;
+    }
+
+    h2 {
+      color: #0486f0;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    h3 {
+      color: #0486f0;
+      margin-top: 20px;
+    }
+
+    code {
+      background: #e8fff2;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #a8ffbf;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .task-box {
+      background: #f4fff8;
+      padding: 15px;
+      border-left: 5px solid #0b7e3f;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      background: #0486f0;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 6px;
+      margin-top: 20px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #777;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      color: #000;
+    }
+
+    .note {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    ul {
+      margin-left: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 style="text-align:center; padding:15px; color:#ffffff;">
+    Smart Career Guide – Data Science Track
+  </h1>
+</header>
+
+<main>
+  <div class="content-box">
+
+    <!-- X button -->
+    <div class="close-btn" onclick="goBackToDS()">&times;</div>
+
+    <h2>Step 12: Understand Time Series Forecasting</h2>
+    <p>
+      In this stage you learn the basics of <strong>time series</strong> and
+      <strong>forecasting</strong>: data ordered by time (day, month, year) and simple
+      ways to predict future values using past observations.
+    </p>
+    <p>
+      You will see key ideas like trend and seasonality, then build a tiny baseline
+      forecast in Python so students can practice with data like sales or rainfall.
+    </p>
+
+    <hr><br>
+
+    <h3>1️⃣ What is a time series?</h3>
+    <p>
+      A time series is a sequence of values recorded over time, for example daily
+      temperature, monthly sales, or yearly rainfall of a district.
+    </p>
+    <ul>
+      <li><strong>Trend</strong>: long‑term upward or downward movement (for example sales growing each year).[web:434][web:440]</li>
+      <li><strong>Seasonality</strong>: regular repeating pattern (for example higher sales every festival month, or rainfall every monsoon).[web:433][web:437]</li>
+    </ul>
+
+    <p class="note">
+      Forecasting guides explain that understanding trend and seasonality helps you
+      choose better methods and avoid treating time‑ordered data like ordinary rows.
+    </p>
+
+    <h3>2️⃣ Prepare a simple time series in Pandas</h3>
+    <p>
+      Time series are usually stored with a date column converted to a datetime type
+      and set as the index so that plotting and resampling become easy.
+    </p>
+
+    <pre>
+import pandas as pd
+
+# Example: monthly sales (toy data)
+data = {
+    "month": [
+        "2024-01-01", "2024-02-01", "2024-03-01", "2024-04-01",
+        "2024-05-01", "2024-06-01", "2024-07-01", "2024-08-01",
+        "2024-09-01", "2024-10-01", "2024-11-01", "2024-12-01"
+    ],
+    "sales": [120, 130, 125, 140, 150, 160, 170, 180, 175, 190, 210, 230]
+}
+df = pd.DataFrame(data)
+df["month"] = pd.to_datetime(df["month"])
+df = df.set_index("month")
+
+print(df.head())
+    </pre>
+
+    <p class="note">
+      Many tutorials treat the datetime index as the base structure for plotting,
+      splitting, and forecasting.
+    </p>
+
+    <h3>3️⃣ Visualize and make a simple baseline forecast</h3>
+    <p>
+      Before using advanced models, start with simple “baseline” forecasts such as
+      repeating the last value, which is called a naive forecast.
+    </p>
+
+    <pre>
+import matplotlib.pyplot as plt
+
+# Plot the historical series
+df["sales"].plot(figsize=(7, 4), marker="o", title="Monthly Sales")
+plt.ylabel("Sales")
+plt.tight_layout()
+plt.show()
+
+# Naive forecast: next month's sales = last observed value
+last_value = df["sales"].iloc[-1]
+print("Naive forecast for next month:", last_value)
+    </pre>
+
+    <p class="note">
+      Baseline models help you check whether more complex models actually improve the
+      forecast compared with simply using the last observation.
+    </p>
+
+    <h3>4️⃣ Train/test split for time series</h3>
+    <p>
+      Unlike random train‑test splits, time series splits must respect time order:
+      train on earlier data and test on later data.
+    </p>
+
+    <pre>
+# Simple time-based split: last 3 months as test
+train = df.iloc[:-3]
+test  = df.iloc[-3:]
+
+print("Train period:", train.index.min(), "to", train.index.max())
+print("Test period:", test.index.min(), "to", test.index.max())
+
+# Naive forecast on test: always use last train value
+naive_forecast = [train["sales"].iloc[-1]] * len(test)
+print("Test actual:\\n", test["sales"].values)
+print("Naive forecast:\\n", naive_forecast)
+    </pre>
+
+    <p class="note">
+      Time‑based splits like this are a first step before more advanced methods such as
+      rolling windows or dedicated time series cross‑validation.
+    </p>
+
+    <h3>5️⃣ Next steps after basics</h3>
+    <p>
+      After these basics, common next topics are ARIMA‑type models, seasonal models,
+      and machine‑learning‑based forecasting.
+    </p>
+    <p class="note">
+      For friendly learning, it is enough at this stage to know what a time series is,
+      how to plot it, and how to make a simple naive forecast on a train/test split
+      before touching advanced formulas.
+    </p>
+
+    <div class="task-box">
+      <strong>🎯 Mini Tasks for DS Stage 12:</strong>
+      <ul>
+        <li>Create a small monthly or daily time series from real life (shop sales,
+            rainfall, or electricity usage) and store it as a CSV with date and
+            value columns.
+        </li>
+        <li>Load it in Pandas, set the date as index, plot the series, and describe in
+            3–4 sentences whether you see a trend or seasonality.
+        </li>
+        <li>Make a naive forecast using the last observed value for the next few
+            periods and compare it with actual values if you have them.
+        </li>
+      </ul>
+    </div>
+
+    <!-- Buttons -->
+   <div style="display:flex; justify-content:space-between; margin-top:20px;">
+      <button class="back-btn" onclick="goBackToDS()">⬅ Back</button>
+      <button class="complete-btn" onclick="markCompleted()">✅ Mark as Completed</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  function goBackToDS() {
+    // Go back to index.html and open Data Science roadmap popup
+    window.location.href = "index.html#open-ds";
+  }
+
+  function markCompleted() {
+    // Mark DS Step 12 as completed in localStorage
+    localStorage.setItem("ds_step12_completed", "true");
+    window.location.href = "index.html#open-ds";
+  }
+</script>
+
+</body>
+</html>
